@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION "3.9.2")
 
 project(RAM)
 
-#set(SOURCES )
+set(SOURCES
+  ../src/datos.cpp
+  )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 

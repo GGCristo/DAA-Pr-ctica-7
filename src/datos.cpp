@@ -18,7 +18,6 @@ Datos::Datos() {
                   linea_stream >> n;
                   linea_stream >> n;
                   n_ = std::stoi(n);
-                  std::cout << "n: " << n << '\n';
                 }
                 break;
       case 'm': {
@@ -27,12 +26,10 @@ Datos::Datos() {
                   linea_stream >> m;
                   linea_stream >> m;
                   m_ = std::stoi(m);
-                  std::cout << "m: " << m << '\n';
-
                 }
                 break;
       case 'P': {
-                  times_ = times(linea);
+                  times(linea);
                   // std::cout << "Voy a mostrar los tiempos\n" << '\n';
                   // for (size_t i = 0; i < tiempos.size(); ++i) {
                   // std::cout << tiempos[i] << '\n';
@@ -40,7 +37,7 @@ Datos::Datos() {
                 }
                 break;
       case 'S': {
-                  setups_ = setups(fichero, linea);
+                  setups(fichero, linea);
                   // std::cout << "Voy a mostrar los setups\n" << '\n';
                   // for (size_t i = 0; i < setup.size(); ++i) {
                   // std::cout << setup[i] << '\n';
@@ -54,7 +51,15 @@ Datos::Datos() {
   fichero.close();
 }
 
-std::vector<int> Datos::times(const std::string& linea) {
+int Datos::getN() {
+  return n_;
+}
+
+int Datos::getM() {
+  return m_;
+}
+
+void Datos::times(const std::string& linea) {
   std::vector<int> times;
   std::string numero;
   std::stringstream linea_stream(linea);
@@ -67,17 +72,15 @@ std::vector<int> Datos::times(const std::string& linea) {
   while(linea_stream >> numero) {
     times.emplace_back(std::stoi(numero));
   }
-  std::cout << "times: " << &times << '\n';
-  return times;
+  times_ = times;
 }
 
-const std::vector<int>& Datos::get_times() {
-  std::cout << "times_: " << &times_ << '\n';
+const std::vector<int>& Datos::getTimes() {
   return times_;
 }
 
-std::vector<int> Datos::setups(std::fstream& fichero,std::string& linea) {
-  std::vector<int> setups;
+void Datos::setups(std::fstream& fichero,std::string& linea) {
+  std::vector<std::vector<int>> setups;
   std::string numero;
   std::stringstream linea_stream(linea);
   while (linea_stream >> numero) {
@@ -86,20 +89,35 @@ std::vector<int> Datos::setups(std::fstream& fichero,std::string& linea) {
     }
     continue;
   }
-  while(linea_stream >> numero) {
-    setups.emplace_back(std::stoi(numero));
-  }
+  std::vector<int> row;
+  row.reserve(n_ + 1);
   while(getline(fichero ,linea)) {
     std::stringstream linea_stream(linea);
     while(linea_stream >> numero) {
-      setups.emplace_back(std::stoi(numero));
+      row.emplace_back(std::stoi(numero));
     }
+    setups.emplace_back(row);
+    row.clear();
   }
-  std::cout << "setups: " << &setups << '\n';
-  return setups;
+  setups_ = setups;
 }
 
-const std::vector<int>& Datos::get_setups(){
-  std::cout << "setups_: " << &setups_ << '\n';
+const std::vector<std::vector<int>>& Datos::getSetups(){
   return setups_;
+}
+
+void Datos::showTimes() {
+  for (size_t i = 0; i < times_.size(); ++i){
+    std::cout << times_[i] << ' ';
+  }
+  std::cout << '\n';
+}
+
+void Datos::showSetups() {
+  for (size_t i = 0; i < setups_.size(); ++i) {
+    for (size_t j = 0; j < setups_[i].size(); ++j) {
+      std::cout << setups_[i][j] << ' ';
+    }
+    std::cout << '\n';
+  }
 }

@@ -3,3 +3,4 @@
 /.vimspector.json
 /bin/
 /build/
+/compile_commands.json

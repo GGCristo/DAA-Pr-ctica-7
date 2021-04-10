@@ -13,7 +13,7 @@ std::vector<int> setups(std::fstream&, std::string&);
 // leer Pi y pasar a Sij y demás
 int main() {
   Datos datos;
-  datos.get_times();
-  datos.get_setups();
+  // datos.showTimes();
+  // datos.showSetups();
   return 0;
 }
