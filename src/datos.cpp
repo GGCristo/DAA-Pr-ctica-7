@@ -1,15 +1,6 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <vector>
+#include "../include/datos.hpp"
 
-std::vector<int> times(const std::string&);
-std::vector<int> setups(std::fstream&, std::string&);
-
-// TODO Hacer la lectura de líneas más robusta, asegurarte de cuando parar de
-// leer Pi y pasar a Sij y demás
-int main() {
+Datos::Datos() {
   std::fstream fichero;
   fichero.open("I40j_2m_S1_1.txt", std::ios::in);
   if (!fichero)
@@ -60,43 +51,4 @@ int main() {
   }
   fichero.close();
   return 0;
-}
-
-std::vector<int> times(const std::string& linea) {
-  std::vector<int> times;
-  std::string numero;
-  std::stringstream linea_stream(linea);
-  while (linea_stream >> numero) {
-    if(numero[numero.size() - 1] == ']') {
-      break;
-    }
-    continue;
-  }
-  while(linea_stream >> numero) {
-    times.emplace_back(std::stoi(numero));
-  }
-  return times;
-}
-
-std::vector<int> setups(std::fstream& fichero,std::string& linea) {
-  std::vector<int> setups;
-  std::string numero;
-  std::stringstream linea_stream(linea);
-  while (linea_stream >> numero) {
-    if(numero[numero.size() - 1] == ']') {
-      break;
-    }
-    continue;
-  }
-  while(linea_stream >> numero) {
-    setups.emplace_back(std::stoi(numero));
-  }
-  while(getline(fichero ,linea)) {
-    std::stringstream linea_stream(linea);
-    while(linea_stream >> numero) {
-      setups.emplace_back(std::stoi(numero));
-    }
-
-  }
-  return setups;
 }

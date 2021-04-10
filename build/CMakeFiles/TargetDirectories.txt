@@ -1,5 +1,0 @@
-/home/cristo/Desktop/DAA/Práctica 7-20210409/build/CMakeFiles/rebuild_cache.dir
-/home/cristo/Desktop/DAA/Práctica 7-20210409/build/CMakeFiles/edit_cache.dir
-/home/cristo/Desktop/DAA/Práctica 7-20210409/build/src/CMakeFiles/rebuild_cache.dir
-/home/cristo/Desktop/DAA/Práctica 7-20210409/build/src/CMakeFiles/edit_cache.dir
-/home/cristo/Desktop/DAA/Práctica 7-20210409/build/src/CMakeFiles/main.dir
