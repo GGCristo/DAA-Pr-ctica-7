@@ -4,18 +4,23 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <utility>
 #include <vector>
 
+// TODO Make everything const
 class Datos {
   public:
-    Datos();
+    static Datos& getInstance();
+    Datos(const Datos&) = delete;
+    Datos& operator =(const Datos&) = delete;
     int getN();
     int getM();
     const std::vector<int>& getTimes();
-    const std::vector<std::vector<int>>& getSetups();
+    const std::vector<std::vector<std::pair<int, bool>>>& getSetups();
     void showTimes();
     void showSetups();
   private:
+    Datos();
     void times(const std::string&);
     void setups(std::fstream&, std::string&);
 
@@ -23,5 +28,5 @@ class Datos {
     int n_;
     // TODO Return optimization doesn't work
     std::vector<int> times_;
-    std::vector<std::vector<int>> setups_;
+    std::vector<std::vector<std::pair<int, bool>>> setups_;
 };

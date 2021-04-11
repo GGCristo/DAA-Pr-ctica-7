@@ -1,5 +1,10 @@
 #include "../include/datos.hpp"
 
+Datos& Datos::getInstance() {
+  static Datos instance;
+  return instance;
+}
+
 Datos::Datos() {
   std::fstream fichero;
   fichero.open("I40j_2m_S1_1.txt", std::ios::in);
@@ -43,7 +48,6 @@ Datos::Datos() {
                   // std::cout << setup[i] << '\n';
                   // }
                 }
-
       default:
                 break;
     }
@@ -80,21 +84,23 @@ const std::vector<int>& Datos::getTimes() {
 }
 
 void Datos::setups(std::fstream& fichero,std::string& linea) {
-  std::vector<std::vector<int>> setups;
-  std::string numero;
+  std::vector<std::vector<std::pair<int, bool>>> setups;
+  std::string ignorar;
   std::stringstream linea_stream(linea);
-  while (linea_stream >> numero) {
-    if(numero[numero.size() - 1] == ']') {
+  while (linea_stream >> ignorar) {
+    if(ignorar[ignorar.size() - 1] == ']') {
       break;
     }
     continue;
   }
-  std::vector<int> row;
+  double number;
+  std::vector<std::pair<int, bool>> row;
   row.reserve(n_ + 1);
   while(getline(fichero ,linea)) {
-    std::stringstream linea_stream(linea);
-    while(linea_stream >> numero) {
-      row.emplace_back(std::stoi(numero));
+    linea_stream.str(linea);
+    while(linea_stream >> number) {
+      row.emplace_back(number, false);
+      // row.emplace_back(number);
     }
     setups.emplace_back(row);
     row.clear();
@@ -102,7 +108,7 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
   setups_ = setups;
 }
 
-const std::vector<std::vector<int>>& Datos::getSetups(){
+const std::vector<std::vector<std::pair<int, bool>>>& Datos::getSetups(){
   return setups_;
 }
 
@@ -116,7 +122,7 @@ void Datos::showTimes() {
 void Datos::showSetups() {
   for (size_t i = 0; i < setups_.size(); ++i) {
     for (size_t j = 0; j < setups_[i].size(); ++j) {
-      std::cout << setups_[i][j] << ' ';
+      std::cout << setups_[i][j].first << ' ';
     }
     std::cout << '\n';
   }

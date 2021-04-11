@@ -5,15 +5,18 @@
 #include <vector>
 
 #include "../include/datos.hpp"
-
-std::vector<int> times(const std::string&);
-std::vector<int> setups(std::fstream&, std::string&);
+#include "../include/maquina.hpp"
 
 // TODO Hacer la lectura de líneas más robusta, asegurarte de cuando parar de
 // leer Pi y pasar a Sij y demás
 int main() {
-  Datos datos;
+  std::vector<Maquina> maquinas;
+  for (int i = 0; i < Datos::getInstance().getM(); ++i) {
+    maquinas.emplace_back(Maquina());
+  }
+  std::cout << "Hay " << maquinas.size() << " creadas\n";
   // datos.showTimes();
+  // std::cout << "\n";
   // datos.showSetups();
   return 0;
 }

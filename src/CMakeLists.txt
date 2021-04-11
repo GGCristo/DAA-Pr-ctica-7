@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION "3.9.2")
 
 project(RAM)
 
-# set(SOURCES )
+set(SOURCES )
 file(GLOB SOURCES *.cpp)
 
 # set(CMAKE_CXX_FLAGS "-O2")
