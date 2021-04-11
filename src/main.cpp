@@ -16,13 +16,17 @@ int main() {
     maquinas.emplace_back(Maquina());
   }
   std::cout << "Hay " << maquinas.size() << " maquinas creadas\n";
-  voraz(maquinas);
+  try {
+    voraz(maquinas);
+  } catch (const std::string message) {
+    std::cout << message;
+    return 1;
+  }
   for (size_t i = 0; i < maquinas.size(); ++i) {
     std::cout << "Maquina " << i + 1 << ": ";
     maquinas[i].show();
+    std::cout << "\nTCTlocal: " << maquinas[i].getTime() << '\n';
   }
-  // datos.showTimes();
-  // std::cout << "\n";
-  // datos.showSetups();
+  std::cout << "\n";
   return 0;
 }

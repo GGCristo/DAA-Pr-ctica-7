@@ -84,7 +84,6 @@ std::vector<std::pair<int, bool>>& Datos::getTimes() {
 }
 
 void Datos::setups(std::fstream& fichero,std::string& linea) {
-  std::vector<std::vector<int>> setups;
   std::string ignorar;
   std::stringstream linea_stream(linea);
   while (linea_stream >> ignorar) {
@@ -93,19 +92,16 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
     }
     continue;
   }
-  int number;
-  std::vector<int> row;
-  row.reserve(n_ + 1);
+  std::string number;
   while(getline(fichero ,linea)) {
-    linea_stream.str(linea);
+    std::vector<int> row;
+    row.reserve(n_ + 1);
+    std::stringstream linea_stream(linea);
     while(linea_stream >> number) {
-      row.emplace_back(number);
-      // row.emplace_back(number);
+      row.push_back(std::stoi(number));
     }
-    setups.emplace_back(row);
-    row.clear();
+    setups_.push_back(row);
   }
-  setups_ = setups;
 }
 
 const std::vector<std::vector<int>>& Datos::getSetups(){

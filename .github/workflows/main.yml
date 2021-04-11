@@ -1,0 +1,13 @@
+name: CI
+on: push
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd test && wget https://raw.githubusercontent.com/onqtam/doctest/master/doctest/doctest.h
+      - run: mkdir -p build && cd build && cmake .. -DENABLE_TESTS=ON
+      - run: cd build && make
+      - run: ./bin/my_test
