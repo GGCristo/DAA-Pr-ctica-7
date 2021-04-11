@@ -6,7 +6,9 @@
 class Maquina {
   public:
     Maquina();
+    void add(const Tarea&);
+    std::ostream& show(std::ostream& os = std::cout);
   private:
-    double Tf_;
+    int Tf_;
     std::vector<Tarea> queue_;
 };

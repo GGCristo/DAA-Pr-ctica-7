@@ -64,7 +64,7 @@ int Datos::getM() {
 }
 
 void Datos::times(const std::string& linea) {
-  std::vector<int> times;
+  std::vector<std::pair<int, bool>> times;
   std::string numero;
   std::stringstream linea_stream(linea);
   while (linea_stream >> numero) {
@@ -74,17 +74,17 @@ void Datos::times(const std::string& linea) {
     continue;
   }
   while(linea_stream >> numero) {
-    times.emplace_back(std::stoi(numero));
+    times.emplace_back(std::stoi(numero), false);
   }
   times_ = times;
 }
 
-const std::vector<int>& Datos::getTimes() {
+std::vector<std::pair<int, bool>>& Datos::getTimes() {
   return times_;
 }
 
 void Datos::setups(std::fstream& fichero,std::string& linea) {
-  std::vector<std::vector<std::pair<int, bool>>> setups;
+  std::vector<std::vector<int>> setups;
   std::string ignorar;
   std::stringstream linea_stream(linea);
   while (linea_stream >> ignorar) {
@@ -93,13 +93,13 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
     }
     continue;
   }
-  double number;
-  std::vector<std::pair<int, bool>> row;
+  int number;
+  std::vector<int> row;
   row.reserve(n_ + 1);
   while(getline(fichero ,linea)) {
     linea_stream.str(linea);
     while(linea_stream >> number) {
-      row.emplace_back(number, false);
+      row.emplace_back(number);
       // row.emplace_back(number);
     }
     setups.emplace_back(row);
@@ -108,13 +108,13 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
   setups_ = setups;
 }
 
-const std::vector<std::vector<std::pair<int, bool>>>& Datos::getSetups(){
+const std::vector<std::vector<int>>& Datos::getSetups(){
   return setups_;
 }
 
 void Datos::showTimes() {
   for (size_t i = 0; i < times_.size(); ++i){
-    std::cout << times_[i] << ' ';
+    std::cout << times_[i].first << ' ';
   }
   std::cout << '\n';
 }
@@ -122,7 +122,7 @@ void Datos::showTimes() {
 void Datos::showSetups() {
   for (size_t i = 0; i < setups_.size(); ++i) {
     for (size_t j = 0; j < setups_[i].size(); ++j) {
-      std::cout << setups_[i][j].first << ' ';
+      std::cout << setups_[i][j] << ' ';
     }
     std::cout << '\n';
   }

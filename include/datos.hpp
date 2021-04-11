@@ -15,8 +15,8 @@ class Datos {
     Datos& operator =(const Datos&) = delete;
     int getN();
     int getM();
-    const std::vector<int>& getTimes();
-    const std::vector<std::vector<std::pair<int, bool>>>& getSetups();
+    std::vector<std::pair<int, bool>>& getTimes();
+    const std::vector<std::vector<int>>& getSetups();
     void showTimes();
     void showSetups();
   private:
@@ -27,6 +27,6 @@ class Datos {
     int m_;
     int n_;
     // TODO Return optimization doesn't work
-    std::vector<int> times_;
-    std::vector<std::vector<std::pair<int, bool>>> setups_;
+    std::vector<std::pair<int, bool>> times_;
+    std::vector<std::vector<int>> setups_;
 };
