@@ -5,3 +5,6 @@
 /build/
 /compile_commands.json
 /Debug/
+/test/doctest.h
+/project.log
+/report.tasks

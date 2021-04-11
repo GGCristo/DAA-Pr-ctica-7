@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "../include/datos.hpp"
 
 Datos& Datos::getInstance() {
@@ -6,11 +10,13 @@ Datos& Datos::getInstance() {
 }
 
 Datos::Datos() {
+  if (fichero_ == "") {
+    throw "Especifíca el fichero\n";
+  }
   std::fstream fichero;
-  fichero.open("I40j_2m_S1_1.txt", std::ios::in);
-  if (!fichero)
-  {
-    throw "No se ha podido cargar el programa";
+  fichero.open(fichero_, std::ios::in);
+  if (!fichero) {
+    throw std::string("No se pudo abrir el fichero ") + fichero_  + '\n';
   }
   std::string linea;
   while(getline(fichero, linea)) {
@@ -96,8 +102,8 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
   while(getline(fichero ,linea)) {
     std::vector<int> row;
     row.reserve(n_ + 1);
-    std::stringstream linea_stream(linea);
-    while(linea_stream >> number) {
+    std::stringstream linea_stream_inner(linea);
+    while(linea_stream_inner >> number) {
       row.push_back(std::stoi(number));
     }
     setups_.push_back(row);

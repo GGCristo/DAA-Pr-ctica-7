@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "../include/voraz.hpp"
 
 void voraz(std::vector<Maquina>& maquinas) {
@@ -8,16 +12,16 @@ void voraz(std::vector<Maquina>& maquinas) {
   for (size_t i = 0; i < Datos::getInstance().getN() - maquinas.size(); ++i) {
     std::vector<Tarea> aux;
     aux.reserve(maquinas.size());
-    for (size_t i = 0; i < maquinas.size(); ++i) {
-      aux.push_back(getTask(maquinas[i].getIdLastTask()));
+    for (size_t j = 0; j < maquinas.size(); ++j) {
+      aux.push_back(getTask(maquinas[j].getIdLastTask()));
     }
     int auxMinSum = aux[0].getTime() + maquinas[0].getTime();
     int minPosition = 0;
-    for (size_t i = 1; i < aux.size(); ++i) {
-      if (aux[i].getTime() + maquinas[i].getTime() <
+    for (size_t j = 1; j < aux.size(); ++j) {
+      if (aux[j].getTime() + maquinas[j].getTime() <
           auxMinSum) {
-        minPosition = i;
-        auxMinSum = aux[i].getTime() + maquinas[i].getTime();
+        minPosition = j;
+        auxMinSum = aux[j].getTime() + maquinas[j].getTime();
       }
     }
     maquinas[minPosition].add(aux[minPosition]);

@@ -19,6 +19,7 @@ class Datos {
     const std::vector<std::vector<int>>& getSetups();
     void showTimes();
     void showSetups();
+    static inline std::string fichero_ = "";
   private:
     Datos();
     void times(const std::string&);
