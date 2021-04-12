@@ -42,7 +42,7 @@ Datos::Datos() {
                 }
                 break;
       case 'S': {
-                  setups(fichero, linea);
+                  setups(fichero);
                 }
       default:
                 break;
@@ -80,7 +80,7 @@ std::vector<std::pair<int, bool>>& Datos::getTimes() {
 }
 
 void Datos::setups(std::fstream& fichero) {
-  // std::string ignorar;
+  std::string linea;
   // std::stringstream linea_stream(linea);
   // while (linea_stream >> ignorar) {
   //   if(ignorar[ignorar.size() - 1] == ']') {
