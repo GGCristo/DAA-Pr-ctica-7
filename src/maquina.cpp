@@ -10,7 +10,7 @@ Maquina::Maquina() {
 
 int Maquina::getIdLastTask() {
   if (queue_.empty()) {
-    return 0;
+    return -1;
   }
   return queue_[queue_.size() - 1].id_;
 }
@@ -31,7 +31,15 @@ void Maquina::add(const Tarea& tarea) {
   queue_.push_back(tarea);
 }
 
-size_t Maquina::size() {
+unsigned long Maquina::getTCT() {
+  unsigned long tct = 0;
+  for (size_t i = 0; i < queue_.size(); ++i) {
+    tct += (queue_.size() - i) * queue_[i].getTime();
+  }
+  return tct;
+}
+
+size_t Maquina::size() const{
   return queue_.size();
 }
 

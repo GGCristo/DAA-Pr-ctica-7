@@ -7,32 +7,34 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <memory>
 
 #include "../include/datos.hpp"
 #include "../include/maquina.hpp"
-#include "../include/voraz.hpp"
+#include "../include/solucion.hpp"
 
-// TODO Hacer la lectura de líneas más robusta, asegurarte de cuando parar de
-// leer Pi y pasar a Sij y demás
+void mainTryCatch() {
+  // Datos::fichero_ = "I40j_2m_S1_1.txt";
+  // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
+  Datos::fichero_ = "I40j_4m_S1_1.txt";
+  // Datos::fichero_ = "I40j_6m_S1_1.txt";
+  // Datos::fichero_ = "I40j_8m_S1_1.txt";
+  // Datos::fichero_ = "prueba.txt";
+
+  Solucion solucion(std::make_unique<Voraz>(Voraz()));
+  solucion.ejecutar();
+  solucion.show(std::cout);
+  std::cout << solucion.getZ() << '\n';
+
+  // Solucion solucion1(std::make_unique<Voraz>(Voraz()));
+  // solucion1.ejecutar();
+  // solucion1.show(std::cout);
+  // std::cout << solucion1.getZ() << '\n';
+}
+
 int main() {
   try {
-    // Datos::fichero_ = "I40j_2m_S1_1.txt";
-    // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
-    // Datos::fichero_ = "I40j_4m_S1_1.txt";
-    // Datos::fichero_ = "I40j_6m_S1_1.txt";
-    Datos::fichero_ = "I40j_8m_S1_1.txt";
-    std::vector<Maquina> maquinas;
-    for (int i = 0; i < Datos::getInstance().getM(); ++i) {
-      maquinas.emplace_back(Maquina());
-    }
-    std::cout << "Hay " << maquinas.size() << " maquinas creadas\n";
-    voraz(maquinas);
-    for (size_t i = 0; i < maquinas.size(); ++i) {
-      std::cout << "Maquina " << i + 1 << ": ";
-      maquinas[i].show();
-      std::cout << "\nTCTlocal: " << maquinas[i].getTime() << '\n';
-    }
-    std::cout << "\n";
+    mainTryCatch();
   } catch (const std::string& message) {
     std::cout << message;
     return 1;

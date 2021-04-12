@@ -11,7 +11,8 @@ class Maquina {
     void add(const Tarea&);
     int getIdLastTask();
     int getTime();
-    size_t size();
+    size_t size() const;
+    unsigned long getTCT();
     std::ostream& show(std::ostream& os = std::cout);
   private:
     int time_;

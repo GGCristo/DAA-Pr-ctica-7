@@ -6,6 +6,8 @@
 #include <fstream>
 #include <utility>
 #include <vector>
+#include <memory>
+#include "parallelInterface.hpp"
 
 // TODO Make everything const
 class Datos {
@@ -19,7 +21,9 @@ class Datos {
     const std::vector<std::vector<int>>& getSetups();
     void showTimes();
     void showSetups();
+    void reset();
     static inline std::string fichero_ = "";
+    static inline std::unique_ptr<ParallelInterface> algorithm_;
   private:
     Datos();
     void times(const std::string&);

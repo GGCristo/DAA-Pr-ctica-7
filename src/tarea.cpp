@@ -12,6 +12,6 @@ int Tarea::getTime() {
   return time_;
 }
 std::ostream& Tarea::show(std::ostream& os) {
-  os << "Tarea " << id_ << " , Time: " << time_;
+  os << "Tarea " << id_ + 1 << " , Time: " << time_;
   return os;
 }

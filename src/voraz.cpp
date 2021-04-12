@@ -4,7 +4,8 @@
 
 #include "../include/voraz.hpp"
 
-void voraz(std::vector<Maquina>& maquinas) {
+void Voraz::algorithm(std::vector<Maquina>& maquinas) {
+  assert(!Datos::getInstance().getTimes()[0].second);
   for (size_t i = 0; i < maquinas.size(); ++i) {
     maquinas[i].add(getTask(maquinas[i].getIdLastTask()));
   }
@@ -26,30 +27,4 @@ void voraz(std::vector<Maquina>& maquinas) {
     }
     maquinas[minPosition].add(aux[minPosition]);
   }
-}
-
-const Tarea getTask(int previousTask) {
-  int auxMinSum;
-  int minPosition;
-  Tarea tarea;
-  Datos* datos = &Datos::getInstance();
-  size_t i = 1;
-  for (; i < datos->getSetups()[previousTask].size(); ++i) {
-    if (!datos->getTimes()[i - 1].second) {
-      auxMinSum = datos->getTimes()[i - 1].first +
-        datos->getSetups()[previousTask][i];
-      minPosition = i++;
-      break;
-    }
-  }
-  for(; i < datos->getSetups()[previousTask].size(); ++i) {
-    if (!datos->getTimes()[i - 1].second &&
-        datos->getTimes()[i -1].first + datos->getSetups()[previousTask][i] <
-        auxMinSum) {
-      auxMinSum = datos->getTimes()[i - 1].first +
-        datos->getSetups()[previousTask][i];
-      minPosition = i;
-    }
-  }
-  return Tarea(minPosition - 1, auxMinSum);
 }

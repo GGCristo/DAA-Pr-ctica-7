@@ -110,6 +110,13 @@ void Datos::setups(std::fstream& fichero,std::string& linea) {
   }
 }
 
+
+void Datos::reset() {
+  for (size_t i = 0; i < times_.size(); ++i) {
+    times_[i].second = false;
+  }
+}
+
 const std::vector<std::vector<int>>& Datos::getSetups(){
   return setups_;
 }

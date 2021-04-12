@@ -2,12 +2,9 @@ cmake_minimum_required(VERSION "3.9.2")
 
 project(RAM)
 
-set(SOURCES
-  ../src/datos.cpp
-  ../src/maquina.cpp
-  ../src/tarea.cpp
-  ../src/voraz.cpp
-  )
+file(GLOB SOURCES ../src/*.cpp)
+
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../src/main.cpp")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 

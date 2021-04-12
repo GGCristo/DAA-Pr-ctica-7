@@ -1,7 +1,9 @@
 #pragma once
-#include <vector>
-#include "maquina.hpp"
+#include "parallelInterface.hpp"
 #include "datos.hpp"
+#include "maquina.hpp"
 
-void voraz(std::vector<Maquina>& maquinas);
-const Tarea getTask(int);
+class Voraz: public ParallelInterface {
+  public:
+    void algorithm(std::vector<Maquina>& maquinas) override;
+};

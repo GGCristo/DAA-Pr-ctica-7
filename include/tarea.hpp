@@ -4,6 +4,7 @@
 
 class Tarea {
   public:
+    // TODO Es necesario el por defecto?
     Tarea(int id = -1, int = 0);
     int getTime();
     std::ostream& show(std::ostream& os = std::cout);
