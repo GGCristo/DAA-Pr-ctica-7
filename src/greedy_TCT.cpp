@@ -16,7 +16,7 @@ void GreedyTCT::algorithm(std::vector<Maquina>& maquinas) {
     for (size_t j = 0; j < maquinas.size(); ++j) {
       aux.push_back(getTask(maquinas[j].getIdLastTask()));
     }
-    int auxMinSum = maquinas[0].peekTCT(aux[0]);
+    unsigned long auxMinSum = maquinas[0].peekTCT(aux[0]);
     int minPosition = 0;
     for (size_t j = 1; j < aux.size(); ++j) {
       if (maquinas[j].peekTCT(aux[j]) < auxMinSum) {
