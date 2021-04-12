@@ -1,3 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "../include/solucion.hpp"
 
 Solucion::Solucion(std::unique_ptr<ParallelInterface> algorithm) :
@@ -24,6 +28,16 @@ unsigned long Solucion::getZ() {
   return z_;
 }
 
+std::ostream& Solucion::showWithTCTs(std::ostream& os) {
+  for (size_t i = 0; i < maquinas_.size(); ++i) {
+    std::cout << "Maquina " << i + 1 << ": ";
+    maquinas_[i].show();
+    std::cout << "TCTLocal: " << maquinas_[i].getTCT() << '\n';
+    std::cout << "\n";
+  }
+  return os;
+}
+
 std::ostream& Solucion::show(std::ostream& os) {
   for (size_t i = 0; i < maquinas_.size(); ++i) {
     std::cout << "Maquina " << i + 1 << ": ";
@@ -31,7 +45,3 @@ std::ostream& Solucion::show(std::ostream& os) {
   }
   return os;
 }
-    // std::cout << "\nTCTlocal: " << maquinas[i].getTCT() << '\n';
-    // z += maquinas[i].getTCT();
-    // std::cout << "Times: " << maquinas[i].getTime() << '\n';
-// std::cout << "z: " << z << '\n';

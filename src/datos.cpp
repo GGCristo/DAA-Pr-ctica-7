@@ -20,8 +20,6 @@ Datos::Datos() {
   }
   std::string linea;
   while(getline(fichero, linea)) {
-    // std::cout << "Linea: " << linea << '\n';
-    // std::cin.get();
     switch(linea[0]) {
       case 'n': {
                   std::string n;
@@ -41,18 +39,10 @@ Datos::Datos() {
                 break;
       case 'P': {
                   times(linea);
-                  // std::cout << "Voy a mostrar los tiempos\n" << '\n';
-                  // for (size_t i = 0; i < tiempos.size(); ++i) {
-                  // std::cout << tiempos[i] << '\n';
-                  // }
                 }
                 break;
       case 'S': {
                   setups(fichero, linea);
-                  // std::cout << "Voy a mostrar los setups\n" << '\n';
-                  // for (size_t i = 0; i < setup.size(); ++i) {
-                  // std::cout << setup[i] << '\n';
-                  // }
                 }
       default:
                 break;

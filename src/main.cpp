@@ -16,20 +16,20 @@
 void mainTryCatch() {
   // Datos::fichero_ = "I40j_2m_S1_1.txt";
   // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
-  Datos::fichero_ = "I40j_4m_S1_1.txt";
+  // Datos::fichero_ = "I40j_4m_S1_1.txt";
   // Datos::fichero_ = "I40j_6m_S1_1.txt";
-  // Datos::fichero_ = "I40j_8m_S1_1.txt";
+  Datos::fichero_ = "I40j_8m_S1_1.txt";
   // Datos::fichero_ = "prueba.txt";
 
-  Solucion solucion(std::make_unique<Voraz>(Voraz()));
+  Solucion solucion(std::make_unique<GreedyTime>());
   solucion.ejecutar();
-  solucion.show(std::cout);
-  std::cout << solucion.getZ() << '\n';
+  solucion.showWithTCTs(std::cout);
+  std::cout << "Z: " << solucion.getZ() << "\n\n";
 
-  // Solucion solucion1(std::make_unique<Voraz>(Voraz()));
-  // solucion1.ejecutar();
-  // solucion1.show(std::cout);
-  // std::cout << solucion1.getZ() << '\n';
+  Solucion solucion1(std::make_unique<GreedyTCT>());
+  solucion1.ejecutar();
+  solucion1.showWithTCTs(std::cout);
+  std::cout << "Z: " << solucion1.getZ() << '\n';
 }
 
 int main() {

@@ -10,5 +10,5 @@ class ParallelInterface {
     virtual ~ParallelInterface() = default;
     virtual void algorithm(std::vector<Maquina>&) = 0;
   protected:
-    const Tarea getTask(int);
+    Tarea getTask(int);
 };

@@ -1,8 +1,12 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "../include/parallelInterface.hpp"
 
 #include "../include/datos.hpp"
 
-const Tarea ParallelInterface::getTask(int previousTask) {
+Tarea ParallelInterface::getTask(int previousTask) {
   // std::cout << "El anterior es: " << previousTask << '\n';
   int auxMinSum;
   int minPosition;

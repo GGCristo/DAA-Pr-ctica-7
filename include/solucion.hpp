@@ -4,7 +4,8 @@
 #include "datos.hpp"
 #include "maquina.hpp"
 #include "../include/parallelInterface.hpp"
-#include "../include/voraz.hpp"
+#include "../include/greedy_time.hpp"
+#include "../include/greedy_TCT.hpp"
 
 class Solucion {
   public:
@@ -13,6 +14,7 @@ class Solucion {
     void ejecutar();
     unsigned long getZ();
     std::ostream& show(std::ostream& os = std::cout);
+    std::ostream& showWithTCTs(std::ostream& os = std::cout);
 
   private:
     std::vector<Maquina> maquinas_;

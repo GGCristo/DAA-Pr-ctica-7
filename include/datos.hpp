@@ -17,8 +17,8 @@ class Datos {
     Datos& operator =(const Datos&) = delete;
     int getN();
     int getM();
-    std::vector<std::pair<int, bool>>& getTimes();
-    const std::vector<std::vector<int>>& getSetups();
+    [[maybe_unused]] std::vector<std::pair<int, bool>>& getTimes();
+    [[maybe_unused]] const std::vector<std::vector<int>>& getSetups();
     void showTimes();
     void showSetups();
     void reset();
