@@ -9,7 +9,7 @@
 
 class Solucion {
   public:
-    Solucion(std::unique_ptr<ParallelInterface>);
+    explicit Solucion(std::unique_ptr<ParallelInterface>);
     const std::vector<Maquina>& getMachines();
     void ejecutar();
     unsigned long getZ();

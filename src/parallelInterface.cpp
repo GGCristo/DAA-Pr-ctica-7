@@ -8,8 +8,8 @@
 
 Tarea ParallelInterface::getTask(int previousTask) {
   // std::cout << "El anterior es: " << previousTask << '\n';
-  int auxMinSum;
-  int minPosition;
+  int auxMinSum = -1;
+  int minPosition = -1;
   Tarea tarea;
   Datos* datos = &Datos::getInstance();
   size_t i = 0;
@@ -17,11 +17,17 @@ Tarea ParallelInterface::getTask(int previousTask) {
     if (!datos->getTimes()[i].second) {
       auxMinSum = datos->getTimes()[i].first +
         datos->getSetups()[previousTask + 1][i + 1];
-      minPosition = i;
+      minPosition = i++;
       break;
     }
   }
-  for(++i; i < datos->getTimes().size(); ++i) {
+  if (auxMinSum == -1) {
+    throw "[getTask] No hay más tareas disponibles\n";
+  }
+  if (minPosition == -1) {
+    throw "[getTask] No hay ninguna tarea disponibles\n";
+  }
+  for(; i < datos->getTimes().size(); ++i) {
     if (!datos->getTimes()[i].second &&
         datos->getTimes()[i].first + datos->getSetups()[previousTask + 1][i + 1] <
         auxMinSum) {
