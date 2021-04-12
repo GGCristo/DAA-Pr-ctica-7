@@ -79,15 +79,15 @@ std::vector<std::pair<int, bool>>& Datos::getTimes() {
   return times_;
 }
 
-void Datos::setups(std::fstream& fichero,std::string& linea) {
-  std::string ignorar;
-  std::stringstream linea_stream(linea);
-  while (linea_stream >> ignorar) {
-    if(ignorar[ignorar.size() - 1] == ']') {
-      break;
-    }
-    continue;
-  }
+void Datos::setups(std::fstream& fichero) {
+  // std::string ignorar;
+  // std::stringstream linea_stream(linea);
+  // while (linea_stream >> ignorar) {
+  //   if(ignorar[ignorar.size() - 1] == ']') {
+  //     break;
+  //   }
+  //   continue;
+  // }
   std::string number;
   while(getline(fichero ,linea)) {
     std::vector<int> row;

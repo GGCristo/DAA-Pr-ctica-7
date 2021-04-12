@@ -7,10 +7,8 @@
 #include "../include/datos.hpp"
 
 Tarea ParallelInterface::getTask(int previousTask) {
-  // std::cout << "El anterior es: " << previousTask << '\n';
   int auxMinSum = -1;
   int minPosition = -1;
-  Tarea tarea;
   Datos* datos = &Datos::getInstance();
   size_t i = 0;
   for (; i < datos->getTimes().size(); ++i) {
@@ -36,6 +34,5 @@ Tarea ParallelInterface::getTask(int previousTask) {
       minPosition = i;
     }
   }
-  // std::cout << "La tarea[i]: " << minPosition << " con valor: " << auxMinSum << '\n';
   return Tarea(minPosition, auxMinSum);
 }

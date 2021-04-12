@@ -4,6 +4,7 @@
 
 #include "../include/greedy_TCT.hpp"
 
+// TODO evita la duplicidad de meter las primeras tareas
 void GreedyTCT::algorithm(std::vector<Maquina>& maquinas) {
   assert(!Datos::getInstance().getTimes()[0].second);
   for (size_t i = 0; i < maquinas.size(); ++i) {
