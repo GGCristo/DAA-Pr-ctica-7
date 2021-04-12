@@ -4,7 +4,6 @@
 #include "../include/datos.hpp"
 #include "../include/maquina.hpp"
 #include "../include/solucion.hpp"
-#include "../include/greedy_time.hpp"
 
     // Datos::fichero_ = "I40j_2m_S1_1.txt";
     // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
@@ -36,25 +35,52 @@ void NUMBER_OF_TASK_IN_MACHINES(Solucion& solucion) {
   }
 }
 
-TEST_CASE("2 máquinas") {
-  Datos::fichero_ = "I40j_2m_S1_1.txt";
-  Solucion solucion(std::make_unique<GreedyTCT>());
-  TEST_SIZES();
-  NUMBER_OF_TASK_IN_MACHINES(solucion);
-}
+TEST_CASE("GreedyTCT") {
+  SUBCASE("2 máquinas") {
+    Datos::fichero_ = "I40j_2m_S1_1.txt";
+    Solucion solucion(std::make_unique<GreedyTCT>());
+    TEST_SIZES();
+    NUMBER_OF_TASK_IN_MACHINES(solucion);
+  }
 
-TEST_CASE("4 máquinas") {
-  SUBCASE("GreedyB") {
-    Datos::fichero_ = "I40j_4m_S1_1.txt";
+  SUBCASE("4 máquinas") {
+    SUBCASE("GreedyB") {
+      Datos::fichero_ = "I40j_4m_S1_1.txt";
+      Solucion solucion(std::make_unique<GreedyTCT>());
+      TEST_SIZES();
+      NUMBER_OF_TASK_IN_MACHINES(solucion);
+    }
+  }
+
+  SUBCASE("8 máquinas") {
+    Datos::fichero_ = "I40j_8m_S1_1.txt";
     Solucion solucion(std::make_unique<GreedyTCT>());
     TEST_SIZES();
     NUMBER_OF_TASK_IN_MACHINES(solucion);
   }
 }
 
-TEST_CASE("8 máquinas") {
-  Datos::fichero_ = "I40j_8m_S1_1.txt";
-  Solucion solucion(std::make_unique<GreedyTCT>());
-  TEST_SIZES();
-  NUMBER_OF_TASK_IN_MACHINES(solucion);
+TEST_CASE("GreedyTime") {
+  SUBCASE("2 máquinas") {
+    Datos::fichero_ = "I40j_2m_S1_1.txt";
+    Solucion solucion(std::make_unique<GreedyTime>());
+    TEST_SIZES();
+    NUMBER_OF_TASK_IN_MACHINES(solucion);
+  }
+
+  SUBCASE("4 máquinas") {
+    SUBCASE("GreedyB") {
+      Datos::fichero_ = "I40j_4m_S1_1.txt";
+      Solucion solucion(std::make_unique<GreedyTime>());
+      TEST_SIZES();
+      NUMBER_OF_TASK_IN_MACHINES(solucion);
+    }
+  }
+
+  SUBCASE("8 máquinas") {
+    Datos::fichero_ = "I40j_8m_S1_1.txt";
+    Solucion solucion(std::make_unique<GreedyTime>());
+    TEST_SIZES();
+    NUMBER_OF_TASK_IN_MACHINES(solucion);
+  }
 }
