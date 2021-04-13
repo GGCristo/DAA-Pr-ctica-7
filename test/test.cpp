@@ -4,12 +4,11 @@
 #include "../include/datos.hpp"
 #include "../include/maquina.hpp"
 #include "../include/solucion.hpp"
+#include "../include/greedy_time.hpp"
+#include "../include/greedy_TCT.hpp"
 
-    // Datos::fichero_ = "I40j_2m_S1_1.txt";
-    // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
-    // Datos::fichero_ = "I40j_4m_S1_1.txt";
-    // Datos::fichero_ = "I40j_6m_S1_1.txt";
-    // Datos::fichero_ = "I40j_8m_S1_1.txt";
+unsigned long FormulaTCT(const Maquina& maquina);
+
 void TEST_SIZES() {
     Datos* datos = &Datos::getInstance();
     SUBCASE("The vector that contain the times") {
@@ -35,52 +34,69 @@ void NUMBER_OF_TASK_IN_MACHINES(Solucion& solucion) {
   }
 }
 
+void FINAL_TCT(Solucion& solucion) {
+  SUBCASE("TCT it should be the same as if you calculate ot with the formula") {
+    for (size_t i = 0; i < solucion.getMachines().size(); ++i) {
+      CHECK(solucion.getMachines()[i].getTCT() == FormulaTCT(solucion.getMachines()[i]));
+    }
+  }
+}
+
+
+void TESTS(Solucion& solucion) {
+  TEST_SIZES();
+  NUMBER_OF_TASK_IN_MACHINES(solucion);
+  FINAL_TCT(solucion);
+}
+
 TEST_CASE("GreedyTCT") {
   SUBCASE("2 máquinas") {
     Datos::fichero_ = "I40j_2m_S1_1.txt";
-    Solucion solucion(std::make_unique<GreedyTCT>());
-    TEST_SIZES();
-    NUMBER_OF_TASK_IN_MACHINES(solucion);
+    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+    TESTS(solucion);
   }
 
   SUBCASE("4 máquinas") {
     SUBCASE("GreedyB") {
       Datos::fichero_ = "I40j_4m_S1_1.txt";
-      Solucion solucion(std::make_unique<GreedyTCT>());
-      TEST_SIZES();
-      NUMBER_OF_TASK_IN_MACHINES(solucion);
+      Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+      TESTS(solucion);
     }
   }
 
   SUBCASE("8 máquinas") {
     Datos::fichero_ = "I40j_8m_S1_1.txt";
-    Solucion solucion(std::make_unique<GreedyTCT>());
-    TEST_SIZES();
-    NUMBER_OF_TASK_IN_MACHINES(solucion);
+    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+    TESTS(solucion);
   }
 }
 
 TEST_CASE("GreedyTime") {
   SUBCASE("2 máquinas") {
     Datos::fichero_ = "I40j_2m_S1_1.txt";
-    Solucion solucion(std::make_unique<GreedyTime>());
-    TEST_SIZES();
-    NUMBER_OF_TASK_IN_MACHINES(solucion);
+    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+    TESTS(solucion);
   }
 
   SUBCASE("4 máquinas") {
     SUBCASE("GreedyB") {
       Datos::fichero_ = "I40j_4m_S1_1.txt";
-      Solucion solucion(std::make_unique<GreedyTime>());
-      TEST_SIZES();
-      NUMBER_OF_TASK_IN_MACHINES(solucion);
+      Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+      TESTS(solucion);
     }
   }
 
   SUBCASE("8 máquinas") {
     Datos::fichero_ = "I40j_8m_S1_1.txt";
-    Solucion solucion(std::make_unique<GreedyTime>());
-    TEST_SIZES();
-    NUMBER_OF_TASK_IN_MACHINES(solucion);
+    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+    TESTS(solucion);
   }
+}
+
+unsigned long FormulaTCT(const Maquina& maquina) {
+  unsigned long tct = 0;
+  for (size_t i = 0; i < maquina.size(); ++i) {
+    tct += (maquina.size() - i) * maquina[i].getTime();
+  }
+  return tct;
 }

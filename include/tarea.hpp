@@ -5,7 +5,7 @@
 class Tarea {
   public:
     Tarea(int, int);
-    int getTime();
+    int getTime() const;
     std::ostream& show(std::ostream& os = std::cout);
   private:
     // int setupTime_;

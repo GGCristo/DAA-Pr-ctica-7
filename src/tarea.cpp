@@ -8,7 +8,7 @@ Tarea::Tarea(int id, int totalTime) : id_(id), time_(totalTime){
   tct_ = -1;
 }
 
-int Tarea::getTime() {
+int Tarea::getTime() const {
   return time_;
 }
 

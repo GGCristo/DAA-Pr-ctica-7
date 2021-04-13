@@ -4,9 +4,9 @@
 
 #include "../include/solucion.hpp"
 
-Solucion::Solucion(std::unique_ptr<ParallelInterface> algorithm) :
+Solucion::Solucion(int m, std::unique_ptr<ParallelInterface> algorithm) :
   algorithm_(std::move(algorithm)) {
-  for (int i = 0; i < Datos::getInstance().getM(); ++i) {
+  for (int i = 0; i < m; ++i) {
     maquinas_.emplace_back(Maquina());
   }
   z_ = 0;

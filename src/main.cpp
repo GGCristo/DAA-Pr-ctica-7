@@ -10,8 +10,10 @@
 #include <memory>
 
 #include "../include/datos.hpp"
-#include "../include/maquina.hpp"
 #include "../include/solucion.hpp"
+#include "../include/greedy_time.hpp"
+#include "../include/greedy_TCT.hpp"
+#include "../include/grasp.hpp"
 
 void mainTryCatch() {
   // Datos::fichero_ = "I40j_2m_S1_1.txt";
@@ -21,15 +23,20 @@ void mainTryCatch() {
   Datos::fichero_ = "I40j_8m_S1_1.txt";
   // Datos::fichero_ = "prueba.txt";
 
-  Solucion solucion(std::make_unique<GreedyTime>());
-  solucion.ejecutar();
-  solucion.showWithTCTs(std::cout);
-  std::cout << "Z: " << solucion.getZ() << "\n\n";
+  Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+  solucion0.ejecutar();
+  solucion0.showWithTCTs(std::cout);
+  std::cout << "Z: " << solucion0.getZ() << "\n\n";
 
-  Solucion solucion1(std::make_unique<GreedyTCT>());
+  Solucion solucion1(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
   solucion1.ejecutar();
   solucion1.showWithTCTs(std::cout);
   std::cout << "Z: " << solucion1.getZ() << '\n';
+
+  // Solucion solucion2(Datos::getInstance().getM(), std::make_unique<Grasp>());
+  // solucion2.ejecutar();
+  // solucion2.showWithTCTs(std::cout);
+  // std::cout << "Z: " << solucion2.getZ() << '\n';
 }
 
 int main() {

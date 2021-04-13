@@ -12,9 +12,10 @@ class Maquina {
     int getIdLastTask();
     int getTime();
     size_t size() const;
-    unsigned long getTCT();
+    unsigned long getTCT() const;
     unsigned long peekTCT(Tarea);
     std::ostream& show(std::ostream& os = std::cout);
+    const Tarea& operator[](int) const;
   private:
     unsigned long tct_;
     int time_;

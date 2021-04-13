@@ -40,8 +40,12 @@ unsigned long Maquina::peekTCT(Tarea tarea) {
   return tct_ + PREVIOUS_TCT + tarea.time_;
 }
 
-unsigned long Maquina::getTCT() {
+unsigned long Maquina::getTCT() const {
   return tct_;
+}
+
+const Tarea& Maquina::operator[] (int index) const {
+  return queue_[index];
 }
 
 size_t Maquina::size() const{

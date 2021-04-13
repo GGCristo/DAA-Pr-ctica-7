@@ -78,10 +78,6 @@ class Datos {
      * Forma de uso: Datos::fichero_ = "Nombre-del-fichero";
      */
     static inline std::string fichero_ = "";
-    /**
-     * @algorithm_ Puntero de tipo ParallelInterface que apunta al algoritmo
-     */
-    static inline std::unique_ptr<ParallelInterface> algorithm_;
   private:
     /**
      * @brief Lee y carga todos los datos del fichero

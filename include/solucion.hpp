@@ -1,15 +1,12 @@
 #pragma once
 
 #include <vector>
-#include "datos.hpp"
 #include "maquina.hpp"
 #include "../include/parallelInterface.hpp"
-#include "../include/greedy_time.hpp"
-#include "../include/greedy_TCT.hpp"
 
 class Solucion {
   public:
-    explicit Solucion(std::unique_ptr<ParallelInterface>);
+    Solucion(int, std::unique_ptr<ParallelInterface>);
     const std::vector<Maquina>& getMachines();
     void ejecutar();
     unsigned long getZ();
