@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 #include <memory>
-#include "parallelInterface.hpp"
 
 // TODO Make everything const
 /**
