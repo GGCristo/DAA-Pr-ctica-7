@@ -11,6 +11,7 @@ class Maquina {
     Maquina();
     void reCalculateTimeFrom(int);
     void reCalculateTct();
+    Tarea* searchTask(int);
     // Getters
     int getIdPreviousTask(int) const;
     int getIdLastTask() const;

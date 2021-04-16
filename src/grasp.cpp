@@ -22,9 +22,54 @@ using Random = effolkronium::random_static;
 //   }
 // }
 
-void Grasp::algorithm(std::vector<Maquina>& maquinas) {
-  // preprocesamiento(maquinas);
-  // for (int i = 0; i < Datos::getInstance()getN(); ++i) {
+bool isTaskAlreadyIn(const std::vector<Tarea>& bestK, int id) {
+  for(size_t i = 0; i < bestK.size(); ++i) {
+    if (bestK[i].getId() == id) {
+      return true;
+    }
+  }
+  return false;
+}
 
-  // }
+std::vector<Tarea> Grasp::getBestK(int previousTask, size_t k) {
+  std::vector<Tarea> bestK;
+  while (bestK.size() != k) {
+    int minPosition = -1;
+    int auxMinSum = -1;
+    int i = 0;
+    for (; i < Datos::getInstance().getN(); ++i) {
+      if (!Datos::getInstance().getTimes()[i].second) {
+        auxMinSum = getTime(previousTask, i);
+        minPosition = i++;
+        break;
+      }
+    }
+    if (auxMinSum == -1) {
+      throw "[getTask] No hay más tareas disponibles\n";
+    }
+    if (minPosition == -1) {
+      throw "[getTask] No hay ninguna tarea disponibles\n";
+    }
+    for (; i < Datos::getInstance().getN(); ++i) {
+      if (!isTaskAlreadyIn(bestK, i) && !Datos::getInstance().getTimes()[i].second) {
+        if (getTime(previousTask, i) < auxMinSum) {
+          minPosition = i;
+          auxMinSum = getTime(previousTask, i);
+        }
+      }
+    }
+    bestK.push_back(Tarea(minPosition, auxMinSum));
+  }
+  return bestK;
+}
+
+void Grasp::algorithm(std::vector<Maquina>& maquinas) {
+  preprocesamiento(maquinas);
+  while (!Datos::getInstance().areAllTaskReady()) {
+    for (size_t j = 0; j < maquinas.size(); ++j) {
+      std::vector<Tarea> rcl = getBestK(maquinas[j].getIdLastTask());
+      Tarea candidato = rcl[Random::get(0, (int)rcl.size() - 1)];
+      maquinas[j].add(candidato);
+    }
+  }
 }

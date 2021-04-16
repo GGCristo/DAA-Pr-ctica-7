@@ -40,6 +40,13 @@ class Datos {
      */
     int getM();
     /**
+     * @brief
+
+     *
+     * @return
+     */
+    bool areAllTaskReady();
+    /**
      * @brief Devuelve los tiempos de las tareas, cada indice representa su
      * respectiva tarea, cada celda tiene un booleano para saber si la tarea
      * ya esta asignada a una tarea o no

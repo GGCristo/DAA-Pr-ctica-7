@@ -9,7 +9,6 @@ Solucion::Solucion(int m, std::unique_ptr<ParallelInterface> algorithm) :
   for (int i = 0; i < m; ++i) {
     maquinas_.emplace_back(Maquina());
   }
-  z_ = 0;
 }
 
 const std::vector<Maquina>& Solucion::getMachines() {
@@ -22,10 +21,11 @@ void Solucion::ejecutar() {
 }
 
 unsigned long Solucion::getZ() {
+  unsigned long z = 0;
   for (size_t i = 0; i < maquinas_.size(); ++i) {
-    z_ += maquinas_[i].getTCT();
+    z += maquinas_[i].getTCT();
   }
-  return z_;
+  return z;
 }
 
 void Solucion::reinsert(int machine, int previousPosition, int newPosition) {

@@ -20,22 +20,23 @@ void mainTryCatch() {
   // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
   // Datos::fichero_ = "I40j_4m_S1_1.txt";
   // Datos::fichero_ = "I40j_6m_S1_1.txt";
-  Datos::fichero_ = "I40j_8m_S1_1.txt";
-  // Datos::fichero_ = "prueba.txt";
+  // Datos::fichero_ = "I40j_8m_S1_1.txt";
+  Datos::fichero_ = "prueba.txt";
 
   Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
   solucion0.ejecutar();
   solucion0.showWithTCTs(std::cout);
 
+  // solucion0.extraSwap(0, 1, 0, 3);
+  // solucion0.showWithTCTs(std::cout);
+
   // Solucion solucion1(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
   // solucion1.ejecutar();
   // solucion1.showWithTCTs(std::cout);
-  // std::cout << "Z: " << solucion1.getZ() << "\n\n";
 
   // Solucion solucion2(Datos::getInstance().getM(), std::make_unique<Grasp>());
   // solucion2.ejecutar();
   // solucion2.showWithTCTs(std::cout);
-  // std::cout << "Z: " << solucion2.getZ() << '\n';
 }
 
 int main() {

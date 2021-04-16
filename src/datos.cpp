@@ -59,6 +59,15 @@ int Datos::getM() {
   return m_;
 }
 
+bool Datos::areAllTaskReady() {
+  for (int i = 0; i < n_; ++i) {
+    if (times_[i].second == false) {
+      return false;
+    }
+  }
+  return true;
+}
+
 void Datos::times(const std::string& linea) {
   std::vector<std::pair<int, bool>> times;
   std::string numero;

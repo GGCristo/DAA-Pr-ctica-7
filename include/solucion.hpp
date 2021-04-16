@@ -20,5 +20,4 @@ class Solucion {
   private:
     std::vector<Maquina> maquinas_;
     std::unique_ptr<ParallelInterface> algorithm_;
-    unsigned long z_;
 };

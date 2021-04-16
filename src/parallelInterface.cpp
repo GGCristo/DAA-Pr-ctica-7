@@ -26,8 +26,7 @@ Tarea ParallelInterface::getTask(int previousTask) {
     throw "[getTask] No hay ninguna tarea disponibles\n";
   }
   for(; i < datos->getTimes().size(); ++i) {
-    if (!datos->getTimes()[i].second &&
-        datos->getTimes()[i].first + datos->getSetups()[previousTask + 1][i + 1] <
+    if (!datos->getTimes()[i].second && getTime(previousTask, i) <
         auxMinSum) {
       auxMinSum = datos->getTimes()[i].first +
         datos->getSetups()[previousTask + 1][i + 1];

@@ -10,8 +10,17 @@ Maquina::Maquina() {
   previousTctTask_ = 0;
 }
 
+Tarea* Maquina::searchTask(int id) {
+  for(size_t i = 0; i < queue_.size(); ++i) {
+    if (queue_[i].getId() == id) {
+      return &queue_[i];
+    }
+  }
+  return nullptr;
+}
+
 void Maquina::reCalculateTimeFrom(int startPosition) {
-  for (int i = startPosition; i < queue_.size(); ++i) {
+  for (size_t i = startPosition; i < queue_.size(); ++i) {
     queue_[i].time_ = Datos::getInstance().getTimes()[i].first +
       Datos::getInstance().getSetups()[getIdPreviousTask(i) + 1][i + 1];
   }
@@ -22,7 +31,7 @@ void Maquina::reCalculateTct() {
   for (size_t i = 0; i < queue_.size(); ++i) {
     tct += (queue_.size() - i) * queue_[i].getTime();
   }
-  tct = tct_;
+  tct_ = tct;
 }
 
 int Maquina::getIdLastTask() const {
