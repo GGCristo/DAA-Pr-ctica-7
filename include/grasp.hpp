@@ -6,7 +6,8 @@
 
 class Grasp: public ParallelInterface {
   public:
-    void algorithm(std::vector<Maquina>& maquinas) override;
+    Solucion run(int) override;
   private:
     std::vector<Tarea> getBestK(int, size_t k = 3);
+    Solucion construction(const std::vector<Maquina>&);
 };

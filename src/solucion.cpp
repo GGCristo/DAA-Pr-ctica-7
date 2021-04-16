@@ -4,21 +4,19 @@
 
 #include "../include/solucion.hpp"
 
-Solucion::Solucion(int m, std::unique_ptr<ParallelInterface> algorithm) :
-  algorithm_(std::move(algorithm)) {
-  for (int i = 0; i < m; ++i) {
-    maquinas_.emplace_back(Maquina());
-  }
+Solucion::Solucion(std::vector<Maquina> maquinas) {
+  maquinas_ = maquinas;
+  Datos::getInstance().reset();
 }
 
 const std::vector<Maquina>& Solucion::getMachines() {
   return maquinas_;
 }
 
-void Solucion::ejecutar() {
-  algorithm_->algorithm(maquinas_);
-  Datos::getInstance().reset();
-}
+// void Solucion::ejecutar() {
+//   algorithm_->algorithm(maquinas_);
+//   Datos::getInstance().reset();
+// }
 
 unsigned long Solucion::getZ() {
   unsigned long z = 0;

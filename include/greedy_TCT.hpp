@@ -4,5 +4,5 @@
 
 class GreedyTCT: public ParallelInterface {
   public:
-    void algorithm(std::vector<Maquina>& maquinas) override;
+    Solucion run(int m) override;
 };

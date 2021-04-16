@@ -3,16 +3,17 @@
 #include <vector>
 #include "tarea.hpp"
 #include "maquina.hpp"
+#include "solucion.hpp"
 // class Maquina;
 
 class ParallelInterface {
   public:
     ParallelInterface() = default;
     virtual ~ParallelInterface() = default;
-    virtual void algorithm(std::vector<Maquina>&) = 0;
+    virtual Solucion run(int) = 0;
   protected:
     Tarea getTask(int);
     // (int previousTask, int currentTask)
     int getTime(int, int);
-    void preprocesamiento(std::vector<Maquina>&);
+    std::vector<Maquina> preprocesamiento(int);
 };

@@ -24,8 +24,6 @@ void TEST_SIZES() {
 
 void NUMBER_OF_TASK_IN_MACHINES(Solucion& solucion) {
   SUBCASE("The total number of tasks that are in a machine must be equal to the number of tasks") {
-    // std::vector<Maquina> maquinas;
-    solucion.ejecutar();
     int totalTests = 0;
     for(size_t i = 0; i < solucion.getMachines().size(); ++i) {
       totalTests += solucion.getMachines()[i].size();
@@ -52,21 +50,24 @@ void TESTS(Solucion& solucion) {
 TEST_CASE("GreedyTCT") {
   SUBCASE("2 máquinas") {
     Datos::fichero_ = "I40j_2m_S1_1.txt";
-    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+    std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
+    Solucion solucion(algorithm->run(Datos::getInstance().getM()));
     TESTS(solucion);
   }
 
   SUBCASE("4 máquinas") {
     SUBCASE("GreedyB") {
       Datos::fichero_ = "I40j_4m_S1_1.txt";
-      Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+      std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
+      Solucion solucion(algorithm->run(Datos::getInstance().getM()));
       TESTS(solucion);
     }
   }
 
   SUBCASE("8 máquinas") {
     Datos::fichero_ = "I40j_8m_S1_1.txt";
-    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+    std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
+    Solucion solucion(algorithm->run(Datos::getInstance().getM()));
     TESTS(solucion);
   }
 }
@@ -74,21 +75,24 @@ TEST_CASE("GreedyTCT") {
 TEST_CASE("GreedyTime") {
   SUBCASE("2 máquinas") {
     Datos::fichero_ = "I40j_2m_S1_1.txt";
-    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+    std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
+    Solucion solucion(algorithm->run(Datos::getInstance().getM()));
     TESTS(solucion);
   }
 
   SUBCASE("4 máquinas") {
     SUBCASE("GreedyB") {
       Datos::fichero_ = "I40j_4m_S1_1.txt";
-      Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+      std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
+      Solucion solucion(algorithm->run(Datos::getInstance().getM()));
       TESTS(solucion);
     }
   }
 
   SUBCASE("8 máquinas") {
     Datos::fichero_ = "I40j_8m_S1_1.txt";
-    Solucion solucion(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+    std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
+    Solucion solucion(algorithm->run(Datos::getInstance().getM()));
     TESTS(solucion);
   }
 }

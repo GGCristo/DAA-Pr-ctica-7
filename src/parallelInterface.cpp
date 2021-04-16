@@ -41,8 +41,12 @@ int ParallelInterface::getTime(int previousTask, int currentTask) {
     Datos::getInstance().getSetups()[previousTask + 1][currentTask + 1];
 }
 
-void ParallelInterface::preprocesamiento(std::vector<Maquina>& maquinas) {
-  for (size_t i = 0; i < maquinas.size(); ++i) {
+std::vector<Maquina> ParallelInterface::preprocesamiento(int m) {
+  std::vector<Maquina> maquinas;
+  for (int i = 0; i < m; ++i) {
+    maquinas.emplace_back(Maquina());
+    // TODO -1 instead of maquinas[i].getIdLastTask();
     maquinas[i].add(getTask(maquinas[i].getIdLastTask()));
   }
+  return maquinas;
 }

@@ -23,8 +23,11 @@ void mainTryCatch() {
   // Datos::fichero_ = "I40j_8m_S1_1.txt";
   Datos::fichero_ = "prueba.txt";
 
-  Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
-  solucion0.ejecutar();
+  std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
+  Solucion solucion0(algorithm->run(Datos::getInstance().getM()));
+
+  // Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
+  // solucion0.ejecutar();
   solucion0.showWithTCTs(std::cout);
 
   // solucion0.extraSwap(0, 1, 0, 3);

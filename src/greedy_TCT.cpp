@@ -4,9 +4,9 @@
 
 #include "../include/greedy_TCT.hpp"
 
-void GreedyTCT::algorithm(std::vector<Maquina>& maquinas) {
+Solucion GreedyTCT::run(int m) {
   assert(!Datos::getInstance().getTimes()[0].second);
-  preprocesamiento(maquinas);
+  std::vector<Maquina> maquinas = preprocesamiento(m);
   // TODO maquinas.size(), what happends if there are more machines than tasks
   for (size_t i = 0; i < Datos::getInstance().getN() - maquinas.size(); ++i) {
     std::vector<Tarea> aux;
@@ -24,4 +24,5 @@ void GreedyTCT::algorithm(std::vector<Maquina>& maquinas) {
     }
     maquinas[minPosition].add(aux[minPosition]);
   }
+  return Solucion(maquinas);
 }

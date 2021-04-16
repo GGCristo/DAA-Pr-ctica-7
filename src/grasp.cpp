@@ -6,22 +6,6 @@
 
 using Random = effolkronium::random_static;
 
-// void Grasp::algorithm(std::vector<Maquina>& maquinas) {
-//   // Fase constructiva
-//   std::vector<int> copyInteger;
-//   copyInteger.reserve(Datos::getInstance().getN());
-//   for (int i = 0; i < Datos::getInstance().getN(); ++i){
-//     copyInteger.push_back(i);
-//   }
-//   while(!copyInteger.empty()) {
-//     int randomTask = Random::get(0, (int)copyInteger.size() - 1);
-//     int randomMachine = Random::get(0,  (int)maquinas.size() - 1);
-//     maquinas[randomMachine].add(Tarea(copyInteger[randomTask], getTime(
-//             maquinas[randomMachine].getIdLastTask(), copyInteger[randomTask])));
-//     copyInteger.erase(copyInteger.begin() + randomTask);
-//   }
-// }
-
 bool isTaskAlreadyIn(const std::vector<Tarea>& bestK, int id) {
   for(size_t i = 0; i < bestK.size(); ++i) {
     if (bestK[i].getId() == id) {
@@ -63,13 +47,40 @@ std::vector<Tarea> Grasp::getBestK(int previousTask, size_t k) {
   return bestK;
 }
 
-void Grasp::algorithm(std::vector<Maquina>& maquinas) {
-  preprocesamiento(maquinas);
+Solucion Grasp::construction(const std::vector<Maquina>& maquinas) {
+  std::vector<Maquina> construction = maquinas;
   while (!Datos::getInstance().areAllTaskReady()) {
-    for (size_t j = 0; j < maquinas.size(); ++j) {
-      std::vector<Tarea> rcl = getBestK(maquinas[j].getIdLastTask());
+    for (size_t j = 0; j < construction.size(); ++j) {
+      std::vector<Tarea> rcl = getBestK(construction[j].getIdLastTask());
       Tarea candidato = rcl[Random::get(0, (int)rcl.size() - 1)];
-      maquinas[j].add(candidato);
+      construction[j].add(candidato);
     }
   }
+  return Solucion(construction);
+}
+
+bool updateSolution(Solucion& solution, Solucion& bestSolution) {
+    if (bestSolution.getZ() < solution.getZ()) {
+      solution = bestSolution;
+      return true;
+    }
+    return false;
+}
+
+Solucion Grasp::run(int m) {
+  int noImprovementIteraction = 0;
+  std::vector<Maquina> maquinas = preprocesamiento(m);
+  Solucion bestSolution = construction(maquinas);
+  // Local
+  Solucion solution = bestSolution;
+  while(noImprovementIteraction < 1000) {
+    Solucion bestSolution = construction(maquinas);
+    // Local():
+    if (updateSolution(solution, bestSolution)) {
+      noImprovementIteraction = 0;
+    } else {
+      noImprovementIteraction++;
+    }
+  }
+  return solution;
 }

@@ -2,11 +2,10 @@
 
 #include <vector>
 #include "maquina.hpp"
-#include "../include/parallelInterface.hpp"
 
 class Solucion {
   public:
-    Solucion(int, std::unique_ptr<ParallelInterface>);
+    Solucion(std::vector<Maquina>);
     const std::vector<Maquina>& getMachines();
     void ejecutar();
     unsigned long getZ();
@@ -19,5 +18,4 @@ class Solucion {
 
   private:
     std::vector<Maquina> maquinas_;
-    std::unique_ptr<ParallelInterface> algorithm_;
 };
