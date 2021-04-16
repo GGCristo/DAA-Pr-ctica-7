@@ -26,12 +26,11 @@ void mainTryCatch() {
   Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
   solucion0.ejecutar();
   solucion0.showWithTCTs(std::cout);
-  std::cout << "Z: " << solucion0.getZ() << "\n\n";
 
-  Solucion solucion1(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
-  solucion1.ejecutar();
-  solucion1.showWithTCTs(std::cout);
-  std::cout << "Z: " << solucion1.getZ() << '\n';
+  // Solucion solucion1(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
+  // solucion1.ejecutar();
+  // solucion1.showWithTCTs(std::cout);
+  // std::cout << "Z: " << solucion1.getZ() << "\n\n";
 
   // Solucion solucion2(Datos::getInstance().getM(), std::make_unique<Grasp>());
   // solucion2.ejecutar();

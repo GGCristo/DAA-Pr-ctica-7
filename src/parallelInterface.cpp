@@ -36,3 +36,14 @@ Tarea ParallelInterface::getTask(int previousTask) {
   }
   return Tarea(minPosition, auxMinSum);
 }
+
+int ParallelInterface::getTime(int previousTask, int currentTask) {
+  return Datos::getInstance().getTimes()[currentTask].first +
+    Datos::getInstance().getSetups()[previousTask + 1][currentTask + 1];
+}
+
+void ParallelInterface::preprocesamiento(std::vector<Maquina>& maquinas) {
+  for (size_t i = 0; i < maquinas.size(); ++i) {
+    maquinas[i].add(getTask(maquinas[i].getIdLastTask()));
+  }
+}

@@ -5,12 +5,12 @@
 class Tarea {
   public:
     Tarea(int, int);
+    int getId() const;
     int getTime() const;
-    std::ostream& show(std::ostream& os = std::cout);
+    std::ostream& show(std::ostream& os = std::cout) const;
   private:
     // int setupTime_;
     // int time_;
-    unsigned long tct_;
     int id_;
     int time_;
     friend class Maquina;

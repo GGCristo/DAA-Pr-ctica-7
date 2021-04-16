@@ -2,7 +2,8 @@
 
 #include <vector>
 #include "tarea.hpp"
-class Maquina;
+#include "maquina.hpp"
+// class Maquina;
 
 class ParallelInterface {
   public:
@@ -11,4 +12,6 @@ class ParallelInterface {
     virtual void algorithm(std::vector<Maquina>&) = 0;
   protected:
     Tarea getTask(int);
+    int getTime(int, int);
+    void preprocesamiento(std::vector<Maquina>&);
 };

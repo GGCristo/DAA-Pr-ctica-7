@@ -6,9 +6,7 @@
 
 void GreedyTime::algorithm(std::vector<Maquina>& maquinas) {
   assert(!Datos::getInstance().getTimes()[0].second);
-  for (size_t i = 0; i < maquinas.size(); ++i) {
-    maquinas[i].add(getTask(maquinas[i].getIdLastTask()));
-  }
+  preprocesamiento(maquinas);
   // TODO maquinas.size(), what happends if there are more machines than tasks
   for (size_t i = 0; i < Datos::getInstance().getN() - maquinas.size(); ++i) {
     std::vector<Tarea> aux;
