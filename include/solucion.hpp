@@ -5,7 +5,7 @@
 
 class Solucion {
   public:
-    Solucion(std::vector<Maquina>);
+    explicit Solucion(const std::vector<Maquina>&);
     const std::vector<Maquina>& getMachines();
     void ejecutar();
     unsigned long getZ();
@@ -15,6 +15,7 @@ class Solucion {
     void extraSwap(int, int, int, int);
     bool operator<(const Solucion&);
     std::ostream& show(std::ostream& os = std::cout);
+    std::ostream& showOnlyZ(std::ostream& os = std::cout);
     std::ostream& showWithTCTs(std::ostream& os = std::cout);
     // Access
     // std::vector<Maquina>::const_iterator begin() const;

@@ -6,8 +6,9 @@
 
 using Random = effolkronium::random_static;
 
-Grasp::Grasp(int typeOfMovement, size_t k) {
+Grasp::Grasp(int typeOfMovement, int iterations, size_t k) {
   typeOfMovement_ = typeOfMovement;
+  iterations_ = iterations;
   k_ = k;
 }
 
@@ -22,23 +23,23 @@ bool isTaskAlreadyIn(const std::vector<Tarea>& bestK, int id) {
 
 std::vector<Tarea> Grasp::getBestK(int previousTask) {
   std::vector<Tarea> bestK;
-  while (bestK.size() != k_) {
+  for (int k = 0; k < k_; ++k) {
     int minPosition = -1;
     int auxMinSum = -1;
     int i = 0;
     for (; i < Datos::getInstance().getN(); ++i) {
-      if (!Datos::getInstance().getTimes()[i].second) {
+      if (!isTaskAlreadyIn(bestK, i) && !Datos::getInstance().getTimes()[i].second) {
         auxMinSum = getTime(previousTask, i);
         minPosition = i++;
         break;
       }
     }
-    if (auxMinSum == -1) {
-      throw "[getBestK] No hay más tareas disponibles\n";
-    }
-    if (minPosition == -1) {
-      throw "[getBestK] No hay ninguna tarea disponibles\n";
-    }
+    // if (auxMinSum == -1) {
+      // throw "[getBestK] No hay más tareas disponibles\n";
+    // }
+    // if (minPosition == -1) {
+      // throw "[getBestK] No hay ninguna tarea disponibles\n";
+    // }
     for (; i < Datos::getInstance().getN(); ++i) {
       if (!isTaskAlreadyIn(bestK, i) && !Datos::getInstance().getTimes()[i].second) {
         if (getTime(previousTask, i) < auxMinSum) {
@@ -47,15 +48,20 @@ std::vector<Tarea> Grasp::getBestK(int previousTask) {
         }
       }
     }
-    bestK.push_back(Tarea(minPosition, auxMinSum));
+    if (minPosition != -1) {
+      bestK.push_back(Tarea(minPosition, auxMinSum));
+    }
   }
   return bestK;
 }
 
 Solucion Grasp::construction(const std::vector<Maquina>& maquinas) {
   std::vector<Maquina> construction = maquinas;
+  if (Datos::getInstance().areAllTaskReady()) {
+    throw "[construction] There are no task available";
+  }
   while (!Datos::getInstance().areAllTaskReady()) {
-    for (size_t j = 0; j < construction.size(); ++j) {
+    for (size_t j = 0; j < construction.size() && !Datos::getInstance().areAllTaskReady(); ++j) {
       std::vector<Tarea> rcl = getBestK(construction[j].getIdLastTask());
       Tarea candidato = rcl[Random::get(0, (int)rcl.size() - 1)];
       construction[j].add(candidato);
@@ -65,20 +71,21 @@ Solucion Grasp::construction(const std::vector<Maquina>& maquinas) {
 }
 
 bool updateSolution(Solucion& solution, Solucion& bestSolution) {
-    if (bestSolution.getZ() < solution.getZ()) {
-      solution = bestSolution;
-      return true;
-    }
-    return false;
+  if (bestSolution.getZ() < solution.getZ()) {
+    solution = bestSolution;
+    return true;
+  }
+  return false;
 }
 
 Solucion Grasp::run(int m) {
   int noImprovementIteraction = 0;
-  std::vector<Maquina> maquinas = preprocesamiento(m);
-  Solucion potencialSolution = construction(maquinas);
+  std::vector<Maquina> preprocesado = preprocesamiento(m);
+  Solucion potencialSolution = construction(preprocesado);
   Solucion solution = postProcessing(potencialSolution.getMachines());
-  while(noImprovementIteraction < 1000) {
-    potencialSolution = construction(maquinas);
+  while(noImprovementIteraction < iterations_ - 1) {
+    pseudo_reset(preprocesado);
+    potencialSolution = construction(preprocesado);
     potencialSolution = postProcessing(potencialSolution.getMachines());
     if (updateSolution(solution, potencialSolution)) {
       noImprovementIteraction = 0;
@@ -87,6 +94,13 @@ Solucion Grasp::run(int m) {
     }
   }
   return solution;
+}
+
+void Grasp::pseudo_reset(const std::vector<Maquina>& maquinas) const {
+  Datos::getInstance().reset();
+  for (size_t maquina = 0; maquina < maquinas.size(); ++maquina) {
+    Datos::getInstance().getTimes()[maquinas[maquina].begin()->getId()].second = true;
+  }
 }
 
 Solucion Grasp::postProcessing(const std::vector<Maquina>& maquinas) {
@@ -170,7 +184,6 @@ Solucion Grasp::postProcessing_extraSwap(const std::vector<Maquina>& maquinas) {
 
 // Movements
 void Grasp::reinsert(Maquina& machine, int previousPosition, int newPosition) {
-  Maquina futureSolution = machine;
   Tarea deleted = machine.erase(previousPosition);
   machine.insert(deleted, newPosition);
   machine.reCalculateTimeFrom(std::min(previousPosition, newPosition));

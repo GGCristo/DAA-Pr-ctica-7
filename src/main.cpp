@@ -3,12 +3,9 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <vector>
 #include <memory>
 
+#include "../include/testing.hpp"
 #include "../include/datos.hpp"
 #include "../include/solucion.hpp"
 #include "../include/greedy_time.hpp"
@@ -16,16 +13,17 @@
 #include "../include/grasp.hpp"
 
 enum Movements { reInsert, move, innerSwap, extraSwap };
+enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
 void mainTryCatch() {
   // Datos::fichero_ = "I40j_2m_S1_1.txt";
   // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
   // Datos::fichero_ = "I40j_4m_S1_1.txt";
-  Datos::fichero_ = "I40j_6m_S1_1.txt";
+  // Datos::fichero_ = "I40j_6m_S1_1.txt";
   // Datos::fichero_ = "I40j_8m_S1_1.txt";
-  // Datos::fichero_ = "prueba.txt";
+  Datos::fichero_ = "prueba.txt";
 
-  std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();;
+  std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();
   Solucion solucion0(greedyTime->run(Datos::getInstance().getM()));
   solucion0.showWithTCTs(std::cout);
 
@@ -56,6 +54,7 @@ void mainTryCatch() {
 int main() {
   try {
     mainTryCatch();
+    // testing();
   } catch (const std::string& message) {
     std::cout << message;
     return 1;

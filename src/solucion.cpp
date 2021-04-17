@@ -4,8 +4,8 @@
 
 #include "../include/solucion.hpp"
 
-Solucion::Solucion(std::vector<Maquina> maquinas) {
-  maquinas_ = maquinas;
+Solucion::Solucion(const std::vector<Maquina>& maquinas) :
+  maquinas_(maquinas) {
   generateZ();
   Datos::getInstance().reset();
 }
@@ -53,18 +53,23 @@ bool Solucion::operator<(const Solucion& otherSolucion) {
 
 std::ostream& Solucion::showWithTCTs(std::ostream& os) {
   for (size_t i = 0; i < maquinas_.size(); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
+    os << "Maquina " << i + 1 << ": ";
     maquinas_[i].show();
-    std::cout << "TCTLocal: " << maquinas_[i].getTCT() << '\n';
-    std::cout << "\n";
+    os << "TCTLocal: " << maquinas_[i].getTCT() << '\n';
+    os << "\n";
   }
-  std::cout << "Z: " << getZ() << "\n\n";
+  os << "Z: " << getZ() << "\n\n";
+  return os;
+}
+
+std::ostream& Solucion::showOnlyZ(std::ostream& os) {
+  os << "Z: " << getZ() << "\n\n";
   return os;
 }
 
 std::ostream& Solucion::show(std::ostream& os) {
   for (size_t i = 0; i < maquinas_.size(); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
+    os << "Maquina " << i + 1 << ": ";
     maquinas_[i].show();
   }
   return os;

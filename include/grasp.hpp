@@ -6,9 +6,10 @@
 
 class Grasp: public ParallelInterface {
   public:
-    Grasp(int, size_t k = 3);
+    explicit Grasp(int, int iterations = 1000, size_t k = 3);
     Solucion run(int) override;
   private:
+    int iterations_;
     size_t k_;
     std::vector<Tarea> getBestK(int);
     Solucion construction(const std::vector<Maquina>&);
@@ -26,4 +27,5 @@ class Grasp: public ParallelInterface {
     void innerSwap(Maquina& machine, int position1, int position2);
     void extraSwap(Maquina& machine1, int position1, Maquina& machine2,
                    int position2);
+    void pseudo_reset(const std::vector<Maquina>&) const;
 };

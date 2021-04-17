@@ -54,8 +54,7 @@ int Maquina::getTime() const {
 
 void Maquina::add(Tarea task) {
   if (Datos::getInstance().getTimes()[task.id_].second) {
-    int id = task.id_;
-    throw "La tarea " + std::to_string(id) +
+    throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
   Datos::getInstance().getTimes()[task.id_].second = true;
@@ -77,16 +76,17 @@ unsigned long Maquina::getTCT() const {
 Tarea Maquina::erase(int position) {
   // TODO should I return a pointer?
   Tarea taskDeleted = queue_[position];
+  Datos::getInstance().getTimes()[queue_[position].id_].second = false;
   queue_.erase(queue_.begin() + position);
   return taskDeleted;
 }
 
 void Maquina::insert(Tarea& task, int position) {
   if (Datos::getInstance().getTimes()[task.id_].second) {
-    int id = task.id_;
-    throw "La tarea " + std::to_string(id) +
+    throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
+  Datos::getInstance().getTimes()[task.id_].second = true;
   queue_.insert(queue_.begin() + position, task);
 }
 
