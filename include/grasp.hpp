@@ -4,13 +4,17 @@
 #include "maquina.hpp"
 #include "random.hpp"
 
+enum Stop_Criterion {iterations, iterationsSinceImprovement};
+
 class Grasp: public ParallelInterface {
   public:
-    explicit Grasp(int, int iterations = 1000, size_t k = 3);
+    explicit Grasp(int, int stopCriterion_ = iterationsSinceImprovement,
+                   int iterations = 1000, size_t k = 3);
     Solucion run(int) override;
   private:
     int iterations_;
     size_t k_;
+    int stopCriterion_;
     std::vector<Tarea> getBestK(int);
     Solucion construction(const std::vector<Maquina>&);
     Solucion postProcessing(const std::vector<Maquina>&);

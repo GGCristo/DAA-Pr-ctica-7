@@ -53,8 +53,8 @@ void mainTryCatch() {
 
 int main() {
   try {
-    mainTryCatch();
-    // testing();
+    // mainTryCatch();
+    testing();
   } catch (const std::string& message) {
     std::cout << message;
     return 1;

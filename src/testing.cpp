@@ -16,14 +16,22 @@ void testing() {
   testing_greedyTime();
   std::cout << "||| GreedyTct |||\n";
   testing_greedyTct();
-  std::cout << "||| MultiBootReinsert |||\n";
-  testing_reinsert();
-  std::cout << "||| MultiBootMove |||\n";
-  testing_move();
-  std::cout << "||| MultiBootInnerSwap |||\n";
-  testin_innerSwap();
-  std::cout << "||| MultiBootExtraSwap |||\n";
-  testing_extraSwap();
+  std::cout << "||| MultiBootReinsert (iterations)|||\n";
+  testing_reinsert(iterations);
+  std::cout << "||| MultiBootReinsert (iterationsSinceImprovement)|||\n";
+  testing_reinsert(iterationsSinceImprovement);
+  std::cout << "||| MultiBootMove (iterations)|||\n";
+  testing_move(iterations);
+  std::cout << "||| MultiBootMove (iterationsSinceImprovement)|||\n";
+  testing_move(iterationsSinceImprovement);
+  std::cout << "||| MultiBootInnerSwap (iterations)|||\n";
+  testin_innerSwap(iterations);
+  std::cout << "||| MultiBootInnerSwap (iterationsSinceImprovement)|||\n";
+  testin_innerSwap(iterationsSinceImprovement);
+  std::cout << "||| MultiBootExtraSwap (iterations)|||\n";
+  testing_extraSwap(iterations);
+  std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement)|||\n";
+  testing_extraSwap(iterationsSinceImprovement);
 }
 
 void testing_greedyTime() {
@@ -54,8 +62,8 @@ void testing_greedyTct() {
   solucion1.showOnlyZ(std::cout);
 }
 
-void testing_reinsert() {
-  std::unique_ptr<ParallelInterface> grasp_reInsert = std::make_unique<Grasp>(reInsert);
+void testing_reinsert(int stopCriterion) {
+  std::unique_ptr<ParallelInterface> grasp_reInsert = std::make_unique<Grasp>(reInsert, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solucion solucion2(grasp_reInsert->run(Datos::getInstance().getM()));
@@ -68,8 +76,8 @@ void testing_reinsert() {
   solucion2.showOnlyZ(std::cout);
 }
 
-void testing_move() {
-  std::unique_ptr<ParallelInterface> grasp_move = std::make_unique<Grasp>(move);
+void testing_move(int stopCriterion) {
+  std::unique_ptr<ParallelInterface> grasp_move = std::make_unique<Grasp>(move, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solucion solucion3(grasp_move->run(Datos::getInstance().getM()));
@@ -82,8 +90,8 @@ void testing_move() {
   solucion3.showOnlyZ(std::cout);
 }
 
-void testin_innerSwap() {
-  std::unique_ptr<ParallelInterface> grasp_innerSwap = std::make_unique<Grasp>(innerSwap);
+void testin_innerSwap(int stopCriterion) {
+  std::unique_ptr<ParallelInterface> grasp_innerSwap = std::make_unique<Grasp>(innerSwap, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solucion solucion4(grasp_innerSwap->run(Datos::getInstance().getM()));
@@ -96,8 +104,8 @@ void testin_innerSwap() {
   solucion4.showOnlyZ(std::cout);
 }
 
-void testing_extraSwap() {
-  std::unique_ptr<ParallelInterface> grasp_extraSwap = std::make_unique<Grasp>(extraSwap);
+void testing_extraSwap(int stopCriterion) {
+  std::unique_ptr<ParallelInterface> grasp_extraSwap = std::make_unique<Grasp>(extraSwap, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solucion solucion5(grasp_extraSwap->run(Datos::getInstance().getM()));

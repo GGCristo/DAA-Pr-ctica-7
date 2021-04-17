@@ -6,9 +6,10 @@
 
 using Random = effolkronium::random_static;
 
-Grasp::Grasp(int typeOfMovement, int iterations, size_t k) {
+Grasp::Grasp(int typeOfMovement, int stopCriterion, int iterations, size_t k) {
   typeOfMovement_ = typeOfMovement;
   iterations_ = iterations;
+  stopCriterion_ = stopCriterion;
   k_ = k;
 }
 
@@ -34,12 +35,6 @@ std::vector<Tarea> Grasp::getBestK(int previousTask) {
         break;
       }
     }
-    // if (auxMinSum == -1) {
-      // throw "[getBestK] No hay más tareas disponibles\n";
-    // }
-    // if (minPosition == -1) {
-      // throw "[getBestK] No hay ninguna tarea disponibles\n";
-    // }
     for (; i < Datos::getInstance().getN(); ++i) {
       if (!isTaskAlreadyIn(bestK, i) && !Datos::getInstance().getTimes()[i].second) {
         if (getTime(previousTask, i) < auxMinSum) {
@@ -88,7 +83,11 @@ Solucion Grasp::run(int m) {
     potencialSolution = construction(preprocesado);
     potencialSolution = postProcessing(potencialSolution.getMachines());
     if (updateSolution(solution, potencialSolution)) {
-      noImprovementIteraction = 0;
+      if (stopCriterion_ == iterationsSinceImprovement) {
+        noImprovementIteraction = 0;
+      } else {
+        noImprovementIteraction++;
+      }
     } else {
       noImprovementIteraction++;
     }
