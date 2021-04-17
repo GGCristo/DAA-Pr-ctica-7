@@ -14,6 +14,9 @@ class Grasp: public ParallelInterface {
     Solucion construction(const std::vector<Maquina>&);
     Solucion postProcessing(const std::vector<Maquina>&);
     Solucion postProcessing_reInsert(const std::vector<Maquina>&);
+    Solucion postProcessing_move(const std::vector<Maquina>&);
+    Solucion postProcessing_innerSwap(const std::vector<Maquina>&);
+    Solucion postProcessing_extraSwap(const std::vector<Maquina>&);
 
     // Movements
     int typeOfMovement_;

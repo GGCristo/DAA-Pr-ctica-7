@@ -34,10 +34,10 @@ std::vector<Tarea> Grasp::getBestK(int previousTask) {
       }
     }
     if (auxMinSum == -1) {
-      throw "[getTask] No hay más tareas disponibles\n";
+      throw "[getBestK] No hay más tareas disponibles\n";
     }
     if (minPosition == -1) {
-      throw "[getTask] No hay ninguna tarea disponibles\n";
+      throw "[getBestK] No hay ninguna tarea disponibles\n";
     }
     for (; i < Datos::getInstance().getN(); ++i) {
       if (!isTaskAlreadyIn(bestK, i) && !Datos::getInstance().getTimes()[i].second) {
@@ -72,16 +72,15 @@ bool updateSolution(Solucion& solution, Solucion& bestSolution) {
     return false;
 }
 
-
 Solucion Grasp::run(int m) {
   int noImprovementIteraction = 0;
   std::vector<Maquina> maquinas = preprocesamiento(m);
-  Solucion bestSolution = construction(maquinas);
-  Solucion solution = postProcessing(bestSolution.getMachines());
+  Solucion potencialSolution = construction(maquinas);
+  Solucion solution = postProcessing(potencialSolution.getMachines());
   while(noImprovementIteraction < 1000) {
-    Solucion bestSolution = construction(maquinas);
-    bestSolution = postProcessing(bestSolution.getMachines());
-    if (updateSolution(solution, bestSolution)) {
+    potencialSolution = construction(maquinas);
+    potencialSolution = postProcessing(potencialSolution.getMachines());
+    if (updateSolution(solution, potencialSolution)) {
       noImprovementIteraction = 0;
     } else {
       noImprovementIteraction++;
@@ -94,6 +93,12 @@ Solucion Grasp::postProcessing(const std::vector<Maquina>& maquinas) {
   switch(typeOfMovement_) {
     case 0:
       return postProcessing_reInsert(maquinas);
+    case 1:
+      return postProcessing_move(maquinas);
+    case 2:
+      return postProcessing_innerSwap(maquinas);
+    case 3:
+      return postProcessing_extraSwap(maquinas);
     default:
       throw "That movements is not allowed!\n";
   }
@@ -114,6 +119,55 @@ Solucion Grasp::postProcessing_reInsert(const std::vector<Maquina>& maquinas) {
   return *std::min_element(solutions.begin(), solutions.end());
 }
 
+Solucion Grasp::postProcessing_move(const std::vector<Maquina>& maquinas) {
+  std::vector<Solucion> solutions;
+  for (int previousMachine = 0; previousMachine < maquinas.size(); ++previousMachine) {
+    for (int previousPosition = 0; previousPosition < maquinas[previousMachine].size(); ++previousPosition) {
+      for (int newMachine = 0; newMachine < maquinas.size(); ++newMachine) {
+        if (previousMachine == newMachine) continue;
+        for (int newPosition = 0; newPosition < maquinas[newMachine].size(); ++newPosition) {
+          std::vector<Maquina> copyMaquinas = maquinas;
+          move(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
+          solutions.push_back(Solucion(copyMaquinas));
+        }
+      }
+    }
+  }
+  return *std::min_element(solutions.begin(), solutions.end());
+}
+
+Solucion Grasp::postProcessing_innerSwap(const std::vector<Maquina>& maquinas) {
+  std::vector<Solucion> solutions;
+  for (int maquina = 0; maquina < maquinas.size(); ++maquina) {
+    for (int pivot = 0; pivot < maquinas[maquina].size(); ++pivot) {
+      for (int newPosition = 0; newPosition < maquinas[maquina].size(); ++newPosition) {
+        if (pivot == newPosition) continue;
+        std::vector<Maquina> copyMaquinas = maquinas;
+        innerSwap(copyMaquinas[maquina], pivot, newPosition);
+        solutions.push_back(Solucion(copyMaquinas));
+      }
+    }
+  }
+  return *std::min_element(solutions.begin(), solutions.end());
+}
+
+Solucion Grasp::postProcessing_extraSwap(const std::vector<Maquina>& maquinas) {
+  std::vector<Solucion> solutions;
+  for (int previousMachine = 0; previousMachine < maquinas.size(); ++previousMachine) {
+    for (int previousPosition = 0; previousPosition < maquinas[previousMachine].size(); ++previousPosition) {
+      for (int newMachine = 0; newMachine < maquinas.size(); ++newMachine) {
+        if (previousMachine == newMachine) continue;
+        for (int newPosition = 0; newPosition < maquinas[newMachine].size(); ++newPosition) {
+          std::vector<Maquina> copyMaquinas = maquinas;
+          extraSwap(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
+          solutions.push_back(Solucion(copyMaquinas));
+        }
+      }
+    }
+  }
+  return *std::min_element(solutions.begin(), solutions.end());
+}
+
 // Movements
 void Grasp::reinsert(Maquina& machine, int previousPosition, int newPosition) {
   Maquina futureSolution = machine;
@@ -125,7 +179,11 @@ void Grasp::reinsert(Maquina& machine, int previousPosition, int newPosition) {
 }
 
 void Grasp::move(Maquina& previousMachine, int previousPosition, Maquina& newMachine,
-                 int newPosition) {
+    int newPosition) {
+  // TODO create ID for machine
+  // if (previousMachine == newMachine) {
+  //   std::cout << "Warning: Using a move in the same machine, consider to use reInsert\n";
+  // }
   auto deleted = previousMachine.erase(previousPosition);
   newMachine.insert(deleted, newPosition);
   previousMachine.reCalculateTimeFrom(previousPosition);
@@ -143,7 +201,7 @@ void Grasp::innerSwap(Maquina& machine, int position1, int position2) {
 }
 
 void Grasp::extraSwap(Maquina& machine1, int position1, Maquina& machine2,
-                      int position2) {
+    int position2) {
   std::iter_swap(machine1.begin() + position1,
       machine2.begin() + position2);
 
