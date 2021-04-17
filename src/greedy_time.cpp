@@ -4,26 +4,26 @@
 
 #include "../include/greedy_time.hpp"
 
-Solucion GreedyTime::run(int m) {
-  assert(!Datos::getInstance().getTimes()[0].second);
-  std::vector<Maquina> maquinas = preprocesamiento(m);
-  // TODO maquinas.size(), what happends if there are more machines than tasks
-  for (size_t i = 0; i < Datos::getInstance().getN() - maquinas.size(); ++i) {
-    std::vector<Tarea> aux;
-    aux.reserve(maquinas.size());
-    for (size_t j = 0; j < maquinas.size(); ++j) {
-      aux.push_back(getTask(maquinas[j].getIdLastTask()));
+Solution GreedyTime::run(int m) {
+  assert(!Data::getInstance().getTimes()[0].second);
+  std::vector<Machine> machines = preprocesamiento(m);
+  // TODO machines.size(), what happends if there are more machines than tasks
+  for (size_t i = 0; i < Data::getInstance().getN() - machines.size(); ++i) {
+    std::vector<Task> aux;
+    aux.reserve(machines.size());
+    for (size_t j = 0; j < machines.size(); ++j) {
+      aux.push_back(getTask(machines[j].getIdLastTask()));
     }
-    int auxMinSum = aux[0].getTime() + maquinas[0].getTime();
+    int auxMinSum = aux[0].getTime() + machines[0].getTime();
     int minPosition = 0;
     for (size_t j = 1; j < aux.size(); ++j) {
-      if (aux[j].getTime() + maquinas[j].getTime() <
+      if (aux[j].getTime() + machines[j].getTime() <
           auxMinSum) {
         minPosition = j;
-        auxMinSum = aux[j].getTime() + maquinas[j].getTime();
+        auxMinSum = aux[j].getTime() + machines[j].getTime();
       }
     }
-    maquinas[minPosition].add(aux[minPosition]);
+    machines[minPosition].add(aux[minPosition]);
   }
-  return Solucion(maquinas);
+  return Solution(machines);
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include "parallelInterface.hpp"
-#include "maquina.hpp"
+#include "machine.hpp"
 
 class GreedyTime: public ParallelInterface {
   public:
-    Solucion run(int) override;
+    Solution run(int) override;
 };

@@ -4,12 +4,12 @@
 
 #include "../include/parallelInterface.hpp"
 
-#include "../include/datos.hpp"
+#include "../include/data.hpp"
 
-Tarea ParallelInterface::getTask(int previousTask) {
+Task ParallelInterface::getTask(int previousTask) {
   int auxMinSum = -1;
   int minPosition = -1;
-  Datos* datos = &Datos::getInstance();
+  Data* datos = &Data::getInstance();
   size_t i = 0;
   for (; i < datos->getTimes().size(); ++i) {
     if (!datos->getTimes()[i].second) {
@@ -33,20 +33,20 @@ Tarea ParallelInterface::getTask(int previousTask) {
       minPosition = i;
     }
   }
-  return Tarea(minPosition, auxMinSum);
+  return Task(minPosition, auxMinSum);
 }
 
 int ParallelInterface::getTime(int previousTask, int currentTask) {
-  return Datos::getInstance().getTimes()[currentTask].first +
-    Datos::getInstance().getSetups()[previousTask + 1][currentTask + 1];
+  return Data::getInstance().getTimes()[currentTask].first +
+    Data::getInstance().getSetups()[previousTask + 1][currentTask + 1];
 }
 
-std::vector<Maquina> ParallelInterface::preprocesamiento(int m) {
-  std::vector<Maquina> maquinas;
+std::vector<Machine> ParallelInterface::preprocesamiento(int m) {
+  std::vector<Machine> machines;
   for (int i = 0; i < m; ++i) {
-    maquinas.emplace_back(Maquina());
-    // TODO -1 instead of maquinas[i].getIdLastTask();
-    maquinas[i].add(getTask(maquinas[i].getIdLastTask()));
+    machines.emplace_back(Machine());
+    // TODO -1 instead of machines[i].getIdLastTask();
+    machines[i].add(getTask(machines[i].getIdLastTask()));
   }
-  return maquinas;
+  return machines;
 }

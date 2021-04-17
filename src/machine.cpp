@@ -2,15 +2,15 @@
 
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-#include "../include/maquina.hpp"
+#include "../include/machine.hpp"
 
-Maquina::Maquina() {
+Machine::Machine() {
   time_ = 0;
   tct_ = 0;
   previousTctTask_ = 0;
 }
 
-Tarea* Maquina::searchTask(int id) {
+Task* Machine::searchTask(int id) {
   for(size_t i = 0; i < queue_.size(); ++i) {
     if (queue_[i].getId() == id) {
       return &queue_[i];
@@ -19,14 +19,14 @@ Tarea* Maquina::searchTask(int id) {
   return nullptr;
 }
 
-void Maquina::reCalculateTimeFrom(int startPosition) {
+void Machine::reCalculateTimeFrom(int startPosition) {
   for (size_t i = startPosition; i < queue_.size(); ++i) {
-    queue_[i].time_ = Datos::getInstance().getTimes()[i].first +
-      Datos::getInstance().getSetups()[getIdPreviousTask(i) + 1][i + 1];
+    queue_[i].time_ = Data::getInstance().getTimes()[i].first +
+      Data::getInstance().getSetups()[getIdPreviousTask(i) + 1][i + 1];
   }
 }
 
-void Maquina::reCalculateTct() {
+void Machine::reCalculateTct() {
   unsigned long tct = 0;
   for (size_t i = 0; i < queue_.size(); ++i) {
     tct += (queue_.size() - i) * queue_[i].getTime();
@@ -34,30 +34,30 @@ void Maquina::reCalculateTct() {
   tct_ = tct;
 }
 
-int Maquina::getIdLastTask() const {
+int Machine::getIdLastTask() const {
   if (queue_.empty()) {
     return -1;
   }
   return queue_[queue_.size() - 1].id_;
 }
 
-int Maquina::getIdPreviousTask(int position) const {
+int Machine::getIdPreviousTask(int position) const {
   if (position == 0) {
     return -1;
   }
   return queue_[position - 1].id_;
 }
 
-int Maquina::getTime() const {
+int Machine::getTime() const {
   return time_;
 }
 
-void Maquina::add(Tarea task) {
-  if (Datos::getInstance().getTimes()[task.id_].second) {
+void Machine::add(Task task) {
+  if (Data::getInstance().getTimes()[task.id_].second) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Datos::getInstance().getTimes()[task.id_].second = true;
+  Data::getInstance().getTimes()[task.id_].second = true;
   tct_ += previousTctTask_ + task.time_;
   previousTctTask_ = previousTctTask_ + task.time_;
   time_ += task.time_;
@@ -65,56 +65,56 @@ void Maquina::add(Tarea task) {
   queue_.push_back(task);
 }
 
-unsigned long Maquina::peekTCT(Tarea tarea) const {
+unsigned long Machine::peekTCT(Task tarea) const {
   return tct_ + previousTctTask_ + tarea.time_;
 }
 
-unsigned long Maquina::getTCT() const {
+unsigned long Machine::getTCT() const {
   return tct_;
 }
 
-Tarea Maquina::erase(int position) {
+Task Machine::erase(int position) {
   // TODO should I return a pointer?
-  Tarea taskDeleted = queue_[position];
-  Datos::getInstance().getTimes()[queue_[position].id_].second = false;
+  Task taskDeleted = queue_[position];
+  Data::getInstance().getTimes()[queue_[position].id_].second = false;
   queue_.erase(queue_.begin() + position);
   return taskDeleted;
 }
 
-void Maquina::insert(Tarea& task, int position) {
-  if (Datos::getInstance().getTimes()[task.id_].second) {
+void Machine::insert(Task& task, int position) {
+  if (Data::getInstance().getTimes()[task.id_].second) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Datos::getInstance().getTimes()[task.id_].second = true;
+  Data::getInstance().getTimes()[task.id_].second = true;
   queue_.insert(queue_.begin() + position, task);
 }
 
-const Tarea& Maquina::operator[] (int index) const {
+const Task& Machine::operator[] (int index) const {
   return queue_[index];
 }
 
-std::vector<Tarea>::const_iterator Maquina::begin() const{
+std::vector<Task>::const_iterator Machine::begin() const{
   return queue_.begin();
 }
 
-std::vector<Tarea>::iterator Maquina::begin(){
+std::vector<Task>::iterator Machine::begin(){
   return queue_.begin();
 }
 
-std::vector<Tarea>::const_iterator Maquina::end() const{
+std::vector<Task>::const_iterator Machine::end() const{
   return queue_.end();
 }
 
-std::vector<Tarea>::iterator Maquina::end(){
+std::vector<Task>::iterator Machine::end(){
   return queue_.end();
 }
 
-size_t Maquina::size() const{
+size_t Machine::size() const{
   return queue_.size();
 }
 
-std::ostream& Maquina::show(std::ostream& os) const {
+std::ostream& Machine::show(std::ostream& os) const {
   for (size_t i = 0; i < queue_.size(); ++i) {
     os << "{ ";
     queue_[i].show(os);

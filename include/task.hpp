@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-class Tarea {
+class Task {
   public:
-    Tarea(int, int);
+    Task(int, int);
     int getId() const;
     int getTime() const;
     std::ostream& show(std::ostream& os = std::cout) const;
@@ -13,5 +13,5 @@ class Tarea {
     // int time_;
     int id_;
     int time_;
-    friend class Maquina;
+    friend class Machine;
 };

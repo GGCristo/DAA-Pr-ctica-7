@@ -1,19 +1,19 @@
 #pragma once
 
 #include <vector>
-#include "maquina.hpp"
+#include "machine.hpp"
 
-class Solucion {
+class Solution {
   public:
-    explicit Solucion(const std::vector<Maquina>&);
-    const std::vector<Maquina>& getMachines();
+    explicit Solution(const std::vector<Machine>&);
+    const std::vector<Machine>& getMachines();
     void ejecutar();
     unsigned long getZ();
     void reinsert(int, int, int);
     void move(int, int, int, int);
     void innerSwap(int, int , int);
     void extraSwap(int, int, int, int);
-    bool operator<(const Solucion&);
+    bool operator<(const Solution&);
     std::ostream& show(std::ostream& os = std::cout);
     std::ostream& showOnlyZ(std::ostream& os = std::cout);
     std::ostream& showWithTCTs(std::ostream& os = std::cout);
@@ -25,6 +25,6 @@ class Solucion {
 
   private:
     void generateZ();
-    std::vector<Maquina> maquinas_;
+    std::vector<Machine> machines_;
     unsigned long z_;
 };

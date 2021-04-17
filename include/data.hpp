@@ -13,22 +13,22 @@
  * @brief Clase que contiene todos los datos leídos del fichero, solo puede
  * haber una instancia de este clase (Singleton)
  */
-class Datos {
+class Data {
   public:
     /**
      * @brief Create o return the instance of this class (Singleton)
      *
      */
-    static Datos& getInstance();
+    static Data& getInstance();
     /**
      * @brief No permitas hacer copias de la clase (Singleton)
      * @param Objeto de la misma clase
      */
-    Datos(const Datos&) = delete;
+    Data(const Data&) = delete;
     /**
      * @brief No permitas hacer copias de la clase (Singleton)
      */
-    Datos& operator =(const Datos&) = delete;
+    Data& operator =(const Data&) = delete;
     /**
      * @brief Devuelve el número de tareas
      * @return Número de tareas totales
@@ -89,7 +89,7 @@ class Datos {
      * @brief Lee y carga todos los datos del fichero
      *
      */
-    Datos();
+    Data();
     /**
      * @brief Carga los tiempos desde el fichero en times_
      * @param {linea} Linea que contiene los tiempos de las tareas

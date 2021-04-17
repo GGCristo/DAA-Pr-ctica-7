@@ -2,14 +2,14 @@
 
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-#include "../include/datos.hpp"
+#include "../include/data.hpp"
 
-Datos& Datos::getInstance() {
-  static Datos instance;
+Data& Data::getInstance() {
+  static Data instance;
   return instance;
 }
 
-Datos::Datos() {
+Data::Data() {
   if (fichero_ == "") {
     throw "Especifíca el fichero\n";
   }
@@ -51,15 +51,15 @@ Datos::Datos() {
   fichero.close();
 }
 
-int Datos::getN() {
+int Data::getN() {
   return n_;
 }
 
-int Datos::getM() {
+int Data::getM() {
   return m_;
 }
 
-bool Datos::areAllTaskReady() {
+bool Data::areAllTaskReady() {
   for (int i = 0; i < n_; ++i) {
     if (times_[i].second == false) {
       return false;
@@ -68,7 +68,7 @@ bool Datos::areAllTaskReady() {
   return true;
 }
 
-void Datos::times(const std::string& linea) {
+void Data::times(const std::string& linea) {
   std::vector<std::pair<int, bool>> times;
   std::string numero;
   std::stringstream linea_stream(linea);
@@ -84,11 +84,11 @@ void Datos::times(const std::string& linea) {
   times_ = times;
 }
 
-std::vector<std::pair<int, bool>>& Datos::getTimes() {
+std::vector<std::pair<int, bool>>& Data::getTimes() {
   return times_;
 }
 
-void Datos::setups(std::fstream& fichero) {
+void Data::setups(std::fstream& fichero) {
   std::string linea;
   // std::stringstream linea_stream(linea);
   // while (linea_stream >> ignorar) {
@@ -110,24 +110,24 @@ void Datos::setups(std::fstream& fichero) {
 }
 
 
-void Datos::reset() {
+void Data::reset() {
   for (size_t i = 0; i < times_.size(); ++i) {
     times_[i].second = false;
   }
 }
 
-const std::vector<std::vector<int>>& Datos::getSetups(){
+const std::vector<std::vector<int>>& Data::getSetups(){
   return setups_;
 }
 
-void Datos::showTimes() {
+void Data::showTimes() {
   for (size_t i = 0; i < times_.size(); ++i){
     std::cout << times_[i].first << ' ';
   }
   std::cout << '\n';
 }
 
-void Datos::showSetups() {
+void Data::showSetups() {
   for (size_t i = 0; i < setups_.size(); ++i) {
     for (size_t j = 0; j < setups_[i].size(); ++j) {
       std::cout << setups_[i][j] << ' ';

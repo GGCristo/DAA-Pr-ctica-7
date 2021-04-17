@@ -11,7 +11,7 @@ void testing() {
   // Datos::fichero_ = "I40j_2m_S1_1.txt"; std::cout << "(2 files)\n";
   // Datos::fichero_ = "I40j_4m_S1_1.txt"; std::cout << "(4 files)\n";
   // Datos::fichero_ = "I40j_6m_S1_1.txt"; std::cout << "(6 files)\n";
-  Datos::fichero_ = "I40j_8m_S1_1.txt"; std::cout << "(8 files)\n";
+  Data::fichero_ = "I40j_8m_S1_1.txt"; std::cout << "(8 files)\n";
   std::cout << "||| GreedyTime|||\n";
   testing_greedyTime();
   std::cout << "||| GreedyTct |||\n";
@@ -38,7 +38,7 @@ void testing_greedyTime() {
   std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion0(greedyTime->run(Datos::getInstance().getM()));
+  Solution solucion0(greedyTime->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "TEST1 time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
@@ -52,7 +52,7 @@ void testing_greedyTct() {
   std::unique_ptr<ParallelInterface> greedyTct = std::make_unique<GreedyTCT>();
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion1(greedyTct->run(Datos::getInstance().getM()));
+  Solution solucion1(greedyTct->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "TEST1 time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
@@ -63,10 +63,10 @@ void testing_greedyTct() {
 }
 
 void testing_reinsert(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> grasp_reInsert = std::make_unique<Grasp>(reInsert, stopCriterion);
+  std::unique_ptr<ParallelInterface> multiboost_reInsert = std::make_unique<Multiboot>(reInsert, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion2(grasp_reInsert->run(Datos::getInstance().getM()));
+  Solution solucion2(multiboost_reInsert->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "TEST1 time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
@@ -77,10 +77,10 @@ void testing_reinsert(int stopCriterion) {
 }
 
 void testing_move(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> grasp_move = std::make_unique<Grasp>(move, stopCriterion);
+  std::unique_ptr<ParallelInterface> multiboost_move = std::make_unique<Multiboot>(move, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion3(grasp_move->run(Datos::getInstance().getM()));
+  Solution solucion3(multiboost_move->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "TEST1 time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
@@ -91,10 +91,10 @@ void testing_move(int stopCriterion) {
 }
 
 void testin_innerSwap(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> grasp_innerSwap = std::make_unique<Grasp>(innerSwap, stopCriterion);
+  std::unique_ptr<ParallelInterface> multiboost_innerSwap = std::make_unique<Multiboot>(innerSwap, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion4(grasp_innerSwap->run(Datos::getInstance().getM()));
+  Solution solucion4(multiboost_innerSwap->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
 
   std::cout << "TEST1 time: "
@@ -105,10 +105,10 @@ void testin_innerSwap(int stopCriterion) {
 }
 
 void testing_extraSwap(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> grasp_extraSwap = std::make_unique<Grasp>(extraSwap, stopCriterion);
+  std::unique_ptr<ParallelInterface> multiboost_extraSwap = std::make_unique<Multiboot>(extraSwap, stopCriterion);
 
   auto t1 = std::chrono::high_resolution_clock::now();
-  Solucion solucion5(grasp_extraSwap->run(Datos::getInstance().getM()));
+  Solution solucion5(multiboost_extraSwap->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
   std::cout << "TEST1 time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "

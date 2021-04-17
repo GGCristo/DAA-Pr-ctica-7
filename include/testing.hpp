@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include "../include/datos.hpp"
-#include "../include/solucion.hpp"
+#include "../include/data.hpp"
+#include "../include/solution.hpp"
 #include "../include/greedy_time.hpp"
 #include "../include/greedy_TCT.hpp"
-#include "../include/grasp.hpp"
+#include "../include/multiboot.hpp"
 
 void testing();
 void testing_greedyTime();
