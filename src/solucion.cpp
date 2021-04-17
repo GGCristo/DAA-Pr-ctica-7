@@ -6,6 +6,7 @@
 
 Solucion::Solucion(std::vector<Maquina> maquinas) {
   maquinas_ = maquinas;
+  generateZ();
   Datos::getInstance().reset();
 }
 
@@ -18,50 +19,37 @@ const std::vector<Maquina>& Solucion::getMachines() {
 //   Datos::getInstance().reset();
 // }
 
-unsigned long Solucion::getZ() {
+void Solucion::generateZ() {
   unsigned long z = 0;
   for (size_t i = 0; i < maquinas_.size(); ++i) {
     z += maquinas_[i].getTCT();
   }
-  return z;
+  z_ = z;
 }
 
-void Solucion::reinsert(int machine, int previousPosition, int newPosition) {
-  Tarea deleted = maquinas_[machine].erase(previousPosition);
-  maquinas_[machine].insert(deleted, newPosition);
-  maquinas_[machine].reCalculateTimeFrom(std::min(previousPosition, newPosition));
-  maquinas_[machine].reCalculateTct();
+unsigned long Solucion::getZ() {
+  return z_;
 }
 
-void Solucion::move(int previousMachine, int previousPosition, int newMachine,
-    int newPosition) {
-  auto deleted = maquinas_[previousMachine].erase(previousPosition);
-  maquinas_[newMachine].insert(deleted, newPosition);
-  maquinas_[previousMachine].reCalculateTimeFrom(previousPosition);
-  maquinas_[newMachine].reCalculateTimeFrom(newPosition);
-
-  maquinas_[previousMachine].reCalculateTct();
-  maquinas_[newMachine].reCalculateTct();
+bool Solucion::operator<(const Solucion& otherSolucion) {
+  return z_ < otherSolucion.z_;
 }
 
-void Solucion::innerSwap(int machine, int position1, int position2) {
-  std::iter_swap(maquinas_[machine].begin() + position1,
-      maquinas_[machine].begin() + position2);
-  maquinas_[machine].reCalculateTimeFrom(std::min(position1, position2));
-  maquinas_[machine].reCalculateTct();
-}
+// std::vector<Maquina>::const_iterator Solucion::begin() const {
+//   return maquinas_.begin();
+// }
 
-void Solucion::extraSwap(int machine1, int position1, int machine2,
-    int position2) {
-  std::iter_swap(maquinas_[machine1].begin() + position1,
-      maquinas_[machine2].begin() + position2);
+// std::vector<Maquina>::iterator Solucion::begin() {
+//   return maquinas_.begin();
+// }
 
-  maquinas_[machine1].reCalculateTimeFrom(position1);
-  maquinas_[machine2].reCalculateTimeFrom(position2);
+// std::vector<Maquina>::const_iterator Solucion::end() const {
+//   return maquinas_.end();
+// }
 
-  maquinas_[machine1].reCalculateTct();
-  maquinas_[machine2].reCalculateTct();
-}
+// std::vector<Maquina>::iterator Solucion::end() {
+//   return maquinas_.end();
+// }
 
 std::ostream& Solucion::showWithTCTs(std::ostream& os) {
   for (size_t i = 0; i < maquinas_.size(); ++i) {

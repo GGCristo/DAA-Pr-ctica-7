@@ -25,6 +25,7 @@ class Maquina {
     void insert(Tarea&, int);
     // Show
     std::ostream& show(std::ostream& os = std::cout) const;
+    // Operator
     const Tarea& operator[](int) const;
     // Access
     std::vector<Tarea>::const_iterator begin() const;

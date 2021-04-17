@@ -15,6 +15,8 @@
 #include "../include/greedy_TCT.hpp"
 #include "../include/grasp.hpp"
 
+enum Movements { reInsert, move, innerSwap, extraSwap };
+
 void mainTryCatch() {
   // Datos::fichero_ = "I40j_2m_S1_1.txt";
   // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
@@ -23,23 +25,20 @@ void mainTryCatch() {
   // Datos::fichero_ = "I40j_8m_S1_1.txt";
   Datos::fichero_ = "prueba.txt";
 
-  std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
-  Solucion solucion0(algorithm->run(Datos::getInstance().getM()));
-
-  // Solucion solucion0(Datos::getInstance().getM(), std::make_unique<GreedyTime>());
-  // solucion0.ejecutar();
+  std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();;
+  Solucion solucion0(greedyTime->run(Datos::getInstance().getM()));
   solucion0.showWithTCTs(std::cout);
 
   // solucion0.extraSwap(0, 1, 0, 3);
   // solucion0.showWithTCTs(std::cout);
 
-  // Solucion solucion1(Datos::getInstance().getM(), std::make_unique<GreedyTCT>());
-  // solucion1.ejecutar();
-  // solucion1.showWithTCTs(std::cout);
+  std::unique_ptr<ParallelInterface> greedyTct = std::make_unique<GreedyTCT>();
+  Solucion solucion1(greedyTct->run(Datos::getInstance().getM()));
+  solucion1.showWithTCTs(std::cout);
 
-  // Solucion solucion2(Datos::getInstance().getM(), std::make_unique<Grasp>());
-  // solucion2.ejecutar();
-  // solucion2.showWithTCTs(std::cout);
+  std::unique_ptr<ParallelInterface> grasp_reInsert = std::make_unique<Grasp>(reInsert);
+  Solucion solucion2(grasp_reInsert->run(Datos::getInstance().getM()));
+  solucion2.showWithTCTs(std::cout);
 }
 
 int main() {

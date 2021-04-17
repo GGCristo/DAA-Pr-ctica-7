@@ -6,6 +6,11 @@
 
 using Random = effolkronium::random_static;
 
+Grasp::Grasp(int typeOfMovement, size_t k) {
+  typeOfMovement_ = typeOfMovement;
+  k_ = k;
+}
+
 bool isTaskAlreadyIn(const std::vector<Tarea>& bestK, int id) {
   for(size_t i = 0; i < bestK.size(); ++i) {
     if (bestK[i].getId() == id) {
@@ -15,9 +20,9 @@ bool isTaskAlreadyIn(const std::vector<Tarea>& bestK, int id) {
   return false;
 }
 
-std::vector<Tarea> Grasp::getBestK(int previousTask, size_t k) {
+std::vector<Tarea> Grasp::getBestK(int previousTask) {
   std::vector<Tarea> bestK;
-  while (bestK.size() != k) {
+  while (bestK.size() != k_) {
     int minPosition = -1;
     int auxMinSum = -1;
     int i = 0;
@@ -67,15 +72,15 @@ bool updateSolution(Solucion& solution, Solucion& bestSolution) {
     return false;
 }
 
+
 Solucion Grasp::run(int m) {
   int noImprovementIteraction = 0;
   std::vector<Maquina> maquinas = preprocesamiento(m);
   Solucion bestSolution = construction(maquinas);
-  // Local
-  Solucion solution = bestSolution;
+  Solucion solution = postProcessing(bestSolution.getMachines());
   while(noImprovementIteraction < 1000) {
     Solucion bestSolution = construction(maquinas);
-    // Local():
+    bestSolution = postProcessing(bestSolution.getMachines());
     if (updateSolution(solution, bestSolution)) {
       noImprovementIteraction = 0;
     } else {
@@ -83,4 +88,68 @@ Solucion Grasp::run(int m) {
     }
   }
   return solution;
+}
+
+Solucion Grasp::postProcessing(const std::vector<Maquina>& maquinas) {
+  switch(typeOfMovement_) {
+    case 0:
+      return postProcessing_reInsert(maquinas);
+    default:
+      throw "That movements is not allowed!\n";
+  }
+}
+
+Solucion Grasp::postProcessing_reInsert(const std::vector<Maquina>& maquinas) {
+  std::vector<Solucion> solutions;
+  for (int maquina = 0; maquina < maquinas.size(); ++maquina) {
+    for (int pivot = 0; pivot < maquinas[maquina].size(); ++pivot) {
+      for (int newPosition = 0; newPosition < maquinas[maquina].size(); ++newPosition) {
+        if (pivot == newPosition) continue;
+        std::vector<Maquina> copyMaquinas = maquinas;
+        reinsert(copyMaquinas[maquina], pivot, newPosition);
+        solutions.push_back(Solucion(copyMaquinas));
+      }
+    }
+  }
+  return *std::min_element(solutions.begin(), solutions.end());
+}
+
+// Movements
+void Grasp::reinsert(Maquina& machine, int previousPosition, int newPosition) {
+  Maquina futureSolution = machine;
+  Tarea deleted = machine.erase(previousPosition);
+  machine.insert(deleted, newPosition);
+  machine.reCalculateTimeFrom(std::min(previousPosition, newPosition));
+  // TODO better reCalculateTct
+  machine.reCalculateTct();
+}
+
+void Grasp::move(Maquina& previousMachine, int previousPosition, Maquina& newMachine,
+                 int newPosition) {
+  auto deleted = previousMachine.erase(previousPosition);
+  newMachine.insert(deleted, newPosition);
+  previousMachine.reCalculateTimeFrom(previousPosition);
+  newMachine.reCalculateTimeFrom(newPosition);
+
+  previousMachine.reCalculateTct();
+  newMachine.reCalculateTct();
+}
+
+void Grasp::innerSwap(Maquina& machine, int position1, int position2) {
+  std::iter_swap(machine.begin() + position1,
+      machine.begin() + position2);
+  machine.reCalculateTimeFrom(std::min(position1, position2));
+  machine.reCalculateTct();
+}
+
+void Grasp::extraSwap(Maquina& machine1, int position1, Maquina& machine2,
+                      int position2) {
+  std::iter_swap(machine1.begin() + position1,
+      machine2.begin() + position2);
+
+  machine1.reCalculateTimeFrom(position1);
+  machine2.reCalculateTimeFrom(position2);
+
+  machine1.reCalculateTct();
+  machine2.reCalculateTct();
 }
