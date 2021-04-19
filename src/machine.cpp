@@ -57,7 +57,7 @@ void Machine::add(Task task) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().getTimes()[task.id_].second = true;
+  Data::getInstance().MarkTaskAsReady(task.id_);
   tct_ += previousTctTask_ + task.time_;
   previousTctTask_ = previousTctTask_ + task.time_;
   time_ += task.time_;
@@ -76,7 +76,7 @@ unsigned long Machine::getTCT() const {
 Task Machine::erase(int position) {
   // TODO should I return a pointer?
   Task taskDeleted = queue_[position];
-  Data::getInstance().getTimes()[queue_[position].id_].second = false;
+  Data::getInstance().MarkTaskAsNotReady(queue_[position].id_);
   queue_.erase(queue_.begin() + position);
   return taskDeleted;
 }
@@ -86,7 +86,7 @@ void Machine::insert(Task& task, int position) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().getTimes()[task.id_].second = true;
+  Data::getInstance().MarkTaskAsReady(task.id_);
   queue_.insert(queue_.begin() + position, task);
 }
 

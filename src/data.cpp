@@ -49,23 +49,41 @@ Data::Data() {
     }
   }
   fichero.close();
+  tasksReady_ = 0;
 }
 
-int Data::getN() {
+int Data::getN() const {
   return n_;
 }
 
-int Data::getM() {
+int Data::getM() const {
   return m_;
 }
 
-bool Data::areAllTaskReady() {
-  for (int i = 0; i < n_; ++i) {
-    if (times_[i].second == false) {
-      return false;
-    }
+bool Data::areAllTaskReady() const {
+  if (tasksReady_ < 0 || tasksReady_ > n_) {
+    throw "Take a look at tasksReady_ and n_ variable\n";
   }
-  return true;
+  if (tasksReady_ == n_) return true;
+  return false;
+}
+
+void Data::MarkTaskAsReady(int id) {
+  tasksReady_++;
+  if (tasksReady_ > n_) {
+    throw std::string("[Data::checkTaskAsReady] tasksReady_ cannot be greater") +
+        " than the number of tasks";
+  }
+  times_[id].second = true;
+}
+
+void Data::MarkTaskAsNotReady(int id) {
+  tasksReady_--;
+  if (tasksReady_ < -1) {
+    throw std::string("[Data::checkTaskAsReady] tasksReady_ is less than - 1") +
+        " maybe you forgot to add a task after deleting it";
+  }
+  times_[id].second = false;
 }
 
 void Data::times(const std::string& linea) {
@@ -84,19 +102,12 @@ void Data::times(const std::string& linea) {
   times_ = times;
 }
 
-std::vector<std::pair<int, bool>>& Data::getTimes() {
+const std::vector<std::pair<int, bool>>& Data::getTimes() const {
   return times_;
 }
 
 void Data::setups(std::fstream& fichero) {
   std::string linea;
-  // std::stringstream linea_stream(linea);
-  // while (linea_stream >> ignorar) {
-  //   if(ignorar[ignorar.size() - 1] == ']') {
-  //     break;
-  //   }
-  //   continue;
-  // }
   std::string number;
   while(getline(fichero ,linea)) {
     std::vector<int> row;
@@ -114,20 +125,21 @@ void Data::reset() {
   for (size_t i = 0; i < times_.size(); ++i) {
     times_[i].second = false;
   }
+  tasksReady_ = 0;
 }
 
-const std::vector<std::vector<int>>& Data::getSetups(){
+const std::vector<std::vector<int>>& Data::getSetups() const {
   return setups_;
 }
 
-void Data::showTimes() {
+void Data::showTimes() const {
   for (size_t i = 0; i < times_.size(); ++i){
     std::cout << times_[i].first << ' ';
   }
   std::cout << '\n';
 }
 
-void Data::showSetups() {
+void Data::showSetups() const {
   for (size_t i = 0; i < setups_.size(); ++i) {
     for (size_t j = 0; j < setups_[i].size(); ++j) {
       std::cout << setups_[i][j] << ' ';

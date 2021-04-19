@@ -8,14 +8,17 @@ enum Movements { reInsert, move, innerSwap, extraSwap };
 enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
 void testing() {
-  // Datos::fichero_ = "I40j_2m_S1_1.txt"; std::cout << "(2 files)\n";
-  // Datos::fichero_ = "I40j_4m_S1_1.txt"; std::cout << "(4 files)\n";
-  // Datos::fichero_ = "I40j_6m_S1_1.txt"; std::cout << "(6 files)\n";
-  Data::fichero_ = "I40j_8m_S1_1.txt"; std::cout << "(8 files)\n";
+  Data::fichero_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
+  // Data::fichero_ = "I40j_4m_S1_1.txt"; std::cout << "(4 machines)\n";
+  // Data::fichero_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
+  // Data::fichero_ = "I40j_8m_S1_1.txt"; std::cout << "(8 machines)\n";
+  std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
   std::cout << "||| GreedyTime|||\n";
   testing_greedyTime();
   std::cout << "||| GreedyTct |||\n";
   testing_greedyTct();
+  std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+  // MultiBoot
   std::cout << "||| MultiBootReinsert (iterations)|||\n";
   testing_reinsert(iterations);
   std::cout << "||| MultiBootReinsert (iterationsSinceImprovement)|||\n";
@@ -32,6 +35,24 @@ void testing() {
   testing_extraSwap(iterations);
   std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement)|||\n";
   testing_extraSwap(iterationsSinceImprovement);
+  // Anxious
+  std::cout << "||| MultiBootReinsert (iterations && anxious)|||\n";
+  testing_reinsert(iterations, true);
+  std::cout << "||| MultiBootReinsert (iterationsSinceImprovement && anxious)|||\n";
+  testing_reinsert(iterationsSinceImprovement, true);
+  std::cout << "||| MultiBootMove (iterations && anxious)|||\n";
+  testing_move(iterations, true);
+  std::cout << "||| MultiBootMove (iterationsSinceImprovement && anxious)|||\n";
+  testing_move(iterationsSinceImprovement, true);
+  std::cout << "||| MultiBootInnerSwap (iterations)|||\n";
+  testin_innerSwap(iterations, true);
+  std::cout << "||| MultiBootInnerSwap (iterationsSinceImprovement && anxious)|||\n";
+  testin_innerSwap(iterationsSinceImprovement, true);
+  std::cout << "||| MultiBootExtraSwap (iterations)|||\n";
+  testing_extraSwap(iterations, true);
+  std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement && anxious)|||\n";
+  testing_extraSwap(iterationsSinceImprovement, true);
+
 }
 
 void testing_greedyTime() {
@@ -62,8 +83,9 @@ void testing_greedyTct() {
   solucion1.showOnlyZ(std::cout);
 }
 
-void testing_reinsert(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> multiboost_reInsert = std::make_unique<Multiboot>(reInsert, stopCriterion);
+void testing_reinsert(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> multiboost_reInsert =
+    std::make_unique<Multiboot>(reInsert, stopCriterion, anxious);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion2(multiboost_reInsert->run(Data::getInstance().getM()));
@@ -76,8 +98,9 @@ void testing_reinsert(int stopCriterion) {
   solucion2.showOnlyZ(std::cout);
 }
 
-void testing_move(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> multiboost_move = std::make_unique<Multiboot>(move, stopCriterion);
+void testing_move(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> multiboost_move =
+    std::make_unique<Multiboot>(move, stopCriterion, anxious);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion3(multiboost_move->run(Data::getInstance().getM()));
@@ -90,8 +113,9 @@ void testing_move(int stopCriterion) {
   solucion3.showOnlyZ(std::cout);
 }
 
-void testin_innerSwap(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> multiboost_innerSwap = std::make_unique<Multiboot>(innerSwap, stopCriterion);
+void testin_innerSwap(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> multiboost_innerSwap =
+    std::make_unique<Multiboot>(innerSwap, stopCriterion, anxious);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion4(multiboost_innerSwap->run(Data::getInstance().getM()));
@@ -104,8 +128,9 @@ void testin_innerSwap(int stopCriterion) {
   solucion4.showOnlyZ(std::cout);
 }
 
-void testing_extraSwap(int stopCriterion) {
-  std::unique_ptr<ParallelInterface> multiboost_extraSwap = std::make_unique<Multiboot>(extraSwap, stopCriterion);
+void testing_extraSwap(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> multiboost_extraSwap =
+    std::make_unique<Multiboot>(extraSwap, stopCriterion, anxious);
 
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion5(multiboost_extraSwap->run(Data::getInstance().getM()));

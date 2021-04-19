@@ -8,7 +8,9 @@ using Random = effolkronium::random_static;
 
 enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
-Multiboot::Multiboot(int typeOfMovement, int stopCriterion, int iterations, int k) {
+Multiboot::Multiboot(int typeOfMovement, int stopCriterion, bool ansioso,
+    int iterations, int k) {
+  ansioso_ = ansioso;
   typeOfMovement_ = typeOfMovement;
   iterations_ = iterations;
   stopCriterion_ = stopCriterion;
@@ -79,7 +81,7 @@ bool updateSolution(Solution& solution, Solution& bestSolution) {
 
 Solution Multiboot::run(int m) {
   int noImprovementIteraction = 0;
-  std::vector<Machine> preprocesado = preprocesamiento(m);
+  std::vector<Machine> preprocesado = preprocessing(m);
   Solution potencialSolution = construction(preprocesado);
   Solution solution = postProcessing(potencialSolution.getMachines());
   while(noImprovementIteraction < iterations_ - 1) {
@@ -101,8 +103,8 @@ Solution Multiboot::run(int m) {
 
 void Multiboot::pseudo_reset(const std::vector<Machine>& machines) const {
   Data::getInstance().reset();
-  for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
-    Data::getInstance().getTimes()[machines[maquina].begin()->getId()].second = true;
+  for (size_t machine = 0; machine < machines.size(); ++machine) {
+    Data::getInstance().MarkTaskAsReady(machines[machine].begin()->getId());
   }
 }
 
@@ -122,71 +124,88 @@ Solution Multiboot::postProcessing(const std::vector<Machine>& machines) {
 }
 
 Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& machines) {
-  std::vector<Solution> solutions;
+  Solution bestSolution(machines);
   for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
     for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
       for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
-        std::vector<Machine> copyMaquinas = machines;
-        reinsert(copyMaquinas[maquina], pivot, newPosition);
-        solutions.push_back(Solution(copyMaquinas));
+        std::vector<Machine> testMachine = machines;
+        reinsert(testMachine[maquina], pivot, newPosition);
+        Solution testMachineSolution(testMachine);
+        if (testMachineSolution.getZ() < bestSolution.getZ()) {
+          if (ansioso_) return testMachineSolution;
+          bestSolution = std::move(testMachineSolution);
+        }
       }
     }
   }
-  return *std::min_element(solutions.begin(), solutions.end());
+  return bestSolution;
 }
 
 Solution Multiboot::postProcessing_move(const std::vector<Machine>& machines) {
-  std::vector<Solution> solutions;
+  Solution bestSolution(machines);
   for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
     for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
       for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
         for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
-          std::vector<Machine> copyMaquinas = machines;
-          move(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
-          solutions.push_back(Solution(copyMaquinas));
+          std::vector<Machine> testMachine = machines;
+          move(testMachine[previousMachine], previousPosition, testMachine[newMachine], newPosition);
+          Solution testMachineSolution(testMachine);
+          if (testMachineSolution.getZ() < bestSolution.getZ()) {
+            if (ansioso_) return testMachineSolution;
+            bestSolution = std::move(testMachineSolution);
+          }
         }
       }
     }
   }
-  return *std::min_element(solutions.begin(), solutions.end());
+  return bestSolution;
 }
 
 Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& machines) {
-  std::vector<Solution> solutions;
+  Solution bestSolution(machines);
   for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
     for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
       for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
-        std::vector<Machine> copyMaquinas = machines;
-        innerSwap(copyMaquinas[maquina], pivot, newPosition);
-        solutions.push_back(Solution(copyMaquinas));
+        std::vector<Machine> testMachine = machines;
+        innerSwap(testMachine[maquina], pivot, newPosition);
+        Solution testMachineSolution(testMachine);
+        if (testMachineSolution.getZ() < bestSolution.getZ()) {
+          if (ansioso_) return testMachineSolution;
+          bestSolution = std::move(testMachineSolution);
+        }
       }
     }
   }
-  return *std::min_element(solutions.begin(), solutions.end());
+  return bestSolution;
 }
 
 Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& machines) {
-  std::vector<Solution> solutions;
+  Solution bestSolution(machines);
   for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
     for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
       for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
         for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
-          std::vector<Machine> copyMaquinas = machines;
-          extraSwap(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
-          solutions.push_back(Solution(copyMaquinas));
+          std::vector<Machine> testMachine = machines;
+          extraSwap(testMachine[previousMachine], previousPosition, testMachine[newMachine], newPosition);
+          Solution testMachineSolution(testMachine);
+          if (testMachineSolution.getZ() < bestSolution.getZ()) {
+            if (ansioso_) return testMachineSolution;
+            bestSolution = std::move(testMachineSolution);
+          }
         }
       }
     }
   }
-  return *std::min_element(solutions.begin(), solutions.end());
+  return bestSolution;
 }
 
 // Movements
-void Multiboot::reinsert(Machine& machine, int previousPosition, int newPosition) {
+void Multiboot::reinsert(Machine& machine, int previousPosition,
+    int newPosition) {
   Task deleted = machine.erase(previousPosition);
   machine.insert(deleted, newPosition);
   machine.reCalculateTimeFrom(std::min(previousPosition, newPosition));
@@ -194,8 +213,8 @@ void Multiboot::reinsert(Machine& machine, int previousPosition, int newPosition
   machine.reCalculateTct();
 }
 
-void Multiboot::move(Machine& previousMachine, int previousPosition, Machine& newMachine,
-    int newPosition) {
+void Multiboot::move(Machine& previousMachine, int previousPosition,
+    Machine& newMachine, int newPosition) {
   // TODO create ID for machine
   // if (previousMachine == newMachine) {
   //   std::cout << "Warning: Using a move in the same machine, consider to use reInsert\n";

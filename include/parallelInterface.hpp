@@ -14,5 +14,5 @@ class ParallelInterface {
     Task getTask(int) const;
     // (int previousTask, int currentTask)
     int getTime(int, int) const;
-    std::vector<Machine> preprocesamiento(int);
+    std::vector<Machine> preprocessing(int);
 };

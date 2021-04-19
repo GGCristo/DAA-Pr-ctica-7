@@ -15,39 +15,36 @@
 enum Movements { reInsert, move, innerSwap, extraSwap };
 
 void mainTryCatch() {
-  // Datos::fichero_ = "I40j_2m_S1_1.txt";
-  // Datos::fichero_ = "I40j_2mS1_1.txt"; // empty
-  // Datos::fichero_ = "I40j_4m_S1_1.txt";
-  // Datos::fichero_ = "I40j_6m_S1_1.txt";
-  // Datos::fichero_ = "I40j_8m_S1_1.txt";
-  Data::fichero_ = "prueba.txt";
+  // Data::fichero_ = "I40j_2m_S1_1.txt";
+  // Data::fichero_ = "I40j_2mS1_1.txt"; // empty
+  // Data::fichero_ = "I40j_4m_S1_1.txt";
+  // Data::fichero_ = "I40j_6m_S1_1.txt";
+  Data::fichero_ = "I40j_8m_S1_1.txt";
+  // Data::fichero_ = "prueba.txt";
 
   // std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();
-  // Solution solucion0(greedyTime->run(Datos::getInstance().getM()));
-  // solucion0.showWithTCTs(std::cout);
-
-  // solucion0.extraSwap(0, 1, 0, 3);
+  // Solution solucion0(greedyTime->run(Data::getInstance().getM()));
   // solucion0.showWithTCTs(std::cout);
 
   // std::unique_ptr<ParallelInterface> greedyTct = std::make_unique<GreedyTCT>();
-  // Solution solucion1(greedyTct->run(Datos::getInstance().getM()));
+  // Solution solucion1(greedyTct->run(Data::getInstance().getM()));
   // solucion1.showWithTCTs(std::cout);
 
   // std::unique_ptr<ParallelInterface> multiboost_reInsert = std::make_unique<Multiboot>(reInsert);
-  // Solution solucion2(multiboost_reInsert->run(Datos::getInstance().getM()));
+  // Solution solucion2(multiboost_reInsert->run(Data::getInstance().getM()));
   // solucion2.showWithTCTs(std::cout);
 
   // std::unique_ptr<ParallelInterface> multiboost_move = std::make_unique<Multiboot>(move);
-  // Solution solucion3(multiboost_move->run(Datos::getInstance().getM()));
+  // Solution solucion3(multiboost_move->run(Data::getInstance().getM()));
   // solucion3.showWithTCTs(std::cout);
 
-  std::unique_ptr<ParallelInterface> multiboost_innerSwap = std::make_unique<Multiboot>(innerSwap);
-  Solution solucion4(multiboost_innerSwap->run(Data::getInstance().getM()));
-  solucion4.showWithTCTs(std::cout);
+  // std::unique_ptr<ParallelInterface> multiboost_innerSwap = std::make_unique<Multiboot>(innerSwap);
+  // Solution solucion4(multiboost_innerSwap->run(Data::getInstance().getM()));
+  // solucion4.showWithTCTs(std::cout);
 
-  // std::unique_ptr<ParallelInterface> multiboost_extraSwap = std::make_unique<Multiboot>(extraSwap);
-  // Solution solucion5(multiboost_extraSwap->run(Datos::getInstance().getM()));
-  // solucion5.showWithTCTs(std::cout);
+  std::unique_ptr<ParallelInterface> multiboost_extraSwap = std::make_unique<Multiboot>(extraSwap);
+  Solution solucion5(multiboost_extraSwap->run(Data::getInstance().getM()));
+  solucion5.showWithTCTs(std::cout);
 }
 
 int main() {

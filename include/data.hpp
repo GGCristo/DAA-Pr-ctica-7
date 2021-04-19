@@ -20,32 +20,39 @@ class Data {
      *
      */
     static Data& getInstance();
+
     /**
      * @brief No permitas hacer copias de la clase (Singleton)
      * @param Objeto de la misma clase
      */
     Data(const Data&) = delete;
+
     /**
      * @brief No permitas hacer copias de la clase (Singleton)
      */
     Data& operator =(const Data&) = delete;
+
     /**
      * @brief Devuelve el número de tareas
      * @return Número de tareas totales
      */
-    int getN();
+    int getN() const;
+
     /**
      * @brief Devuelve el número de maquinas
      * @return Número de maquinas totales
      */
-    int getM();
+    int getM() const;
     /**
      * @brief
 
      *
      * @return
      */
-    bool areAllTaskReady();
+    bool areAllTaskReady() const;
+
+    void MarkTaskAsReady(int);
+    void MarkTaskAsNotReady(int);
     /**
      * @brief Devuelve los tiempos de las tareas, cada indice representa su
      * respectiva tarea, cada celda tiene un booleano para saber si la tarea
@@ -53,7 +60,8 @@ class Data {
      * @return Vector de lo que serán las tareas, representadas con un
      * par de enteros y pares
      */
-    std::vector<std::pair<int, bool>>& getTimes();
+    const std::vector<std::pair<int, bool>>& getTimes() const;
+
     /**
      * @brief Devuelve los setups que necesita cada tarea antes de empezar a
      * ejecutarse, la fila corresponde a la anterior tarea (limpieza) y la
@@ -61,24 +69,26 @@ class Data {
      * @return vector de vectores de enteros con los tiempos de setup
      *
      */
-    const std::vector<std::vector<int>>& getSetups();
+    const std::vector<std::vector<int>>& getSetups() const;
+
     /**
      * @brief Muestra el vector de pares de enteros y booleanos con los tiempos
      * de las tareas
      *
      */
-    [[maybe_unused]] void showTimes();
+    [[maybe_unused]] void showTimes() const;
     /**
      * @brief Muestra el vector de vectores de enteros con los setups de las
      * tareas dependientes de la tarea anterior
      *
      */
-    [[maybe_unused]] void showSetups();
+    [[maybe_unused]] void showSetups() const;
     /**
      * @brief Pone a false todos los booleanos del vector times_
      *
      */
     void reset();
+
     /**
      * @fichero_ Fichero desde donde se va a leer los datos
      * Forma de uso: Datos::fichero_ = "Nombre-del-fichero";
@@ -91,11 +101,13 @@ class Data {
      *
      */
     Data();
+
     /**
      * @brief Carga los tiempos desde el fichero en times_
      * @param {linea} Linea que contiene los tiempos de las tareas
      */
     void times(const std::string&);
+
     /**
      * @brief Carga los setups desde el fichero en setups_
      *
@@ -107,17 +119,24 @@ class Data {
      * @m_ Número de maquinas
      */
     int m_;
+
     /**
      * @n_ Número de tareas
      */
     int n_;
-    // TODO Return optimization doesn't work
+
+    /**
+     * @tasksReady_ Number of tasks that are already in a machine
+     */
+    int tasksReady_;
+
     /**
      * @times_ Devuelve los tiempos de las tareas, cada indice representa su
      * respectiva tarea, cada celda tiene un booleano para saber si la tarea
      * ya esta asignada a una tarea o no
      */
     std::vector<std::pair<int, bool>> times_;
+
     /**
      * @setups_ Devuelve los setups que necesita cada tarea antes de empezar a
      * ejecutarse, la fila corresponde a la anterior tarea (limpieza) y la

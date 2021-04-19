@@ -10,8 +10,7 @@
 void testing();
 void testing_greedyTime();
 void testing_greedyTct();
-void multiboot();
-void testing_reinsert(int);
-void testing_move(int);
-void testin_innerSwap(int);
-void testing_extraSwap(int);
+void testing_reinsert(int, bool = false);
+void testing_move(int, bool = false);
+void testin_innerSwap(int, bool = false);
+void testing_extraSwap(int, bool = false);
