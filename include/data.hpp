@@ -84,6 +84,7 @@ class Data {
      * Forma de uso: Datos::fichero_ = "Nombre-del-fichero";
      */
     static inline std::string fichero_ = "";
+
   private:
     /**
      * @brief Lee y carga todos los datos del fichero

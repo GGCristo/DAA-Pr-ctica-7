@@ -8,7 +8,7 @@ using Random = effolkronium::random_static;
 
 enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
-Multiboot::Multiboot(int typeOfMovement, int stopCriterion, int iterations, size_t k) {
+Multiboot::Multiboot(int typeOfMovement, int stopCriterion, int iterations, int k) {
   typeOfMovement_ = typeOfMovement;
   iterations_ = iterations;
   stopCriterion_ = stopCriterion;
@@ -24,7 +24,7 @@ bool isTaskAlreadyIn(const std::vector<Task>& bestK, int id) {
   return false;
 }
 
-std::vector<Task> Multiboot::getBestK(int previousTask) {
+std::vector<Task> Multiboot::getBestK(int previousTask) const {
   std::vector<Task> bestK;
   for (int k = 0; k < k_; ++k) {
     int minPosition = -1;
@@ -58,8 +58,10 @@ Solution Multiboot::construction(const std::vector<Machine>& machines) {
     throw "[construction] There are no task available";
   }
   while (!Data::getInstance().areAllTaskReady()) {
-    for (size_t j = 0; j < construction.size() && !Data::getInstance().areAllTaskReady(); ++j) {
+    for (size_t j = 0; j < construction.size() &&
+            !Data::getInstance().areAllTaskReady(); ++j) {
       std::vector<Task> rcl = getBestK(construction[j].getIdLastTask());
+
       Task candidato = rcl[Random::get(0, (int)rcl.size() - 1)];
       construction[j].add(candidato);
     }
@@ -121,9 +123,9 @@ Solution Multiboot::postProcessing(const std::vector<Machine>& machines) {
 
 Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& machines) {
   std::vector<Solution> solutions;
-  for (int maquina = 0; maquina < machines.size(); ++maquina) {
-    for (int pivot = 0; pivot < machines[maquina].size(); ++pivot) {
-      for (int newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
+  for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
+    for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
+      for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
         std::vector<Machine> copyMaquinas = machines;
         reinsert(copyMaquinas[maquina], pivot, newPosition);
@@ -136,11 +138,11 @@ Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& machines
 
 Solution Multiboot::postProcessing_move(const std::vector<Machine>& machines) {
   std::vector<Solution> solutions;
-  for (int previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
-    for (int previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
-      for (int newMachine = 0; newMachine < machines.size(); ++newMachine) {
+  for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
+    for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
+      for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
-        for (int newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
+        for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
           std::vector<Machine> copyMaquinas = machines;
           move(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
           solutions.push_back(Solution(copyMaquinas));
@@ -153,9 +155,9 @@ Solution Multiboot::postProcessing_move(const std::vector<Machine>& machines) {
 
 Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& machines) {
   std::vector<Solution> solutions;
-  for (int maquina = 0; maquina < machines.size(); ++maquina) {
-    for (int pivot = 0; pivot < machines[maquina].size(); ++pivot) {
-      for (int newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
+  for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
+    for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
+      for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
         std::vector<Machine> copyMaquinas = machines;
         innerSwap(copyMaquinas[maquina], pivot, newPosition);
@@ -168,11 +170,11 @@ Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& machine
 
 Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& machines) {
   std::vector<Solution> solutions;
-  for (int previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
-    for (int previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
-      for (int newMachine = 0; newMachine < machines.size(); ++newMachine) {
+  for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
+    for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
+      for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
-        for (int newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
+        for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
           std::vector<Machine> copyMaquinas = machines;
           extraSwap(copyMaquinas[previousMachine], previousPosition, copyMaquinas[newMachine], newPosition);
           solutions.push_back(Solution(copyMaquinas));

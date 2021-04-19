@@ -32,6 +32,7 @@ class Machine {
     std::vector<Task>::iterator begin();
     std::vector<Task>::const_iterator end() const;
     std::vector<Task>::iterator end();
+
   private:
     int previousTctTask_;
     unsigned long tct_;

@@ -11,8 +11,8 @@ class ParallelInterface {
     virtual ~ParallelInterface() = default;
     virtual Solution run(int) = 0;
   protected:
-    Task getTask(int);
+    Task getTask(int) const;
     // (int previousTask, int currentTask)
-    int getTime(int, int);
+    int getTime(int, int) const;
     std::vector<Machine> preprocesamiento(int);
 };

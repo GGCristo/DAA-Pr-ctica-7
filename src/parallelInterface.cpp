@@ -6,7 +6,7 @@
 
 #include "../include/data.hpp"
 
-Task ParallelInterface::getTask(int previousTask) {
+Task ParallelInterface::getTask(int previousTask) const {
   int auxMinSum = -1;
   int minPosition = -1;
   Data* datos = &Data::getInstance();
@@ -36,7 +36,7 @@ Task ParallelInterface::getTask(int previousTask) {
   return Task(minPosition, auxMinSum);
 }
 
-int ParallelInterface::getTime(int previousTask, int currentTask) {
+int ParallelInterface::getTime(int previousTask, int currentTask) const {
   return Data::getInstance().getTimes()[currentTask].first +
     Data::getInstance().getSetups()[previousTask + 1][currentTask + 1];
 }
