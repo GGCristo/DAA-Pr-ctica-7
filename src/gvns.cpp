@@ -10,9 +10,9 @@ enum Movements { reInsert_enum, move_enum, innerSwap_enum, extraSwap_enum };
 
 enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
-GVNS::GVNS(int typeOfMovement, int typeOfShaking, int stopCriterion, bool ansioso,
+GVNS::GVNS(int typeOfMovement, int typeOfShaking, int stopCriterion, bool anxious,
     int iterations, int k)
-  : Multiboot(typeOfMovement, stopCriterion, ansioso,
+  : Multiboot(typeOfMovement, stopCriterion, anxious,
     iterations, k) {
     if(typeOfMovement_ != reInsert_enum && typeOfMovement_ != extraSwap_enum) {
       std::cerr << "GRASP must be done with reInsert or extraSwap movements\n";
@@ -42,11 +42,11 @@ Solution GVNS::run(int m) {
         if (stopCriterion_ == iterationsSinceImprovement) {
           noImprovementIteraction = 0;
         } else {
-          noImprovementIteraction++;
+          ++noImprovementIteraction;
         }
       } else {
-        k++;
-        noImprovementIteraction++;
+        ++k;
+        ++noImprovementIteraction;
       }
     }
   }
@@ -102,9 +102,9 @@ Solution GVNS::vnd(const std::vector<Machine>& shaked){
         throw "[GVNS | vnd] There are not that many movements\n";
     }
     if (!updateSolution(solution, probablySolution)) {
-      l++;
+      ++l;
     } else {
-      if (ansioso_) return solution;
+      if (anxious_) return solution;
       l = 1;
     }
   }

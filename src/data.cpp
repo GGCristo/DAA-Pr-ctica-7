@@ -68,7 +68,7 @@ bool Data::areAllTaskReady() const {
   return false;
 }
 
-void Data::MarkTaskAsReady(int id) {
+void Data::markTaskAsReady(int id) {
   tasksReady_++;
   if (tasksReady_ > n_) {
     throw std::string("[Data::checkTaskAsReady] tasksReady_ cannot be greater") +
@@ -77,7 +77,7 @@ void Data::MarkTaskAsReady(int id) {
   times_[id].second = true;
 }
 
-void Data::MarkTaskAsNotReady(int id) {
+void Data::markTaskAsNotReady(int id) {
   tasksReady_--;
   if (tasksReady_ < -1) {
     throw std::string("[Data::checkTaskAsReady] tasksReady_ is less than - 1") +

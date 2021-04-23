@@ -17,11 +17,6 @@ class Solution {
     std::ostream& show(std::ostream& os = std::cout);
     std::ostream& showOnlyZ(std::ostream& os = std::cout);
     std::ostream& showWithTCTs(std::ostream& os = std::cout);
-    // Access
-    // std::vector<Maquina>::const_iterator begin() const;
-    // std::vector<Maquina>::iterator begin();
-    // std::vector<Maquina>::const_iterator end() const;
-    // std::vector<Maquina>::iterator end();
 
   private:
     void generateZ();

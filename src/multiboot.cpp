@@ -8,9 +8,9 @@ using Random = effolkronium::random_static;
 
 enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
-Multiboot::Multiboot(int typeOfMovement, int stopCriterion, bool ansioso,
+Multiboot::Multiboot(int typeOfMovement, int stopCriterion, bool anxious,
     int iterations, int k) {
-  ansioso_ = ansioso;
+  anxious_ = anxious;
   typeOfMovement_ = typeOfMovement;
   iterations_ = iterations;
   stopCriterion_ = stopCriterion;
@@ -54,8 +54,8 @@ std::vector<Task> Multiboot::getBestK(int previousTask) const {
   return bestK;
 }
 
-Solution Multiboot::construction(const std::vector<Machine>& machines) {
-  std::vector<Machine> construction = machines;
+Solution Multiboot::construction(const std::vector<Machine>& preprocessed) {
+  std::vector<Machine> construction = preprocessed;
   if (Data::getInstance().areAllTaskReady()) {
     throw "[construction] There are no task available";
   }
@@ -71,9 +71,10 @@ Solution Multiboot::construction(const std::vector<Machine>& machines) {
   return Solution(construction);
 }
 
-bool Multiboot::updateSolution(Solution& solution, const Solution& bestSolution) {
-  if (bestSolution.getZ() < solution.getZ()) {
-    solution = bestSolution;
+bool Multiboot::updateSolution(Solution& solution,
+    const Solution& incomingSolution) {
+  if (incomingSolution.getZ() < solution.getZ()) {
+    solution = incomingSolution;
     return true;
   }
   return false;
@@ -104,36 +105,36 @@ Solution Multiboot::run(int m) {
 void Multiboot::pseudo_reset(const std::vector<Machine>& machines) const {
   Data::getInstance().reset();
   for (size_t machine = 0; machine < machines.size(); ++machine) {
-    Data::getInstance().MarkTaskAsReady(machines[machine].begin()->getId());
+    Data::getInstance().markTaskAsReady(machines[machine].begin()->getId());
   }
 }
 
-Solution Multiboot::postProcessing(const std::vector<Machine>& machines) {
+Solution Multiboot::postProcessing(const std::vector<Machine>& constructed) {
   switch(typeOfMovement_) {
     case 0:
-      return postProcessing_reInsert(machines);
+      return postProcessing_reInsert(constructed);
     case 1:
-      return postProcessing_move(machines);
+      return postProcessing_move(constructed);
     case 2:
-      return postProcessing_innerSwap(machines);
+      return postProcessing_innerSwap(constructed);
     case 3:
-      return postProcessing_extraSwap(machines);
+      return postProcessing_extraSwap(constructed);
     default:
       throw "That movements is not allowed!\n";
   }
 }
 
-Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& machines) {
-  Solution bestSolution(machines);
-  for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
-    for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
-      for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
+Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& constructed) {
+  Solution bestSolution(constructed);
+  for (size_t maquina = 0; maquina < constructed.size(); ++maquina) {
+    for (size_t pivot = 0; pivot < constructed[maquina].size(); ++pivot) {
+      for (size_t newPosition = 0; newPosition < constructed[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
-        std::vector<Machine> testMachine = machines;
+        std::vector<Machine> testMachine = constructed;
         reinsert(testMachine[maquina], pivot, newPosition);
         Solution testMachineSolution(testMachine);
         if (testMachineSolution.getZ() < bestSolution.getZ()) {
-          if (ansioso_) return testMachineSolution;
+          if (anxious_) return testMachineSolution;
           bestSolution = std::move(testMachineSolution);
         }
       }
@@ -142,18 +143,18 @@ Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& machines
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_move(const std::vector<Machine>& machines) {
-  Solution bestSolution(machines);
-  for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
-    for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
-      for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
+Solution Multiboot::postProcessing_move(const std::vector<Machine>& constructed) {
+  Solution bestSolution(constructed);
+  for (size_t previousMachine = 0; previousMachine < constructed.size(); ++previousMachine) {
+    for (size_t previousPosition = 0; previousPosition < constructed[previousMachine].size(); ++previousPosition) {
+      for (size_t newMachine = 0; newMachine < constructed.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
-        for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
-          std::vector<Machine> testMachine = machines;
+        for (size_t newPosition = 0; newPosition < constructed[newMachine].size(); ++newPosition) {
+          std::vector<Machine> testMachine = constructed;
           move(testMachine[previousMachine], previousPosition, testMachine[newMachine], newPosition);
           Solution testMachineSolution(testMachine);
           if (testMachineSolution.getZ() < bestSolution.getZ()) {
-            if (ansioso_) return testMachineSolution;
+            if (anxious_) return testMachineSolution;
             bestSolution = std::move(testMachineSolution);
           }
         }
@@ -163,17 +164,17 @@ Solution Multiboot::postProcessing_move(const std::vector<Machine>& machines) {
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& machines) {
-  Solution bestSolution(machines);
-  for (size_t maquina = 0; maquina < machines.size(); ++maquina) {
-    for (size_t pivot = 0; pivot < machines[maquina].size(); ++pivot) {
-      for (size_t newPosition = 0; newPosition < machines[maquina].size(); ++newPosition) {
+Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& constructed) {
+  Solution bestSolution(constructed);
+  for (size_t maquina = 0; maquina < constructed.size(); ++maquina) {
+    for (size_t pivot = 0; pivot < constructed[maquina].size(); ++pivot) {
+      for (size_t newPosition = 0; newPosition < constructed[maquina].size(); ++newPosition) {
         if (pivot == newPosition) continue;
-        std::vector<Machine> testMachine = machines;
+        std::vector<Machine> testMachine = constructed;
         innerSwap(testMachine[maquina], pivot, newPosition);
         Solution testMachineSolution(testMachine);
         if (testMachineSolution.getZ() < bestSolution.getZ()) {
-          if (ansioso_) return testMachineSolution;
+          if (anxious_) return testMachineSolution;
           bestSolution = std::move(testMachineSolution);
         }
       }
@@ -182,18 +183,23 @@ Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& machine
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& machines) {
-  Solution bestSolution(machines);
-  for (size_t previousMachine = 0; previousMachine < machines.size(); ++previousMachine) {
-    for (size_t previousPosition = 0; previousPosition < machines[previousMachine].size(); ++previousPosition) {
-      for (size_t newMachine = 0; newMachine < machines.size(); ++newMachine) {
+Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& constructed) {
+  Solution bestSolution(constructed);
+  for (size_t previousMachine = 0; previousMachine < constructed.size();
+      ++previousMachine) {
+    for (size_t previousPosition = 0;
+        previousPosition < constructed[previousMachine].size(); ++previousPosition) {
+      for (size_t newMachine = 0; newMachine < constructed.size(); ++newMachine) {
         if (previousMachine == newMachine) continue;
-        for (size_t newPosition = 0; newPosition < machines[newMachine].size(); ++newPosition) {
-          std::vector<Machine> testMachine = machines;
-          extraSwap(testMachine[previousMachine], previousPosition, testMachine[newMachine], newPosition);
+        for (size_t newPosition = 0;
+            newPosition < constructed[newMachine].size();
+            ++newPosition) {
+          std::vector<Machine> testMachine = constructed;
+          extraSwap(testMachine[previousMachine], previousPosition,
+              testMachine[newMachine], newPosition);
           Solution testMachineSolution(testMachine);
           if (testMachineSolution.getZ() < bestSolution.getZ()) {
-            if (ansioso_) return testMachineSolution;
+            if (anxious_) return testMachineSolution;
             bestSolution = std::move(testMachineSolution);
           }
         }

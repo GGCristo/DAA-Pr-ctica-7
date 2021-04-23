@@ -4,5 +4,11 @@
 
 class GreedyTCT: public ParallelInterface {
   public:
+    /**
+     * @brief Start running the algorithm
+     *
+     * @param {m} Number of machines
+     * @return Definitive solution
+     */
     Solution run(int m) override;
 };

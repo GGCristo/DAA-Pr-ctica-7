@@ -34,22 +34,6 @@ bool Solution::operator<(const Solution& otherSolucion) {
   return z_ < otherSolucion.z_;
 }
 
-// std::vector<Maquina>::const_iterator Solution::begin() const {
-//   return machines_.begin();
-// }
-
-// std::vector<Maquina>::iterator Solution::begin() {
-//   return machines_.begin();
-// }
-
-// std::vector<Maquina>::const_iterator Solution::end() const {
-//   return machines_.end();
-// }
-
-// std::vector<Maquina>::iterator Solution::end() {
-//   return machines_.end();
-// }
-
 std::ostream& Solution::showWithTCTs(std::ostream& os) {
   for (size_t i = 0; i < machines_.size(); ++i) {
     os << "Maquina " << i + 1 << ": ";

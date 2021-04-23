@@ -57,7 +57,7 @@ void Machine::add(Task task) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().MarkTaskAsReady(task.id_);
+  Data::getInstance().markTaskAsReady(task.id_);
   tct_ += previousTctTask_ + task.time_;
   previousTctTask_ = previousTctTask_ + task.time_;
   time_ += task.time_;
@@ -81,7 +81,7 @@ Task Machine::erase(int position) {
     throw "[machine | erase] Algo esta mal con position\n";
   }
   Task taskDeleted = queue_[position];
-  Data::getInstance().MarkTaskAsNotReady(queue_[position].id_);
+  Data::getInstance().markTaskAsNotReady(queue_[position].id_);
   queue_.erase(queue_.begin() + position);
   return taskDeleted;
 }
@@ -95,7 +95,7 @@ void Machine::insert(Task& task, int position) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().MarkTaskAsReady(task.id_);
+  Data::getInstance().markTaskAsReady(task.id_);
   queue_.insert(queue_.begin() + position, task);
 }
 

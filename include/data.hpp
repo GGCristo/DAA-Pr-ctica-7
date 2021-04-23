@@ -6,7 +6,6 @@
 #include <fstream>
 #include <utility>
 #include <vector>
-// #include <memory>
 
 // TODO Make everything const
 /**
@@ -51,8 +50,20 @@ class Data {
      */
     bool areAllTaskReady() const;
 
-    void MarkTaskAsReady(int);
-    void MarkTaskAsNotReady(int);
+    /**
+     * @brief Mark a task as ready
+     *
+     * @param {id} Id or position in times_ vector
+     */
+    void markTaskAsReady(int);
+
+    /**
+     * @brief Mark a task as not ready
+     *
+     * @param {id} ID or position in times_ vector
+     */
+    void markTaskAsNotReady(int);
+
     /**
      * @brief Devuelve los tiempos de las tareas, cada indice representa su
      * respectiva tarea, cada celda tiene un booleano para saber si la tarea
