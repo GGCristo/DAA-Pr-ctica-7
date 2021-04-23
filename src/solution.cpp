@@ -4,6 +4,10 @@
 
 #include "../include/solution.hpp"
 
+Solution::Solution() {
+  z_ = -1;
+}
+
 Solution::Solution(const std::vector<Machine>& machines) :
   machines_(machines) {
   generateZ();
@@ -14,11 +18,6 @@ const std::vector<Machine>& Solution::getMachines() {
   return machines_;
 }
 
-// void Solution::ejecutar() {
-//   algorithm_->algorithm(machines_);
-//   Datos::getInstance().reset();
-// }
-
 void Solution::generateZ() {
   unsigned long z = 0;
   for (size_t i = 0; i < machines_.size(); ++i) {
@@ -27,7 +26,7 @@ void Solution::generateZ() {
   z_ = z;
 }
 
-unsigned long Solution::getZ() {
+unsigned long Solution::getZ() const {
   return z_;
 }
 

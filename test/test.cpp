@@ -49,7 +49,7 @@ void TESTS(Solution& solucion) {
 
 TEST_CASE("GreedyTCT") {
   SUBCASE("2 machines") {
-    Data::fichero_ = "I40j_2m_S1_1.txt";
+    Data::file_ = "I40j_2m_S1_1.txt";
     std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
     Solution solucion(algorithm->run(Data::getInstance().getM()));
     TESTS(solucion);
@@ -57,7 +57,7 @@ TEST_CASE("GreedyTCT") {
 
   SUBCASE("4 machines") {
     SUBCASE("GreedyB") {
-      Data::fichero_ = "I40j_4m_S1_1.txt";
+      Data::file_ = "I40j_4m_S1_1.txt";
       std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
       Solution solucion(algorithm->run(Data::getInstance().getM()));
       TESTS(solucion);
@@ -65,7 +65,7 @@ TEST_CASE("GreedyTCT") {
   }
 
   SUBCASE("8 machines") {
-    Data::fichero_ = "I40j_8m_S1_1.txt";
+    Data::file_ = "I40j_8m_S1_1.txt";
     std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTCT>();
     Solution solucion(algorithm->run(Data::getInstance().getM()));
     TESTS(solucion);
@@ -74,7 +74,7 @@ TEST_CASE("GreedyTCT") {
 
 TEST_CASE("GreedyTime") {
   SUBCASE("2 machines") {
-    Data::fichero_ = "I40j_2m_S1_1.txt";
+    Data::file_ = "I40j_2m_S1_1.txt";
     std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
     Solution solucion(algorithm->run(Data::getInstance().getM()));
     TESTS(solucion);
@@ -82,7 +82,7 @@ TEST_CASE("GreedyTime") {
 
   SUBCASE("4 machines") {
     SUBCASE("GreedyB") {
-      Data::fichero_ = "I40j_4m_S1_1.txt";
+      Data::file_ = "I40j_4m_S1_1.txt";
       std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
       Solution solucion(algorithm->run(Data::getInstance().getM()));
       TESTS(solucion);
@@ -90,7 +90,7 @@ TEST_CASE("GreedyTime") {
   }
 
   SUBCASE("8 machines") {
-    Data::fichero_ = "I40j_8m_S1_1.txt";
+    Data::file_ = "I40j_8m_S1_1.txt";
     std::unique_ptr<ParallelInterface> algorithm = std::make_unique<GreedyTime>();
     Solution solucion(algorithm->run(Data::getInstance().getM()));
     TESTS(solucion);

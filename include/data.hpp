@@ -6,7 +6,7 @@
 #include <fstream>
 #include <utility>
 #include <vector>
-#include <memory>
+// #include <memory>
 
 // TODO Make everything const
 /**
@@ -93,7 +93,7 @@ class Data {
      * @fichero_ Fichero desde donde se va a leer los datos
      * Forma de uso: Datos::fichero_ = "Nombre-del-fichero";
      */
-    static inline std::string fichero_ = "";
+    static inline std::string file_ = "";
 
   private:
     /**

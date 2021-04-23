@@ -5,13 +5,14 @@
 #include "../include/testing.hpp"
 
 enum Movements { reInsert, move, innerSwap, extraSwap };
-enum Stop_Criterion {iterations, iterationsSinceImprovement};
+enum Stop_Criterion { iterations, iterationsSinceImprovement };
 
 void testing() {
-  Data::fichero_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
-  // Data::fichero_ = "I40j_4m_S1_1.txt"; std::cout << "(4 machines)\n";
-  // Data::fichero_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
-  // Data::fichero_ = "I40j_8m_S1_1.txt"; std::cout << "(8 machines)\n";
+  // Data::file_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
+  // Data::file_ = "I40j_4m_S1_1.txt"; std::cout << "(4 machines)\n";
+  // Data::file_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
+  // Data::file_ = "I40j_8m_S1_1.txt"; std::cout << "(8 machines)\n";
+  Data::file_ = "prueba.txt"; std::cout << "(2 machines)\n";
   std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
   std::cout << "||| GreedyTime|||\n";
   testing_greedyTime();
@@ -35,6 +36,24 @@ void testing() {
   testing_extraSwap(iterations);
   std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement)|||\n";
   testing_extraSwap(iterationsSinceImprovement);
+  // GVNS
+  std::cout << "||| GVNSReInsertAndMove (iterations)|||\n";
+  testing_gvnsReInsertAndMove(iterations);
+  std::cout << "||| GVNSReInsertAndMove (iterationsSinceImprovement)|||\n";
+  testing_gvnsReInsertAndMove(iterationsSinceImprovement);
+  std::cout << "||| GVNSReInsertAndExtraSwap (iterations)|||\n";
+  testing_gvnsReInsertAndExtraSwap(iterations);
+  std::cout << "||| GVNSReInsertAndExtraSwap (iterationsSinceImprovement)|||\n";
+  testing_gvnsReInsertAndExtraSwap(iterationsSinceImprovement);
+  std::cout << "||| GVNSExtraSwapAndMove (iterations)|||\n";
+  testing_gvnsExtraSwapAndMove(iterations);
+  std::cout << "||| GVNSExtraSwapAndMove (iterationsSinceImprovement)|||\n";
+  testing_gvnsExtraSwapAndMove(iterationsSinceImprovement);
+  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterations)|||\n";
+  testing_gvnsExtraSwapAndExtraSwap(iterations);
+  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterationsSinceImprovement)|||\n";
+  testing_gvnsExtraSwapAndExtraSwap(iterationsSinceImprovement);
+
   // Anxious
   std::cout << "||| MultiBootReinsert (iterations && anxious)|||\n";
   testing_reinsert(iterations, true);
@@ -52,7 +71,71 @@ void testing() {
   testing_extraSwap(iterations, true);
   std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement && anxious)|||\n";
   testing_extraSwap(iterationsSinceImprovement, true);
+  std::cout << "||| GVNS (iterations && anxious)|||\n";
+  testing_extraSwap(iterations, true);
+  std::cout << "||| GVNS (iterationsSinceImprovement && anxious)|||\n";
+  testing_extraSwap(iterationsSinceImprovement, true);
 
+}
+
+void testing_gvnsReInsertAndMove(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> gvnsReInsertAndMove =
+    std::make_unique<GVNS>(reInsert, move, stopCriterion, anxious);
+
+  auto t1 = std::chrono::high_resolution_clock::now();
+  Solution solucion2(gvnsReInsertAndMove->run(Data::getInstance().getM()));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "Time: "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
+
+  solucion2.showOnlyZ(std::cout);
+}
+
+void testing_gvnsReInsertAndExtraSwap(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> gvnsReInsertAndMove =
+    std::make_unique<GVNS>(reInsert, extraSwap, stopCriterion, anxious);
+
+  auto t1 = std::chrono::high_resolution_clock::now();
+  Solution solucion2(gvnsReInsertAndMove->run(Data::getInstance().getM()));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "Time: "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
+
+  solucion2.showOnlyZ(std::cout);
+}
+
+void testing_gvnsExtraSwapAndMove(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> gvnsReInsertAndMove =
+    std::make_unique<GVNS>(extraSwap, move, stopCriterion, anxious);
+
+  auto t1 = std::chrono::high_resolution_clock::now();
+  Solution solucion2(gvnsReInsertAndMove->run(Data::getInstance().getM()));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "Time: "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
+
+  solucion2.showOnlyZ(std::cout);
+}
+
+void testing_gvnsExtraSwapAndExtraSwap(int stopCriterion, bool anxious) {
+  std::unique_ptr<ParallelInterface> gvnsReInsertAndMove =
+    std::make_unique<GVNS>(extraSwap, extraSwap, stopCriterion, anxious);
+
+  auto t1 = std::chrono::high_resolution_clock::now();
+  Solution solucion2(gvnsReInsertAndMove->run(Data::getInstance().getM()));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  std::cout << "Time: "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
+    << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
+
+  solucion2.showOnlyZ(std::cout);
 }
 
 void testing_greedyTime() {
@@ -61,7 +144,7 @@ void testing_greedyTime() {
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion0(greedyTime->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
@@ -75,7 +158,7 @@ void testing_greedyTct() {
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion1(greedyTct->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
@@ -90,7 +173,7 @@ void testing_reinsert(int stopCriterion, bool anxious) {
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion2(multiboost_reInsert->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
@@ -105,7 +188,7 @@ void testing_move(int stopCriterion, bool anxious) {
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion3(multiboost_move->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
@@ -121,7 +204,7 @@ void testin_innerSwap(int stopCriterion, bool anxious) {
   Solution solucion4(multiboost_innerSwap->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
 
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";
@@ -135,7 +218,7 @@ void testing_extraSwap(int stopCriterion, bool anxious) {
   auto t1 = std::chrono::high_resolution_clock::now();
   Solution solucion5(multiboost_extraSwap->run(Data::getInstance().getM()));
   auto t2 = std::chrono::high_resolution_clock::now();
-  std::cout << "TEST1 time: "
+  std::cout << "Time: "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() << " microsegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000.0 << " milisegundos | "
     << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count()/1000000.0 << " segundos\n";

@@ -75,6 +75,11 @@ unsigned long Machine::getTCT() const {
 
 Task Machine::erase(int position) {
   // TODO should I return a pointer?
+  if (position >= queue_.size() || position < 0) {
+    std::cout << "position: " << position << '\n';
+    std::cout << "queue_.size(): " << queue_.size() << '\n';
+    throw "[machine | erase] Algo esta mal con position\n";
+  }
   Task taskDeleted = queue_[position];
   Data::getInstance().MarkTaskAsNotReady(queue_[position].id_);
   queue_.erase(queue_.begin() + position);
@@ -82,6 +87,10 @@ Task Machine::erase(int position) {
 }
 
 void Machine::insert(Task& task, int position) {
+  if (position > queue_.size() || position < 0) {
+    std::cout << "position: " << position << '\n';
+    throw "[machine | insert] Algo esta mal con position\n";
+  }
   if (Data::getInstance().getTimes()[task.id_].second) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";

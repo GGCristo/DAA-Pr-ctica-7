@@ -7,8 +7,10 @@
 Solution GreedyTCT::run(int m) {
   assert(!Data::getInstance().getTimes()[0].second);
   std::vector<Machine> machines = preprocessing(m);
-  const int PREPROCESSED_TASK = std::min(Data::getInstance().getN(), m);
-  for (size_t i = 0; i < Data::getInstance().getN() - PREPROCESSED_TASK; ++i) {
+  if (Data::getInstance().getN() < m) {
+    return Solution(machines);
+  }
+  for (size_t i = 0; i < Data::getInstance().getN() - m; ++i) {
     std::vector<Task> aux;
     aux.reserve(machines.size());
     for (size_t j = 0; j < machines.size(); ++j) {

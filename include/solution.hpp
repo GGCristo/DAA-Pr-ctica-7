@@ -5,10 +5,10 @@
 
 class Solution {
   public:
+    Solution();
     explicit Solution(const std::vector<Machine>&);
     const std::vector<Machine>& getMachines();
-    void ejecutar();
-    unsigned long getZ();
+    unsigned long getZ() const;
     void reinsert(int, int, int);
     void move(int, int, int, int);
     void innerSwap(int, int , int);

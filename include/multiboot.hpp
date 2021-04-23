@@ -1,6 +1,5 @@
 #pragma once
-#include <queue>
-#include <set>
+// #include <queue>
 #include "parallelInterface.hpp"
 #include "machine.hpp"
 #include "random.hpp"
@@ -21,12 +20,14 @@ class Multiboot: public ParallelInterface {
                    int iterations = 1000, int k = 3);
     Solution run(int) override;
 
-  private:
+  protected:
     int iterations_;
     int k_;
     int stopCriterion_;
     bool ansioso_;
     std::vector<Task> getBestK(int) const;
+    bool updateSolution(Solution&, const Solution&);
+
     Solution construction(const std::vector<Machine>&);
     Solution postProcessing(const std::vector<Machine>&);
     Solution postProcessing_reInsert(const std::vector<Machine>&);

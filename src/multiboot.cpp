@@ -71,7 +71,7 @@ Solution Multiboot::construction(const std::vector<Machine>& machines) {
   return Solution(construction);
 }
 
-bool updateSolution(Solution& solution, Solution& bestSolution) {
+bool Multiboot::updateSolution(Solution& solution, const Solution& bestSolution) {
   if (bestSolution.getZ() < solution.getZ()) {
     solution = bestSolution;
     return true;
@@ -215,6 +215,16 @@ void Multiboot::reinsert(Machine& machine, int previousPosition,
 
 void Multiboot::move(Machine& previousMachine, int previousPosition,
     Machine& newMachine, int newPosition) {
+  if (previousPosition < 0 || previousPosition > previousMachine.size() - 1) {
+    std::cerr << "previousPosition: " << previousPosition << '\n';
+    std::cerr << "previousMachine size: " << previousMachine.size() << '\n';
+    throw "[move] There is somthing wrong with previousPosition\n";
+  }
+  if (newPosition < 0 || newPosition > newMachine.size()) {
+    std::cerr << "newPosition: " << newPosition << '\n';
+    std::cerr << "newMachine size: " << newMachine.size() << '\n';
+    throw "[move] There is somthing wrong with newPosition\n";
+  }
   // TODO create ID for machine
   // if (previousMachine == newMachine) {
   //   std::cout << "Warning: Using a move in the same machine, consider to use reInsert\n";

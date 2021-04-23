@@ -10,20 +10,20 @@ Data& Data::getInstance() {
 }
 
 Data::Data() {
-  if (fichero_ == "") {
+  if (file_ == "") {
     throw "Especifíca el fichero\n";
   }
-  std::fstream fichero;
-  fichero.open(fichero_, std::ios::in);
-  if (!fichero) {
-    throw std::string("No se pudo abrir el fichero ") + fichero_  + '\n';
+  std::fstream file;
+  file.open(file_, std::ios::in);
+  if (!file) {
+    throw std::string("File could not be opened: ") + file_  + '\n';
   }
-  std::string linea;
-  while(getline(fichero, linea)) {
-    switch(linea[0]) {
+  std::string line;
+  while(getline(file, line)) {
+    switch(line[0]) {
       case 'n': {
                   std::string n;
-                  std::stringstream linea_stream(linea);
+                  std::stringstream linea_stream(line);
                   linea_stream >> n;
                   linea_stream >> n;
                   n_ = std::stoi(n);
@@ -31,24 +31,24 @@ Data::Data() {
                 break;
       case 'm': {
                   std::string m;
-                  std::stringstream linea_stream(linea);
+                  std::stringstream linea_stream(line);
                   linea_stream >> m;
                   linea_stream >> m;
                   m_ = std::stoi(m);
                 }
                 break;
       case 'P': {
-                  times(linea);
+                  times(line);
                 }
                 break;
       case 'S': {
-                  setups(fichero);
+                  setups(file);
                 }
       default:
                 break;
     }
   }
-  fichero.close();
+  file.close();
   tasksReady_ = 0;
 }
 
