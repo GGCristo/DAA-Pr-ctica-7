@@ -1,5 +1,4 @@
 #pragma once
-// #include <queue>
 #include "parallelInterface.hpp"
 #include "machine.hpp"
 #include "random.hpp"
@@ -17,7 +16,7 @@ class Multiboot: public ParallelInterface {
      * @param k Number of elements in RCL
      */
     explicit Multiboot(int, int stopCriterion_ = 1, bool ansioso_ = false,
-                   int iterations = 1000, int k = 3);
+                   int iterations = 1000, int k = 1);
     Solution run(int) override;
 
   protected:

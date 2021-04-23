@@ -10,9 +10,10 @@ enum Stop_Criterion { iterations, iterationsSinceImprovement };
 void testing() {
   // Data::file_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
   // Data::file_ = "I40j_4m_S1_1.txt"; std::cout << "(4 machines)\n";
-  // Data::file_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
+  Data::file_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
   // Data::file_ = "I40j_8m_S1_1.txt"; std::cout << "(8 machines)\n";
-  Data::file_ = "prueba.txt"; std::cout << "(2 machines)\n";
+  // Data::file_ = "prueba.txt"; std::cout << "(2 machines)\n";
+
   std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
   std::cout << "||| GreedyTime|||\n";
   testing_greedyTime();
@@ -55,6 +56,7 @@ void testing() {
   testing_gvnsExtraSwapAndExtraSwap(iterationsSinceImprovement);
 
   // Anxious
+  // MultiBoot
   std::cout << "||| MultiBootReinsert (iterations && anxious)|||\n";
   testing_reinsert(iterations, true);
   std::cout << "||| MultiBootReinsert (iterationsSinceImprovement && anxious)|||\n";
@@ -63,18 +65,31 @@ void testing() {
   testing_move(iterations, true);
   std::cout << "||| MultiBootMove (iterationsSinceImprovement && anxious)|||\n";
   testing_move(iterationsSinceImprovement, true);
-  std::cout << "||| MultiBootInnerSwap (iterations)|||\n";
+  std::cout << "||| MultiBootInnerSwap (iterations && anxious)|||\n";
   testin_innerSwap(iterations, true);
   std::cout << "||| MultiBootInnerSwap (iterationsSinceImprovement && anxious)|||\n";
   testin_innerSwap(iterationsSinceImprovement, true);
-  std::cout << "||| MultiBootExtraSwap (iterations)|||\n";
+  std::cout << "||| MultiBootExtraSwap (iterations && anxious)|||\n";
   testing_extraSwap(iterations, true);
   std::cout << "||| MultiBootExtraSwap (iterationsSinceImprovement && anxious)|||\n";
   testing_extraSwap(iterationsSinceImprovement, true);
-  std::cout << "||| GVNS (iterations && anxious)|||\n";
-  testing_extraSwap(iterations, true);
-  std::cout << "||| GVNS (iterationsSinceImprovement && anxious)|||\n";
-  testing_extraSwap(iterationsSinceImprovement, true);
+  // GVNS
+  std::cout << "||| GVNSReInsertAndMove (iterations && anxious)|||\n";
+  testing_gvnsReInsertAndMove(iterations, true);
+  std::cout << "||| GVNSReInsertAndMove (iterationsSinceImprovement && anxious)|||\n";
+  testing_gvnsReInsertAndMove(iterationsSinceImprovement, true);
+  std::cout << "||| GVNSReInsertAndExtraSwap (iterations && anxious)|||\n";
+  testing_gvnsReInsertAndExtraSwap(iterations, true);
+  std::cout << "||| GVNSReInsertAndExtraSwap (iterationsSinceImprovement && anxious)|||\n";
+  testing_gvnsReInsertAndExtraSwap(iterationsSinceImprovement, true);
+  std::cout << "||| GVNSExtraSwapAndMove (iterations)|||\n";
+  testing_gvnsExtraSwapAndMove(iterations, true);
+  std::cout << "||| GVNSExtraSwapAndMove (iterationsSinceImprovement && anxious)|||\n";
+  testing_gvnsExtraSwapAndMove(iterationsSinceImprovement, true);
+  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterations)|||\n";
+  testing_gvnsExtraSwapAndExtraSwap(iterations, true);
+  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterationsSinceImprovement && anxious)|||\n";
+  testing_gvnsExtraSwapAndExtraSwap(iterationsSinceImprovement, true);
 
 }
 
