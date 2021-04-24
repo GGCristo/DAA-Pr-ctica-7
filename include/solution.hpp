@@ -5,8 +5,12 @@
 
 class Solution {
   public:
-    Solution();
+    Solution() = delete;
     explicit Solution(const std::vector<Machine>&);
+    Solution(const Solution&);
+    Solution(Solution&&);
+    Solution& operator =(const Solution&);
+    Solution& operator =(Solution&&);
     const std::vector<Machine>& getMachines();
     unsigned long getZ() const;
     void reinsert(int, int, int);

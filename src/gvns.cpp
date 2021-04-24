@@ -28,12 +28,12 @@ Solution GVNS::run(int m) {
   // GRASP
   std::vector<Machine> preprocesado = preprocessing(m);
   Solution potencialSolution = construction(preprocesado);
-  Solution solution = postProcessing(potencialSolution.getMachines());
+  Solution solution = Multiboot::postProcessing(potencialSolution.getMachines());
   // GVNS
   while(noImprovementIteraction < iterations_) {
     pseudo_reset(preprocesado);
     potencialSolution = construction(preprocesado);
-    potencialSolution = postProcessing(potencialSolution.getMachines());
+    potencialSolution = Multiboot::postProcessing(potencialSolution.getMachines());
     int k = 2;
     while (k < 4) {
       std::vector<Machine> shaked = shaking(potencialSolution.getMachines(), k);
@@ -56,7 +56,7 @@ Solution GVNS::run(int m) {
 std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) {
   std::vector<Machine> shaked = machines;
 
-  for(size_t i = 0; i < k; ++i) {
+  for(int i = 0; i < k; ++i) {
     const int PREVIOUS_MACHINE = Random::get(0, (int)shaked.size() - 1);
     const int PREVIOUS_POSITION = Random::get(0,
         (int)shaked[PREVIOUS_MACHINE].size() - 1);
@@ -80,27 +80,27 @@ std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) 
   return shaked;
 }
 
-Solution GVNS::vnd(const std::vector<Machine>& shaked){
-  int l = 0;
-  Solution solution(shaked);
-  Solution probablySolution;
-  while (l < 4) {
+Solution GVNS::postProcessing(const std::vector<Machine>& solutionMachines, int l) {
     switch (l) {
       case 0:
-        probablySolution = postProcessing_reInsert(solution.getMachines());
-        break;
+        return postProcessing_reInsert(solutionMachines);
       case 1:
-        probablySolution = postProcessing_move(solution.getMachines());
-        break;
+        return postProcessing_move(solutionMachines);
       case 2:
-        probablySolution = postProcessing_innerSwap(solution.getMachines());
-        break;
+        return postProcessing_innerSwap(solutionMachines);
       case 3:
-        probablySolution = postProcessing_extraSwap(solution.getMachines());
+        return postProcessing_extraSwap(solutionMachines);
         break;
       default:
         throw "[GVNS | vnd] There are not that many movements\n";
     }
+}
+
+Solution GVNS::vnd(const std::vector<Machine>& shaked){
+  int l = 0;
+  Solution solution(shaked);
+  while (l < 4) {
+    Solution probablySolution(postProcessing(solution.getMachines(), l));
     if (!updateSolution(solution, probablySolution)) {
       ++l;
     } else {

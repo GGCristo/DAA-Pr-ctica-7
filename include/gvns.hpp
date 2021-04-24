@@ -15,7 +15,7 @@ class GVNS: public Multiboot{
      * @param k Number of elements in RCL
      */
     explicit GVNS(int typeOfMovement = 0, int typeOfShaking = 1,
-        int stopCriterion = 1, bool anxious = false, int iterations = 100,
+        int stopCriterion = 1, bool anxious = false, int iterations = 1000,
         int k = 3);
 
     /**
@@ -46,4 +46,5 @@ class GVNS: public Multiboot{
      * @return [TODO:description]
      */
     Solution vnd(const std::vector<Machine>&);
+    Solution postProcessing(const std::vector<Machine>&, int);
 };

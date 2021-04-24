@@ -10,7 +10,7 @@ Solution GreedyTCT::run(int m) {
   if (Data::getInstance().getN() < m) {
     return Solution(machines);
   }
-  for (size_t i = 0; i < Data::getInstance().getN() - m; ++i) {
+  for (int i = 0; i < Data::getInstance().getN() - m; ++i) {
     std::vector<Task> aux;
     aux.reserve(machines.size());
     for (size_t j = 0; j < machines.size(); ++j) {

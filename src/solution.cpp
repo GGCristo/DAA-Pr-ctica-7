@@ -4,14 +4,36 @@
 
 #include "../include/solution.hpp"
 
-Solution::Solution() {
-  z_ = -1;
-}
+// Solution::Solution() {
+//   z_ = -1;
+// }
 
 Solution::Solution(const std::vector<Machine>& machines) :
   machines_(machines) {
   generateZ();
   Data::getInstance().reset();
+}
+
+Solution::Solution(const Solution& other) {
+  machines_ = other.machines_;
+  z_ = other.z_;
+}
+
+Solution::Solution(Solution&& other) :
+  machines_(std::move(other.machines_)),
+  z_(std::move(other.z_))
+{}
+
+Solution& Solution::operator=(Solution&& other) {
+  machines_ = std::move(other.machines_);
+  z_ = std::move(other.z_);
+  return *this;
+}
+
+Solution& Solution::operator=(const Solution& other) {
+  machines_ = other.machines_;
+  z_ = other.z_;
+  return *this;
 }
 
 const std::vector<Machine>& Solution::getMachines() {

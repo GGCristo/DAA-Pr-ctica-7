@@ -75,7 +75,7 @@ unsigned long Machine::getTCT() const {
 
 Task Machine::erase(int position) {
   // TODO should I return a pointer?
-  if (position >= queue_.size() || position < 0) {
+  if ((size_t)position >= queue_.size() || position < 0) {
     std::cout << "position: " << position << '\n';
     std::cout << "queue_.size(): " << queue_.size() << '\n';
     throw "[machine | erase] Algo esta mal con position\n";
@@ -87,7 +87,7 @@ Task Machine::erase(int position) {
 }
 
 void Machine::insert(Task& task, int position) {
-  if (position > queue_.size() || position < 0) {
+  if ((size_t)position > queue_.size() || position < 0) {
     std::cout << "position: " << position << '\n';
     throw "[machine | insert] Algo esta mal con position\n";
   }
