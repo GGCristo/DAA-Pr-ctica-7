@@ -12,8 +12,7 @@ enum Stop_Criterion {iterations, iterationsSinceImprovement};
 
 GVNS::GVNS(int typeOfMovement, int typeOfShaking, int stopCriterion, bool anxious,
     int iterations, int k)
-  : Multiboot(typeOfMovement, stopCriterion, anxious,
-    iterations, k) {
+  : Multiboot(typeOfMovement, stopCriterion, anxious, iterations, k) {
     if(typeOfMovement_ != reInsert_enum && typeOfMovement_ != extraSwap_enum) {
       std::cerr << "GRASP must be done with reInsert or extraSwap movements\n";
     }
@@ -35,7 +34,8 @@ Solution GVNS::run(int m) {
     potencialSolution = construction(preprocesado);
     potencialSolution = Multiboot::postProcessing(potencialSolution.getMachines());
     int k = 2;
-    while (k < 4) {
+    int kmax = std::min((int)potencialSolution.getMinimalMachineSize(), 5);
+    while (k < kmax) {
       std::vector<Machine> shaked = shaking(potencialSolution.getMachines(), k);
       if (updateSolution(solution, vnd(shaked))){
         k = 2;
@@ -80,16 +80,17 @@ std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) 
   return shaked;
 }
 
-Solution GVNS::postProcessing(const std::vector<Machine>& solutionMachines, int l) {
+Solution GVNS::postProcessing(const std::vector<Machine>& constructedMachines,
+      int l) {
     switch (l) {
       case 0:
-        return postProcessing_reInsert(solutionMachines);
+        return postProcessing_reInsert(constructedMachines);
       case 1:
-        return postProcessing_move(solutionMachines);
+        return postProcessing_move(constructedMachines);
       case 2:
-        return postProcessing_innerSwap(solutionMachines);
+        return postProcessing_innerSwap(constructedMachines);
       case 3:
-        return postProcessing_extraSwap(solutionMachines);
+        return postProcessing_extraSwap(constructedMachines);
         break;
       default:
         throw "[GVNS | vnd] There are not that many movements\n";

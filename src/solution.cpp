@@ -36,8 +36,21 @@ Solution& Solution::operator=(const Solution& other) {
   return *this;
 }
 
-const std::vector<Machine>& Solution::getMachines() {
+const std::vector<Machine>& Solution::getMachines() const {
   return machines_;
+}
+
+size_t Solution::getMinimalMachineSize() const {
+  // if (machines_.empty()) {
+  //   throw "[Solution::getMinimalMachineSize] machines is empty\n";
+  // }
+  size_t min = machines_.begin()->size();
+  for (auto i = machines_.begin() + 1; i != machines_.end(); ++i) {
+    if (i->size() < min) {
+      min = i->size();
+    }
+  }
+  return min;
 }
 
 void Solution::generateZ() {
@@ -52,8 +65,8 @@ unsigned long Solution::getZ() const {
   return z_;
 }
 
-bool Solution::operator<(const Solution& otherSolucion) {
-  return z_ < otherSolucion.z_;
+bool Solution::operator<(const Solution& other) {
+  return z_ < other.z_;
 }
 
 std::ostream& Solution::showWithTCTs(std::ostream& os) {

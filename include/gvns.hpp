@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "multiboot.hpp"
 
 class GVNS: public Multiboot{
@@ -40,11 +41,20 @@ class GVNS: public Multiboot{
     std::vector<Machine> shaking(const std::vector<Machine>&, int);
 
     /**
-     * @brief [TODO:description]
+     * @brief Find the optimum local with VND algorithm
      *
-     * @param {name} [TODO:description]
-     * @return [TODO:description]
+     * @param {shaked} Vector of machines already shaked
+     * @return Optimum local solution
      */
     Solution vnd(const std::vector<Machine>&);
+
+    /**
+     * @brief Wrapper to call postProcessing with the desired movement
+     *
+     * @param {constructedMachines} vector of machines that came from the
+     * construction phase
+     * @param {l} Type of movement indicated with an integer (look enum)
+     * @return Improved Solution
+     */
     Solution postProcessing(const std::vector<Machine>&, int);
 };

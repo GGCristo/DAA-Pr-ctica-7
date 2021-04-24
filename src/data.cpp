@@ -49,7 +49,7 @@ Data::Data() {
     }
   }
   file.close();
-  tasksReady_ = 0;
+  tasksTaken_ = 0;
 }
 
 int Data::getN() const {
@@ -60,26 +60,30 @@ int Data::getM() const {
   return m_;
 }
 
-bool Data::areAllTaskReady() const {
-  if (tasksReady_ < 0 || tasksReady_ > n_) {
+bool Data::areAllTaskTaken() const {
+  if (tasksTaken_ < 0 || tasksTaken_ > n_) {
     throw "Take a look at tasksReady_ and n_ variable\n";
   }
-  if (tasksReady_ == n_) return true;
+  if (tasksTaken_ == n_) return true;
   return false;
 }
 
-void Data::markTaskAsReady(int id) {
-  tasksReady_++;
-  if (tasksReady_ > n_) {
+bool Data::isTaskTaken(int id) const {
+  return times_[id].second;
+}
+
+void Data::markTaskAsTaken(int id) {
+  tasksTaken_++;
+  if (tasksTaken_ > n_) {
     throw std::string("[Data::checkTaskAsReady] tasksReady_ cannot be greater") +
         " than the number of tasks";
   }
   times_[id].second = true;
 }
 
-void Data::markTaskAsNotReady(int id) {
-  tasksReady_--;
-  if (tasksReady_ < -1) {
+void Data::markTaskAsNotTaken(int id) {
+  tasksTaken_--;
+  if (tasksTaken_ < -1) {
     throw std::string("[Data::checkTaskAsReady] tasksReady_ is less than - 1") +
         " maybe you forgot to add a task after deleting it";
   }
@@ -125,7 +129,7 @@ void Data::reset() {
   for (size_t i = 0; i < times_.size(); ++i) {
     times_[i].second = false;
   }
-  tasksReady_ = 0;
+  tasksTaken_ = 0;
 }
 
 const std::vector<std::vector<int>>& Data::getSetups() const {

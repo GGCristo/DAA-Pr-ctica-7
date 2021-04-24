@@ -12,7 +12,7 @@ Task ParallelInterface::getTask(int previousTask) const {
   Data* datos = &Data::getInstance();
   size_t i = 0;
   for (; i < datos->getTimes().size(); ++i) {
-    if (!datos->getTimes()[i].second) {
+    if (!datos->isTaskTaken(i)) {
       auxMinSum = datos->getTimes()[i].first +
         datos->getSetups()[previousTask + 1][i + 1];
       minPosition = i++;
@@ -26,7 +26,7 @@ Task ParallelInterface::getTask(int previousTask) const {
     throw "[getTask] No hay ninguna tarea disponibles\n";
   }
   for(; i < datos->getTimes().size(); ++i) {
-    if (!datos->getTimes()[i].second && getTime(previousTask, i) <
+    if (!datos->isTaskTaken(i) && getTime(previousTask, i) <
         auxMinSum) {
       auxMinSum = datos->getTimes()[i].first +
         datos->getSetups()[previousTask + 1][i + 1];

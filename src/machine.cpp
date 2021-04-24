@@ -53,11 +53,11 @@ int Machine::getTime() const {
 }
 
 void Machine::add(Task task) {
-  if (Data::getInstance().getTimes()[task.id_].second) {
+  if (Data::getInstance().isTaskTaken(task.id_)) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().markTaskAsReady(task.id_);
+  Data::getInstance().markTaskAsTaken(task.id_);
   tct_ += previousTctTask_ + task.time_;
   previousTctTask_ = previousTctTask_ + task.time_;
   time_ += task.time_;
@@ -65,8 +65,8 @@ void Machine::add(Task task) {
   queue_.push_back(task);
 }
 
-unsigned long Machine::peekTCT(Task tarea) const {
-  return tct_ + previousTctTask_ + tarea.time_;
+unsigned long Machine::peekTCT(Task incomingTask) const {
+  return tct_ + previousTctTask_ + incomingTask.time_;
 }
 
 unsigned long Machine::getTCT() const {
@@ -74,14 +74,13 @@ unsigned long Machine::getTCT() const {
 }
 
 Task Machine::erase(int position) {
-  // TODO should I return a pointer?
   if ((size_t)position >= queue_.size() || position < 0) {
     std::cout << "position: " << position << '\n';
     std::cout << "queue_.size(): " << queue_.size() << '\n';
     throw "[machine | erase] Algo esta mal con position\n";
   }
   Task taskDeleted = queue_[position];
-  Data::getInstance().markTaskAsNotReady(queue_[position].id_);
+  Data::getInstance().markTaskAsNotTaken(queue_[position].id_);
   queue_.erase(queue_.begin() + position);
   return taskDeleted;
 }
@@ -91,11 +90,11 @@ void Machine::insert(Task& task, int position) {
     std::cout << "position: " << position << '\n';
     throw "[machine | insert] Algo esta mal con position\n";
   }
-  if (Data::getInstance().getTimes()[task.id_].second) {
+  if (Data::getInstance().isTaskTaken(task.id_)) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
-  Data::getInstance().markTaskAsReady(task.id_);
+  Data::getInstance().markTaskAsTaken(task.id_);
   queue_.insert(queue_.begin() + position, task);
 }
 

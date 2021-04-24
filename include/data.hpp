@@ -42,27 +42,35 @@ class Data {
      * @return Número de maquinas totales
      */
     int getM() const;
-    /**
-     * @brief
 
+    /**
+     * @brief Check if all Task are in a machine
      *
-     * @return
+     * @return True if all Task are in a machine, false otherwise
      */
-    bool areAllTaskReady() const;
+    bool areAllTaskTaken() const;
 
     /**
-     * @brief Mark a task as ready
+     * @brief Check if the Task is already in a machine
+     *
+     * @param {id} ID of the Task
+     * @return True if the task is already in a machine, false otherwise
+     */
+    bool isTaskTaken(int) const;
+
+    /**
+     * @brief Mark a task as taken
      *
      * @param {id} Id or position in times_ vector
      */
-    void markTaskAsReady(int);
+    void markTaskAsTaken(int);
 
     /**
-     * @brief Mark a task as not ready
+     * @brief Mark a task as not taken
      *
      * @param {id} ID or position in times_ vector
      */
-    void markTaskAsNotReady(int);
+    void markTaskAsNotTaken(int);
 
     /**
      * @brief Devuelve los tiempos de las tareas, cada indice representa su
@@ -139,7 +147,7 @@ class Data {
     /**
      * @tasksReady_ Number of tasks that are already in a machine
      */
-    int tasksReady_;
+    int tasksTaken_;
 
     /**
      * @times_ Devuelve los tiempos de las tareas, cada indice representa su

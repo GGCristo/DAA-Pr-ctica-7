@@ -33,14 +33,14 @@ std::vector<Task> Multiboot::getBestK(int previousTask) const {
     int auxMinSum = -1;
     int i = 0;
     for (; i < Data::getInstance().getN(); ++i) {
-      if (!isTaskAlreadyIn(bestK, i) && !Data::getInstance().getTimes()[i].second) {
+      if (!isTaskAlreadyIn(bestK, i) && !Data::getInstance().isTaskTaken(i)) {
         auxMinSum = getTime(previousTask, i);
         minPosition = i++;
         break;
       }
     }
     for (; i < Data::getInstance().getN(); ++i) {
-      if (!isTaskAlreadyIn(bestK, i) && !Data::getInstance().getTimes()[i].second) {
+      if (!isTaskAlreadyIn(bestK, i) && !Data::getInstance().isTaskTaken(i)) {
         if (getTime(previousTask, i) < auxMinSum) {
           minPosition = i;
           auxMinSum = getTime(previousTask, i);
@@ -56,12 +56,12 @@ std::vector<Task> Multiboot::getBestK(int previousTask) const {
 
 Solution Multiboot::construction(const std::vector<Machine>& preprocessed) {
   std::vector<Machine> construction = preprocessed;
-  if (Data::getInstance().areAllTaskReady()) {
+  if (Data::getInstance().areAllTaskTaken()) {
     throw "[construction] There are no task available";
   }
-  while (!Data::getInstance().areAllTaskReady()) {
+  while (!Data::getInstance().areAllTaskTaken()) {
     for (size_t j = 0; j < construction.size() &&
-            !Data::getInstance().areAllTaskReady(); ++j) {
+            !Data::getInstance().areAllTaskTaken(); ++j) {
       std::vector<Task> rcl = getBestK(construction[j].getIdLastTask());
 
       Task candidato = rcl[Random::get(0, (int)rcl.size() - 1)];
@@ -106,7 +106,7 @@ Solution Multiboot::run(int m) {
 void Multiboot::pseudo_reset(const std::vector<Machine>& machines) const {
   Data::getInstance().reset();
   for (size_t machine = 0; machine < machines.size(); ++machine) {
-    Data::getInstance().markTaskAsReady(machines[machine].begin()->getId());
+    Data::getInstance().markTaskAsTaken(machines[machine].begin()->getId());
   }
 }
 

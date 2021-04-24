@@ -8,9 +8,9 @@ enum Movements { reInsert, move, innerSwap, extraSwap };
 enum Stop_Criterion { iterations, iterationsSinceImprovement };
 
 void testing() {
-  // Data::file_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
+  Data::file_ = "I40j_2m_S1_1.txt"; std::cout << "(2 machines)\n";
   // Data::file_ = "I40j_4m_S1_1.txt"; std::cout << "(4 machines)\n";
-  Data::file_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
+  // Data::file_ = "I40j_6m_S1_1.txt"; std::cout << "(6 machines)\n";
   // Data::file_ = "I40j_8m_S1_1.txt"; std::cout << "(8 machines)\n";
   // Data::file_ = "prueba.txt"; std::cout << "(2 machines)\n";
 
@@ -82,11 +82,11 @@ void testing() {
   testing_gvnsReInsertAndExtraSwap(iterations, true);
   std::cout << "||| GVNSReInsertAndExtraSwap (iterationsSinceImprovement && anxious)|||\n";
   testing_gvnsReInsertAndExtraSwap(iterationsSinceImprovement, true);
-  std::cout << "||| GVNSExtraSwapAndMove (iterations)|||\n";
+  std::cout << "||| GVNSExtraSwapAndMove (iterations && anxious)|||\n";
   testing_gvnsExtraSwapAndMove(iterations, true);
   std::cout << "||| GVNSExtraSwapAndMove (iterationsSinceImprovement && anxious)|||\n";
   testing_gvnsExtraSwapAndMove(iterationsSinceImprovement, true);
-  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterations)|||\n";
+  std::cout << "||| GVNSExtraSwapAndExtraSwap (iterations && anxious)|||\n";
   testing_gvnsExtraSwapAndExtraSwap(iterations, true);
   std::cout << "||| GVNSExtraSwapAndExtraSwap (iterationsSinceImprovement && anxious)|||\n";
   testing_gvnsExtraSwapAndExtraSwap(iterationsSinceImprovement, true);

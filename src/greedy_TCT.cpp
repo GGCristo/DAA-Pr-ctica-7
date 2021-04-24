@@ -5,7 +5,7 @@
 #include "../include/greedy_TCT.hpp"
 
 Solution GreedyTCT::run(int m) {
-  assert(!Data::getInstance().getTimes()[0].second);
+  assert(!Data::getInstance().isTaskTaken(0));
   std::vector<Machine> machines = preprocessing(m);
   if (Data::getInstance().getN() < m) {
     return Solution(machines);
