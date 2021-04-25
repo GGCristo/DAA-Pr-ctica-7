@@ -33,6 +33,7 @@ class Task {
      * @param os ostream, default its std::cout
      */
     std::ostream& show(std::ostream& os = std::cout) const;
+
   private:
     /**
      * @id_ Position of the Task in the time_ vector

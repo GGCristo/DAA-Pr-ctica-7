@@ -52,7 +52,7 @@ int Machine::getTime() const {
   return time_;
 }
 
-void Machine::add(Task task) {
+void Machine::add(const Task& task) {
   if (Data::getInstance().isTaskTaken(task.id_)) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
@@ -65,7 +65,7 @@ void Machine::add(Task task) {
   queue_.push_back(task);
 }
 
-unsigned long Machine::peekTCT(Task incomingTask) const {
+unsigned long Machine::peekTCT(const Task& incomingTask) const {
   return tct_ + previousTctTask_ + incomingTask.time_;
 }
 
@@ -85,7 +85,7 @@ Task Machine::erase(int position) {
   return taskDeleted;
 }
 
-void Machine::insert(Task& task, int position) {
+void Machine::insert(const Task& task, int position) {
   if ((size_t)position > queue_.size() || position < 0) {
     std::cout << "position: " << position << '\n';
     throw "[machine | insert] Algo esta mal con position\n";

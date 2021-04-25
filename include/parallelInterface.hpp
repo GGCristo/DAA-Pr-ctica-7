@@ -17,6 +17,7 @@ class ParallelInterface {
      * @return Definitive solution
      */
     virtual Solution run(int) = 0;
+
   protected:
     /**
      * @brief Get the best Task in term of times knowing the position

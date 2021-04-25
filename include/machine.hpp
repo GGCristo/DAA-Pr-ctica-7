@@ -77,7 +77,7 @@ class Machine {
      *
      * @param {incomingTask} Incoming Task
      */
-    unsigned long peekTCT(Task) const;
+    unsigned long peekTCT(const Task&) const;
 
     // Modifiers
     /**
@@ -85,7 +85,7 @@ class Machine {
      *
      * @param {task} Incoming Task
      */
-    void add(Task);
+    void add(const Task&);
 
     /**
      * @brief Delete a task of a given position
@@ -101,7 +101,7 @@ class Machine {
      * @param {task} Task to be inserted
      * @param {position} Position where the task is going to be
      */
-    void insert(Task&, int);
+    void insert(const Task&, int);
 
     // Show
     /**

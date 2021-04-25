@@ -14,10 +14,9 @@ Solution::Solution(const std::vector<Machine>& machines) :
   Data::getInstance().reset();
 }
 
-Solution::Solution(const Solution& other) {
-  machines_ = other.machines_;
-  z_ = other.z_;
-}
+Solution::Solution(const Solution& other) :
+machines_(other.machines_), z_(other.z_)
+{}
 
 Solution::Solution(Solution&& other) :
   machines_(std::move(other.machines_)),

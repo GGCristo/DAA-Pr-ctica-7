@@ -26,6 +26,7 @@ class GVNS: public Multiboot{
      * @return Definitive solution
      */
     Solution run(int) override;
+
   private:
     /**
      * @typeOfShaking_ Type of movement to make the jump
