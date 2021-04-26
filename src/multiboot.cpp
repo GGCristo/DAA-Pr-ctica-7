@@ -48,7 +48,7 @@ std::vector<Task> Multiboot::getBestK(int previousTask) const {
       }
     }
     if (minPosition != -1) {
-      bestK.push_back(Task(minPosition, auxMinSum));
+      bestK.emplace_back(Task(minPosition, auxMinSum));
     }
   }
   return bestK;
@@ -72,7 +72,7 @@ Solution Multiboot::construction(const std::vector<Machine>& preprocessed) {
 }
 
 bool Multiboot::updateSolution(Solution& solution,
-    const Solution& incomingSolution) {
+    Solution&& incomingSolution) {
   if (incomingSolution.getZ() < solution.getZ()) {
     solution = std::move(incomingSolution);
     // solution = incomingSolution;
@@ -84,13 +84,11 @@ bool Multiboot::updateSolution(Solution& solution,
 Solution Multiboot::run(int m) {
   int noImprovementIteraction = 0;
   std::vector<Machine> preprocesado = preprocessing(m);
-  Solution potencialSolution = construction(preprocesado);
-  Solution solution = postProcessing(potencialSolution.getMachines());
+  Solution solution = postProcessing(construction(preprocesado).getMachines());
   while(noImprovementIteraction < iterations_ - 1) {
     pseudo_reset(preprocesado);
-    potencialSolution = construction(preprocesado);
-    potencialSolution = postProcessing(potencialSolution.getMachines());
-    if (updateSolution(solution, potencialSolution)) {
+    Solution potencialSolution = postProcessing(construction(preprocesado).getMachines());
+    if (updateSolution(solution, std::move(potencialSolution))) {
       if (stopCriterion_ == iterationsSinceImprovement) {
         noImprovementIteraction = 0;
       } else {
@@ -103,14 +101,14 @@ Solution Multiboot::run(int m) {
   return solution;
 }
 
-void Multiboot::pseudo_reset(const std::vector<Machine>& machines) const {
+void Multiboot::pseudo_reset(const std::vector<Machine>& machines) {
   Data::getInstance().reset();
   for (size_t machine = 0; machine < machines.size(); ++machine) {
     Data::getInstance().markTaskAsTaken(machines[machine].begin()->getId());
   }
 }
 
-Solution Multiboot::postProcessing(const std::vector<Machine>& constructed) {
+Solution Multiboot::postProcessing(const std::vector<Machine>& constructed) const {
   switch(typeOfMovement_) {
     case 0:
       return postProcessing_reInsert(constructed);
@@ -125,7 +123,7 @@ Solution Multiboot::postProcessing(const std::vector<Machine>& constructed) {
   }
 }
 
-Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& constructed) {
+Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& constructed) const {
   Solution bestSolution(constructed);
   for (size_t maquina = 0; maquina < constructed.size(); ++maquina) {
     for (size_t pivot = 0; pivot < constructed[maquina].size(); ++pivot) {
@@ -144,7 +142,7 @@ Solution Multiboot::postProcessing_reInsert(const std::vector<Machine>& construc
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_move(const std::vector<Machine>& constructed) {
+Solution Multiboot::postProcessing_move(const std::vector<Machine>& constructed) const {
   Solution bestSolution(constructed);
   for (size_t previousMachine = 0; previousMachine < constructed.size(); ++previousMachine) {
     for (size_t previousPosition = 0; previousPosition < constructed[previousMachine].size(); ++previousPosition) {
@@ -165,7 +163,7 @@ Solution Multiboot::postProcessing_move(const std::vector<Machine>& constructed)
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& constructed) {
+Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& constructed) const {
   Solution bestSolution(constructed);
   for (size_t maquina = 0; maquina < constructed.size(); ++maquina) {
     for (size_t pivot = 0; pivot < constructed[maquina].size(); ++pivot) {
@@ -184,7 +182,7 @@ Solution Multiboot::postProcessing_innerSwap(const std::vector<Machine>& constru
   return bestSolution;
 }
 
-Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& constructed) {
+Solution Multiboot::postProcessing_extraSwap(const std::vector<Machine>& constructed) const {
   Solution bestSolution(constructed);
   for (size_t previousMachine = 0; previousMachine < constructed.size();
       ++previousMachine) {
@@ -216,8 +214,7 @@ void Multiboot::reinsert(Machine& machine, int previousPosition,
   Task deleted = machine.erase(previousPosition);
   machine.insert(deleted, newPosition);
   machine.reCalculateTimeFrom(std::min(previousPosition, newPosition));
-  // TODO better reCalculateTct
-  machine.reCalculateTct();
+  machine.reCalculateTctFrom(std::min(previousPosition, newPosition));
 }
 
 void Multiboot::move(Machine& previousMachine, int previousPosition,
@@ -232,24 +229,23 @@ void Multiboot::move(Machine& previousMachine, int previousPosition,
     std::cerr << "newMachine size: " << newMachine.size() << '\n';
     throw "[move] There is somthing wrong with newPosition\n";
   }
-  // TODO create ID for machine
-  // if (previousMachine == newMachine) {
-  //   std::cout << "Warning: Using a move in the same machine, consider to use reInsert\n";
-  // }
+  if (previousMachine.getId() == newMachine.getId()) {
+    std::cout << "Warning: Using a move in the same machine, consider to use reInsert\n";
+  }
   auto deleted = previousMachine.erase(previousPosition);
   newMachine.insert(deleted, newPosition);
   previousMachine.reCalculateTimeFrom(previousPosition);
   newMachine.reCalculateTimeFrom(newPosition);
 
-  previousMachine.reCalculateTct();
-  newMachine.reCalculateTct();
+  previousMachine.reCalculateTctFrom(previousPosition);
+  newMachine.reCalculateTctFrom(newPosition);
 }
 
 void Multiboot::innerSwap(Machine& machine, int position1, int position2) {
   std::iter_swap(machine.begin() + position1,
       machine.begin() + position2);
   machine.reCalculateTimeFrom(std::min(position1, position2));
-  machine.reCalculateTct();
+  machine.reCalculateTctFrom(std::min(position1, position2));
 }
 
 void Multiboot::extraSwap(Machine& machine1, int position1, Machine& machine2,
@@ -260,6 +256,6 @@ void Multiboot::extraSwap(Machine& machine1, int position1, Machine& machine2,
   machine1.reCalculateTimeFrom(position1);
   machine2.reCalculateTimeFrom(position2);
 
-  machine1.reCalculateTct();
-  machine2.reCalculateTct();
+  machine1.reCalculateTctFrom(position1);
+  machine2.reCalculateTctFrom(position2);
 }

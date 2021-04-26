@@ -25,7 +25,7 @@ class GVNS: public Multiboot{
      * @param {m} Number of machines
      * @return Definitive solution
      */
-    Solution run(int) override;
+    Solution run(int m) override;
 
   private:
     /**

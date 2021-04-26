@@ -10,7 +10,7 @@ Data& Data::getInstance() {
 }
 
 Data::Data() {
-  if (file_ == "") {
+  if (file_.empty()) {
     throw "Especifíca el fichero\n";
   }
   std::fstream file;
@@ -118,9 +118,9 @@ void Data::setups(std::fstream& fichero) {
     row.reserve(n_ + 1);
     std::stringstream linea_stream_inner(linea);
     while(linea_stream_inner >> number) {
-      row.push_back(std::stoi(number));
+      row.emplace_back(std::stoi(number));
     }
-    setups_.push_back(row);
+    setups_.emplace_back(row);
   }
 }
 

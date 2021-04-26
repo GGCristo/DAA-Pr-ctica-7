@@ -26,13 +26,11 @@ Solution GVNS::run(int m) {
   int noImprovementIteraction = 0;
   // GRASP
   std::vector<Machine> preprocesado = preprocessing(m);
-  Solution potencialSolution = construction(preprocesado);
-  Solution solution = Multiboot::postProcessing(potencialSolution.getMachines());
+  Solution solution = Multiboot::postProcessing(construction(preprocesado).getMachines());
   // GVNS
   while(noImprovementIteraction < iterations_) {
     pseudo_reset(preprocesado);
-    potencialSolution = construction(preprocesado);
-    potencialSolution = Multiboot::postProcessing(potencialSolution.getMachines());
+    Solution potencialSolution = Multiboot::postProcessing(construction(preprocesado).getMachines());
     int k = 2;
     int kmax = std::min((int)potencialSolution.getMinimalMachineSize(), 5);
     while (k < kmax) {
@@ -61,16 +59,20 @@ std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) 
     const int PREVIOUS_POSITION = Random::get(0,
         (int)shaked[PREVIOUS_MACHINE].size() - 1);
 
-    const int NEW_MACHINE = Random::get(0, (int)shaked.size() - 1);
+    int newMachine;
+    do {
+      newMachine = Random::get(0, (int)shaked.size() - 1);
+    } while (PREVIOUS_MACHINE == newMachine);
+
     const int NEW_POSITION = Random::get(0,
-        (int)shaked[NEW_MACHINE].size() - 1);
+        (int)shaked[newMachine].size() - 1);
     switch(typeOfShaking_) {
       case move_enum:
-        move(shaked[PREVIOUS_MACHINE], PREVIOUS_POSITION, shaked[NEW_MACHINE],
+        move(shaked[PREVIOUS_MACHINE], PREVIOUS_POSITION, shaked[newMachine],
             NEW_POSITION);
         break;
       case extraSwap_enum:
-        extraSwap(shaked[PREVIOUS_MACHINE], PREVIOUS_POSITION, shaked[NEW_MACHINE],
+        extraSwap(shaked[PREVIOUS_MACHINE], PREVIOUS_POSITION, shaked[newMachine],
             NEW_POSITION);
         break;
       default:
@@ -101,11 +103,13 @@ Solution GVNS::vnd(const std::vector<Machine>& shaked){
   int l = 0;
   Solution solution(shaked);
   while (l < 4) {
-    Solution probablySolution(postProcessing(solution.getMachines(), l));
-    if (!updateSolution(solution, probablySolution)) {
+    // Solution probablySolution(postProcessing(solution.getMachines(), l));
+    if (!updateSolution(solution, postProcessing(solution.getMachines(), l))) {
       ++l;
     } else {
-      if (anxious_) return solution;
+      if (anxious_) {
+        return solution;
+      }
       l = 1;
     }
   }

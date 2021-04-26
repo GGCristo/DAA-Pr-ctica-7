@@ -4,7 +4,9 @@
 
 #include "../include/task.hpp"
 
-Task::Task(int id, int totalTime) : id_(id), time_(totalTime){
+Task::Task(int id, int totalTime) : id_(id), time_(totalTime) {
+  tct_ = 0;
+  tctUntilNow_ = 0;
 }
 
 int Task::getId() const {
@@ -13,6 +15,14 @@ int Task::getId() const {
 
 int Task::getTime() const {
   return time_;
+}
+
+void Task::setTct(unsigned long tct) {
+  tct_ = tct;
+}
+
+void Task::setTctUntilNow(unsigned long tctUntilNow) {
+  tctUntilNow_ = tctUntilNow;
 }
 
 std::ostream& Task::show(std::ostream& os) const {

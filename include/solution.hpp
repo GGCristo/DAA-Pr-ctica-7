@@ -33,7 +33,7 @@ class Solution {
      *
      * @param {other} Other solution
      */
-    Solution(Solution&&);
+    Solution(Solution&&) noexcept;
 
     /**
      * @brief Assign operator
@@ -47,13 +47,13 @@ class Solution {
      *
      * @param {other} Other solution
      */
-    Solution& operator =(Solution&&);
+    Solution& operator =(Solution&&) noexcept;
 
     /**
      * @brief Return the attribute machines_ (vector of Machine)
      *
      */
-    const std::vector<Machine>& getMachines() const;
+    [[nodiscard]] const std::vector<Machine>& getMachines() const;
 
     /**
      * @brief Calculate what is the size of smallest Machine
@@ -74,28 +74,28 @@ class Solution {
      * @param {other} Other solution
      * @return True if this.z_ is smaller than other.z_, false otherwise
      */
-    bool operator <(const Solution&);
+    bool operator <(const Solution&) const;
 
     /**
      * @brief Send the content af all the Machines
      *
      * @param os ostream, default its std::cout
      */
-    std::ostream& show(std::ostream& os = std::cout);
+    std::ostream& show(std::ostream& os = std::cout) const;
 
     /**
      * @brief Send the value of z_ to the os output
      *
      * @param os ostream, default its std::cout
      */
-    std::ostream& showOnlyZ(std::ostream& os = std::cout);
+    std::ostream& showOnlyZ(std::ostream& os = std::cout) const;
 
     /**
      * @brief Send the content of all the machines, their TCT, and z_
      *
      * @param os ostream, default its std::cout
      */
-    std::ostream& showWithTCTs(std::ostream& os = std::cout);
+    std::ostream& showWithTCTs(std::ostream& os = std::cout) const;
 
   private:
     /**

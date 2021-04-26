@@ -14,7 +14,7 @@ Solution GreedyTCT::run(int m) {
     std::vector<Task> aux;
     aux.reserve(machines.size());
     for (size_t j = 0; j < machines.size(); ++j) {
-      aux.push_back(getTask(machines[j].getIdLastTask()));
+      aux.emplace_back(getTask(machines[j].getIdLastTask()));
     }
     unsigned long auxMinSum = machines[0].peekTCT(aux[0]);
     int minPosition = 0;

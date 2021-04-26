@@ -4,10 +4,11 @@
 
 #include "../include/machine.hpp"
 
-Machine::Machine() {
+Machine::Machine(int id) {
   time_ = 0;
   tct_ = 0;
   previousTctTask_ = 0;
+  id_ = id;
 }
 
 Task* Machine::searchTask(int id) {
@@ -26,12 +27,19 @@ void Machine::reCalculateTimeFrom(int startPosition) {
   }
 }
 
-void Machine::reCalculateTct() {
-  unsigned long tct = 0;
-  for (size_t i = 0; i < queue_.size(); ++i) {
-    tct += (queue_.size() - i) * queue_[i].getTime();
+void Machine::reCalculateTctFrom(int startPosition) {
+  // unsigned long tct = 0;
+  size_t i = startPosition;
+  if (startPosition == 0){
+    queue_[0].tct_ = queue_[0].time_;
+    queue_[0].tctUntilNow_ = queue_[0].tct_;
+    i = 1;
   }
-  tct_ = tct;
+  for (; i < queue_.size(); ++i) {
+    queue_[i].tct_ = queue_[i - 1].tct_ + queue_[i].time_;
+    queue_[i].tctUntilNow_ = queue_[i - 1].tctUntilNow_ + queue_[i].tct_;
+  }
+  tct_ = queue_[queue_.size() - 1].tctUntilNow_;
 }
 
 int Machine::getIdLastTask() const {
@@ -39,6 +47,10 @@ int Machine::getIdLastTask() const {
     return -1;
   }
   return queue_[queue_.size() - 1].id_;
+}
+
+int Machine::getId() const {
+  return id_;
 }
 
 int Machine::getIdPreviousTask(int position) const {
@@ -52,17 +64,18 @@ int Machine::getTime() const {
   return time_;
 }
 
-void Machine::add(const Task& task) {
+void Machine::add(Task task) {
   if (Data::getInstance().isTaskTaken(task.id_)) {
     throw "La tarea " + std::to_string(task.id_) +
       " ya esta incluida en otra maquina\n";
   }
   Data::getInstance().markTaskAsTaken(task.id_);
   tct_ += previousTctTask_ + task.time_;
+  task.setTct(previousTctTask_ + task.time_);
+  task.setTctUntilNow(tct_);
   previousTctTask_ = previousTctTask_ + task.time_;
   time_ += task.time_;
-  // Todo emplace_back
-  queue_.push_back(task);
+  queue_.emplace_back(task);
 }
 
 unsigned long Machine::peekTCT(const Task& incomingTask) const {

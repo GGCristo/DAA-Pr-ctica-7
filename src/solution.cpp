@@ -16,16 +16,19 @@ Solution::Solution(const std::vector<Machine>& machines) :
 
 Solution::Solution(const Solution& other) :
 machines_(other.machines_), z_(other.z_)
-{}
+{
+  std::cout << "Warning you are using a copy constructor\n";
+}
 
-Solution::Solution(Solution&& other) :
+Solution::Solution(Solution&& other) noexcept :
   machines_(std::move(other.machines_)),
-  z_(std::move(other.z_))
+  z_(other.z_)
 {}
 
-Solution& Solution::operator=(Solution&& other) {
+Solution& Solution::operator=(Solution&& other) noexcept {
   machines_ = std::move(other.machines_);
-  z_ = std::move(other.z_);
+  z_ = other.z_;
+  std::cout << "pipi";
   return *this;
 }
 
@@ -64,11 +67,11 @@ unsigned long Solution::getZ() const {
   return z_;
 }
 
-bool Solution::operator<(const Solution& other) {
+bool Solution::operator<(const Solution& other) const {
   return z_ < other.z_;
 }
 
-std::ostream& Solution::showWithTCTs(std::ostream& os) {
+std::ostream& Solution::showWithTCTs(std::ostream& os) const {
   for (size_t i = 0; i < machines_.size(); ++i) {
     os << "Maquina " << i + 1 << ": ";
     machines_[i].show();
@@ -79,12 +82,12 @@ std::ostream& Solution::showWithTCTs(std::ostream& os) {
   return os;
 }
 
-std::ostream& Solution::showOnlyZ(std::ostream& os) {
+std::ostream& Solution::showOnlyZ(std::ostream& os) const {
   os << "Z: " << getZ() << "\n\n";
   return os;
 }
 
-std::ostream& Solution::show(std::ostream& os) {
+std::ostream& Solution::show(std::ostream& os) const {
   for (size_t i = 0; i < machines_.size(); ++i) {
     os << "Maquina " << i + 1 << ": ";
     machines_[i].show();

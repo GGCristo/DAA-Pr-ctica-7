@@ -38,7 +38,7 @@ class ParallelInterface {
     int getTime(int, int) const;
 
     /**
-     * @brief Load the first tasks of all the machines equitably
+     * @brief Create the machines and load them with their first tasks
      *
      * @param {m} Number of machines
      */

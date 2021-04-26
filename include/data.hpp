@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-// TODO Make everything const
 /**
  * @brief Clase que contiene todos los datos leídos del fichero, solo puede
  * haber una instancia de este clase (Singleton)
@@ -112,7 +111,7 @@ class Data {
      * @fichero_ Fichero desde donde se va a leer los datos
      * Forma de uso: Datos::fichero_ = "Nombre-del-fichero";
      */
-    static inline std::string file_ = "";
+    static inline std::string file_;
 
   private:
     /**

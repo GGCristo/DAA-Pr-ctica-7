@@ -14,7 +14,7 @@ Solution GreedyTime::run(int m) {
     std::vector<Task> aux;
     aux.reserve(machines.size());
     for (size_t j = 0; j < machines.size(); ++j) {
-      aux.push_back(getTask(machines[j].getIdLastTask()));
+      aux.emplace_back(getTask(machines[j].getIdLastTask()));
     }
     int auxMinSum = aux[0].getTime() + machines[0].getTime();
     int minPosition = 0;

@@ -11,8 +11,9 @@ class Machine {
     /**
      * @brief Constructor for machine
      *
+     * @param id ID to identify the machine
      */
-    Machine();
+    Machine(int id);
 
     /**
      * @brief Recalculate the time of all the Task from startPosition to the end
@@ -26,7 +27,7 @@ class Machine {
      * @brief Recalculate TCT
      *
      */
-    void reCalculateTct();
+    void reCalculateTctFrom(int);
 
     /**
      * @brief Search a Task with and ID
@@ -35,6 +36,8 @@ class Machine {
      */
     Task* searchTask(int);
 
+    int getId() const;
+
     // Getters
     /**
      * @brief Get the ID of the previous position
@@ -42,14 +45,14 @@ class Machine {
      * @param {position} position
      * @return ID of the previous position
      */
-    int getIdPreviousTask(int) const;
+    [[nodiscard]] int getIdPreviousTask(int) const;
 
     /**
      * @brief Get the ID of the last task
      *
      * @return ID of the last task
      */
-    int getIdLastTask() const;
+    [[nodiscard]] int getIdLastTask() const;
     /**
      * @brief Return the time of all the tasks in the machine
      * Warning: This is only use for greedy methods time doesn't update if a
@@ -57,27 +60,27 @@ class Machine {
      *
      * @return time_
      */
-    int getTime() const;
+    [[nodiscard]] int getTime() const;
 
     /**
      * @brief Get number of Task in the machine
      *
      * @return Number of Task
      */
-    size_t size() const;
+    [[nodiscard]] size_t size() const;
 
     /**
      * @brief Return tct_ attribute value
      *
      */
-    unsigned long getTCT() const;
+    [[nodiscard]] unsigned long getTCT() const;
 
     /**
      * @brief Return what it would be the value of TCT if incomingTask is added
      *
      * @param {incomingTask} Incoming Task
      */
-    unsigned long peekTCT(const Task&) const;
+    [[nodiscard]] unsigned long peekTCT(const Task&) const;
 
     // Modifiers
     /**
@@ -85,7 +88,7 @@ class Machine {
      *
      * @param {task} Incoming Task
      */
-    void add(const Task&);
+    void add(Task);
 
     /**
      * @brief Delete a task of a given position
@@ -159,6 +162,8 @@ class Machine {
      * @time_ [TODO:description]
      */
     int time_;
+
+    int id_;
 
     /**
      * @queue_ [TODO:description]

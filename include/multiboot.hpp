@@ -24,7 +24,7 @@ class Multiboot: public ParallelInterface {
      * @param {m} Number of machines
      * @return Definitive solution
      */
-    Solution run(int) override;
+    Solution run(int m) override;
 
   protected:
     /**
@@ -68,7 +68,7 @@ class Multiboot: public ParallelInterface {
      * @return true if the incoming Solution is the new Solution,
      * false otherwhise
      */
-    bool updateSolution(Solution&, const Solution&);
+    static bool updateSolution(Solution&, Solution&&);
 
     /**
      * @brief Construction phase of GRASP, create an RCL and get a random
@@ -87,7 +87,7 @@ class Multiboot: public ParallelInterface {
      * @param {constructed} Vector of machines from the construction phase
      * @return Post-processed solution
      */
-    Solution postProcessing(const std::vector<Machine>&);
+    Solution postProcessing(const std::vector<Machine>&) const;
 
     /**
      * @brief Get the best solution of all the combinations posible with one
@@ -96,7 +96,7 @@ class Multiboot: public ParallelInterface {
      * @param {constructed} Vector of machines from the construction phase
      * @return Post-processed solution
      */
-    Solution postProcessing_reInsert(const std::vector<Machine>&);
+    Solution postProcessing_reInsert(const std::vector<Machine>&) const;
 
     /**
      * @brief Get the best solution of all the combinations posible with one
@@ -105,7 +105,7 @@ class Multiboot: public ParallelInterface {
      * @param {constructed} Vector of machines from the construction phase
      * @return Post-processed solution
      */
-    Solution postProcessing_move(const std::vector<Machine>&);
+    Solution postProcessing_move(const std::vector<Machine>&) const;
 
     /**
      * @brief Get the best solution of all the combinations posible with one
@@ -114,7 +114,7 @@ class Multiboot: public ParallelInterface {
      * @param {constructed} Vector of machines from the construction phase
      * @return Post-processed solution
      */
-    Solution postProcessing_innerSwap(const std::vector<Machine>&);
+    Solution postProcessing_innerSwap(const std::vector<Machine>&) const;
 
     /**
      * @brief Get the best solution of all the combinations posible with one
@@ -123,7 +123,7 @@ class Multiboot: public ParallelInterface {
      * @param {constructed} Vector of machines from the construction phase
      * @return Post-processed solution
      */
-    Solution postProcessing_extraSwap(const std::vector<Machine>&);
+    Solution postProcessing_extraSwap(const std::vector<Machine>&) const;
 
     // Movements
     /**
@@ -140,7 +140,7 @@ class Multiboot: public ParallelInterface {
      * @param newPosition The moved task is going to be inserted int this
      * position
      */
-    void reinsert(Machine& machine, int previousPosition, int newPosition);
+    static void reinsert(Machine& machine, int previousPosition, int newPosition);
 
     /**
      * @brief Take a task from one machine and insert it in another machine
@@ -151,7 +151,7 @@ class Multiboot: public ParallelInterface {
      * @param newPosition The moved task is going to be inserted int this
      * position
      */
-    void move(Machine& previousMachine, int previousPosition,
+    static void move(Machine& previousMachine, int previousPosition,
               Machine& newMachine, int newPosition);
 
     /**
@@ -162,7 +162,7 @@ class Multiboot: public ParallelInterface {
      * @param position1 Postion of a task
      * @param position2 Position of a task
      */
-    void innerSwap(Machine& machine, int position1, int position2);
+    static void innerSwap(Machine& machine, int position1, int position2);
 
     /**
      * @brief Take a task from one machine and swap it with another task of
@@ -173,7 +173,7 @@ class Multiboot: public ParallelInterface {
      * @param machine2 One machine
      * @param position2 The position of a task
      */
-    void extraSwap(Machine& machine1, int position1, Machine& machine2,
+    static void extraSwap(Machine& machine1, int position1, Machine& machine2,
                    int position2);
     /**
      * @brief Reset all the tasks to be free of being chosen, but mark as taken
@@ -181,5 +181,5 @@ class Multiboot: public ParallelInterface {
      *
      * @param {preprocessed} Preprocessed vector of machines
      */
-    void pseudo_reset(const std::vector<Machine>&) const;
+    static void pseudo_reset(const std::vector<Machine>&);
 };

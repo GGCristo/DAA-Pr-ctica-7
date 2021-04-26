@@ -27,6 +27,9 @@ class Task {
      */
     int getTime() const;
 
+    void setTct(unsigned long);
+
+    void setTctUntilNow(unsigned long);
     /**
      * @brief Send the value of z_ to the os output
      *
@@ -44,5 +47,8 @@ class Task {
      * @time_ vector of the times of all the Tasks
      */
     int time_;
+
+    unsigned long tct_;
+    unsigned long tctUntilNow_;
     friend class Machine;
 };

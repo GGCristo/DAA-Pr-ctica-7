@@ -44,7 +44,7 @@ int ParallelInterface::getTime(int previousTask, int currentTask) const {
 std::vector<Machine> ParallelInterface::preprocessing(int m) {
   std::vector<Machine> machines;
   for (int i = 0; i < m; ++i) {
-    machines.emplace_back(Machine());
+    machines.emplace_back(Machine(i));
     // -1 == machines[i].getIdLastTask(), We are in preprocessing so I already
     // know the queue of tasks is empty
     machines[i].add(getTask(-1));
