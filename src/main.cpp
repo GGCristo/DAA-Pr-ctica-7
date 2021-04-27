@@ -16,12 +16,12 @@
 enum Movements { reInsert, move, innerSwap, extraSwap };
 
 void mainTryCatch() {
-  Data::file_ = "I40j_2m_S1_1.txt";
+  // Data::file_ = "I40j_2m_S1_1.txt";
   // Data::file_ = "I40j_2mS1_1.txt"; // empty
   // Data::file_ = "I40j_4m_S1_1.txt";
   // Data::file_ = "I40j_6m_S1_1.txt";
   // Data::file_ = "I40j_8m_S1_1.txt";
-  // Data::file_ = "prueba.txt";
+  Data::file_ = "prueba.txt";
 
   std::unique_ptr<ParallelInterface> greedyTime = std::make_unique<GreedyTime>();
   Solution solucion0(greedyTime->run(Data::getInstance().getM()));

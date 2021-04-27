@@ -23,20 +23,20 @@ GVNS::GVNS(int typeOfMovement, int typeOfShaking, int stopCriterion, bool anxiou
 }
 
 Solution GVNS::run(int m) {
-  int noImprovementIteraction = 0;
   // GRASP
   std::vector<Machine> preprocesado = preprocessing(m);
   Solution solution = Multiboot::postProcessing(construction(preprocesado).getMachines());
   // GVNS
+  int noImprovementIteraction = 0;
   while(noImprovementIteraction < iterations_) {
     pseudo_reset(preprocesado);
     Solution potencialSolution = Multiboot::postProcessing(construction(preprocesado).getMachines());
-    int k = 2;
+    int k = 1;
     int kmax = std::min((int)potencialSolution.getMinimalMachineSize(), 5);
     while (k < kmax) {
-      std::vector<Machine> shaked = shaking(potencialSolution.getMachines(), k);
-      if (updateSolution(solution, vnd(shaked))){
-        k = 2;
+      // std::vector<Machine> shaked = shaking(potencialSolution.getMachines(), k);
+      if (updateSolution(solution, vnd(shaking(potencialSolution.getMachines(), k)))){
+        k = 1;
         if (stopCriterion_ == iterationsSinceImprovement) {
           noImprovementIteraction = 0;
         } else {
@@ -64,8 +64,7 @@ std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) 
       newMachine = Random::get(0, (int)shaked.size() - 1);
     } while (PREVIOUS_MACHINE == newMachine);
 
-    const int NEW_POSITION = Random::get(0,
-        (int)shaked[newMachine].size() - 1);
+    const int NEW_POSITION = Random::get(0, (int)shaked[newMachine].size() - 1);
     switch(typeOfShaking_) {
       case move_enum:
         move(shaked[PREVIOUS_MACHINE], PREVIOUS_POSITION, shaked[newMachine],
@@ -83,20 +82,19 @@ std::vector<Machine> GVNS::shaking(const std::vector<Machine>& machines, int k) 
 }
 
 Solution GVNS::postProcessing(const std::vector<Machine>& constructedMachines,
-      int l) {
-    switch (l) {
-      case 0:
-        return postProcessing_reInsert(constructedMachines);
-      case 1:
-        return postProcessing_move(constructedMachines);
-      case 2:
-        return postProcessing_innerSwap(constructedMachines);
-      case 3:
-        return postProcessing_extraSwap(constructedMachines);
-        break;
-      default:
-        throw "[GVNS | vnd] There are not that many movements\n";
-    }
+    int l) {
+  switch (l) {
+    case 0:
+      return postProcessing_reInsert(constructedMachines);
+    case 1:
+      return postProcessing_innerSwap(constructedMachines);
+    case 2:
+      return postProcessing_move(constructedMachines);
+    case 3:
+      return postProcessing_extraSwap(constructedMachines);
+    default:
+      throw "[GVNS | vnd] There are not that many movements\n";
+  }
 }
 
 Solution GVNS::vnd(const std::vector<Machine>& shaked){

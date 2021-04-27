@@ -13,7 +13,7 @@ class Machine {
      *
      * @param id ID to identify the machine
      */
-    Machine(int id);
+    explicit Machine(int id);
 
     /**
      * @brief Recalculate the time of all the Task from startPosition to the end

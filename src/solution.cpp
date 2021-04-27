@@ -17,7 +17,7 @@ Solution::Solution(const std::vector<Machine>& machines) :
 Solution::Solution(const Solution& other) :
 machines_(other.machines_), z_(other.z_)
 {
-  std::cout << "Warning you are using a copy constructor\n";
+  // std::cout << "Warning you are using a copy constructor\n";
 }
 
 Solution::Solution(Solution&& other) noexcept :
@@ -28,7 +28,6 @@ Solution::Solution(Solution&& other) noexcept :
 Solution& Solution::operator=(Solution&& other) noexcept {
   machines_ = std::move(other.machines_);
   z_ = other.z_;
-  std::cout << "pipi";
   return *this;
 }
 

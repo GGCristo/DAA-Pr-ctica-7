@@ -16,7 +16,7 @@ class Multiboot: public ParallelInterface {
      * @param k Number of elements in RCL
      */
     explicit Multiboot(int, int stopCriterion_ = 1, bool anxious = false,
-                   int iterations = 1000, int k = 1);
+                   int iterations = 1000, int k = 3);
 
     /**
      * @brief Start running the algorithm
